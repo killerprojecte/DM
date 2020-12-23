@@ -1,0 +1,210 @@
+Gangs:
+  Enabled: true
+  # If you would like to disable a defined mob gang, just set the radius to 0
+  Mob:
+    bat:
+      # In Blocks
+      Radius: 10
+      # How many bees in the defined radius to define a gang kill
+      Amount: 4
+    bee:
+      Radius: 10
+      Amount: 6
+    blaze:
+      Radius: 15
+      Amount: 3
+    cat:
+      Radius: 5
+      Amount: 3
+    cave_spider:
+      Radius: 5
+      Amount: 3
+    chicken:
+      Radius: 5
+      Amount: 3
+    cod:
+      Radius: 5
+      Amount: 3
+    cow:
+      Radius: 5
+      Amount: 3
+    creeper:
+      Radius: 8
+      Amount: 3
+    creeper_charged:
+      Radius: 8
+      Amount: 3
+    dolphin:
+      Radius: 20
+      Amount: 3
+    donkey:
+      Radius: 5
+      Amount: 3
+    drowned:
+      Radius: 10
+      Amount: 3
+    elder_guardian:
+      Radius: 10
+      Amount: 3
+    ender_dragon:
+      Radius: 150
+      Amount: 3
+    enderman:
+      Radius: 10
+      Amount: 4
+    endermite:
+      Radius: 5
+      Amount: 3
+    evoker:
+      Radius: 5
+      Amount: 3
+    fox:
+      Radius: 5
+      Amount: 3
+    ghast:
+      Radius: 50
+      Amount: 3
+    giant:
+      Radius: 15
+      Amount: 3
+    guardian:
+      Radius: 10
+      Amount: 4
+    hoglin:
+      Radius: 5
+      Amount: 3
+    horse:
+      Radius: 5
+      Amount: 3
+    husk:
+      Radius: 5
+      Amount: 3
+    illusiner:
+      Radius: 5
+      Amount: 3
+    iron_golem:
+      Radius: 10
+      Amount: 3
+    llama:
+      Radius: 5
+      Amount: 3
+    magma_cube:
+      Radius: 8
+      Amount: 3
+    mooshroom:
+      Radius: 8
+      Amount: 3
+    mule:
+      Radius: 8
+      Amount: 3
+    panda:
+      Radius: 8
+      Amount: 3
+    parrot:
+      Radius: 10
+      Amount: 3
+    phantom:
+      Radius: 50
+      Amount: 3
+    pig:
+      Radius: 5
+      Amount: 3
+    piglin:
+      Radius: 8
+      Amount: 3
+    pillager:
+      Radius: 15
+      Amount: 3
+    polar_bear:
+      Radius: 8
+      Amount: 3
+    puffer_fish:
+      Radius: 5
+      Amount: 3
+    rabbit:
+      Radius: 8
+      Amount: 3
+    ravager:
+      Radius: 10
+      Amount: 3
+    salmon:
+      Radius: 8
+      Amount: 3
+    sheep:
+      Radius: 5
+      Amount: 3
+    shulker:
+      Radius: 15
+      Amount: 3
+    silverfish:
+      Radius: 5
+      Amount: 3
+    skeleton:
+      Radius: 15
+      Amount: 3
+    skeleton_horse:
+      Radius: 10
+      Amount: 3
+    slime:
+      Radius: 8
+      Amount: 3
+    snow_golem:
+      Radius: 15
+      Amount: 3
+    spider:
+      Radius: 8
+      Amount: 3
+    squid:
+      Radius: 8
+      Amount: 3
+    stray:
+      Radius: 15
+      Amount: 3
+    strider:
+      Radius: 10
+      Amount: 3
+    tropical_fish:
+      Radius: 8
+      Amount: 3
+    turtle:
+      Radius: 8
+      Amount: 3
+    vex:
+      Radius: 15
+      Amount: 3
+    vindicator:
+      Radius: 8
+      Amount: 3
+    wandering_trader:
+      Radius: 10
+      Amount: 3
+    witch:
+      Radius: 15
+      Amount: 3
+    wither:
+      Radius: 50
+      Amount: 3
+    wither_skeleton:
+      Radius: 20
+      Amount: 3
+    wolf:
+      Radius: 8
+      Amount: 3
+    zoglin:
+      Radius: 15
+      Amount: 3
+    zombie:
+      Radius: 5
+      Amount: 3
+    zombie_pig_man:
+      Radius: 5
+      Amount: 3
+    zombified_piglin:
+      Radius: 5
+      Amount: 3
+    zombie_villager:
+      Radius: 5
+      Amount: 3
+    zombie_horse:
+      Radius: 15
+      Amount: 3

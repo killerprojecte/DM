@@ -1,0 +1,15 @@
+me\Joshb\DeathMessages\DeathMessages.class
+me\Joshb\DeathMessages\Config\Messages.class
+me\Joshb\DeathMessages\Assets\ConfigUpdater.class
+me\Joshb\DeathMessages\Manager\PlayerManager.class
+me\Joshb\DeathMessages\Listener\OnJoin.class
+me\Joshb\DeathMessages\Listener\EntityDamage.class
+me\Joshb\DeathMessages\Listener\EntityDamageByEntity.class
+me\Joshb\DeathMessages\Listener\EntityDamageByBlock.class
+me\Joshb\DeathMessages\Manager\PlayerManager$1.class
+me\Joshb\DeathMessages\Config\PlayerDeathMessages.class
+me\Joshb\DeathMessages\Config\EntityDeathMessages.class
+me\Joshb\DeathMessages\Config\Settings.class
+me\Joshb\DeathMessages\Listener\EntityDeath.class
+me\Joshb\DeathMessages\Assets\RomanNumber.class
+me\Joshb\DeathMessages\Assets\Assets.class

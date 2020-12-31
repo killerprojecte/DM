@@ -11,17 +11,17 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 
-public class PlayerDeathMessages {
+public class Gangs {
 
-    private String fileName = "PlayerDeathMessages";
+    private String fileName = "Gangs";
 
     FileConfiguration config;
 
     File file;
 
-    public PlayerDeathMessages(){ }
-    private static PlayerDeathMessages instance = new PlayerDeathMessages();
-    public static PlayerDeathMessages getInstance(){
+    public Gangs(){ }
+    private static Gangs instance = new Gangs();
+    public static Gangs getInstance(){
         return instance;
     }
 

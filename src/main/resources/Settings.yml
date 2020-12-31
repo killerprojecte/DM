@@ -1,15 +1,4 @@
 Expire-Last-Damage:
   # How long until the last mob that damaged a player expires?
-  # Default: 5
-  Expire-Mob: 5
-
-  # How long until a possible mob-related push into the void expires?
-  # Default: 10 seconds
-  # This includes entity explosions (Creeper exploding, Ghast fireballs)
-  Expire-Mob-Void: 10
-
-  # How long until a possible mob-related push off a cliff expires?
-  # This includes entity explosions (Creeper exploding, Ghast fireballs)
-  # Default: 5 seconds
-  Expire-Mob-Fall: 5
-
+  # Default: 7
+  Expire-Mob: 7

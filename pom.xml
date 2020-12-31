@@ -17,6 +17,7 @@
                 <directory>${basedir}/src/main/resources/</directory>
                 <includes>
                     <include>EntityDeathMessages.yml</include>
+                    <include>Gangs.yml</include>
                     <include>Messages.yml</include>
                     <include>PlayerDeathMessages.yml</include>
                     <include>plugin.yml</include>
@@ -55,6 +56,10 @@
             <id>bukkit-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>placeholderapi</id>
+            <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -68,6 +73,12 @@
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
             <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>me.clip</groupId>
+            <artifactId>placeholderapi</artifactId>
+            <version>2.9.2</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

@@ -1,5 +1,7 @@
 me\Joshb\DeathMessages\DeathMessages.class
 me\Joshb\DeathMessages\Config\Messages.class
+me\Joshb\DeathMessages\Assets\Assets$1.class
+me\Joshb\DeathMessages\Config\Gangs.class
 me\Joshb\DeathMessages\Assets\ConfigUpdater.class
 me\Joshb\DeathMessages\Manager\PlayerManager.class
 me\Joshb\DeathMessages\Listener\OnJoin.class

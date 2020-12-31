@@ -11,14 +11,16 @@ public class DeathMessages extends JavaPlugin {
 
     public static DeathMessages plugin;
 
+    public boolean placeholderAPIEnabled = false;
+
     public void onEnable(){
         plugin = this;
         initializeConfigs();
         initializeListeners();
         initializeOnlinePlayers();
 
-        for(Player p : Bukkit.getOnlinePlayers()){
-            new PlayerManager(p.getUniqueId(), p.getName(), p.getDisplayName());
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            placeholderAPIEnabled = true;
         }
     }
 
@@ -29,7 +31,8 @@ public class DeathMessages extends JavaPlugin {
     }
 
     private void initializeConfigs(){
-       // EntityDeathMessages.getInstance().initialize();
+        EntityDeathMessages.getInstance().initialize();
+        Gangs.getInstance().initialize();
         Messages.getInstance().initialize();
         PlayerDeathMessages.getInstance().initialize();
         Settings.getInstance().initialize();
@@ -45,7 +48,7 @@ public class DeathMessages extends JavaPlugin {
 
     public void initializeOnlinePlayers(){
         for(Player p : Bukkit.getOnlinePlayers()){
-            new PlayerManager(p.getUniqueId(), p.getName(), p.getDisplayName());
+            new PlayerManager(p);
         }
     }
 }

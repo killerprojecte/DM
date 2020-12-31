@@ -15,6 +15,7 @@ import java.util.UUID;
 
 public class PlayerManager {
 
+    private Player p;
     private UUID uuid;
     private String name;
     private String displayName;
@@ -26,13 +27,16 @@ public class PlayerManager {
 
     private static List<PlayerManager> players = new ArrayList<>();
 
-    public PlayerManager(UUID uuid, String name, String displayName){
-        this.uuid = uuid;
-        this.name = name;
-        this.displayName = displayName;
+    public PlayerManager(Player p){
+        this.p = p;
+        this.uuid = p.getUniqueId();
+        this.name = p.getName();
+        this.displayName = p.getDisplayName();
 
         players.add(this);
     }
+
+    public Player getPlayer(){ return p; }
 
     public UUID getUUID(){
         return uuid;
@@ -63,7 +67,7 @@ public class PlayerManager {
             public void run() {
                 setLastEntityDamager(null);
             }
-        }.runTaskLater(DeathMessages.plugin, Settings.getInstance().getConfig().getInt("Last-Damage.Expire-Mob") * 20);
+        }.runTaskLater(DeathMessages.plugin, Settings.getInstance().getConfig().getInt("Expire-Last-Damage.Expire-Mob") * 20);
     }
 
     public Entity getLastEntityDamager() {

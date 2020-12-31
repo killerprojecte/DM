@@ -62,6 +62,7 @@ public class EntityDeath implements Listener {
                 Player killer = e.getEntity().getKiller();
                 PlayerManager pm = PlayerManager.getPlayer(killer);
                 Tameable tameable = (Tameable) e.getEntity();
+                if(tameable.getOwner().equals(e.getEntity().getKiller())) return;
                 for (Player pls : Bukkit.getOnlinePlayers()) {
                     TextComponent tx = Assets.getTamable(pm, tameable);
                     if (tx == null) return;

@@ -1,5 +1,9 @@
 name: DeathMessages
 version: 1.0.0
-main: me.Joshb.DeathMessages.DeathMessages
+main: net.joshb.deathmessages.DeathMessages
 api-version: 1.13
 author: Joshb_
+commands:
+  deathmessages:
+    description: Main plugin command
+    aliases: [dm]

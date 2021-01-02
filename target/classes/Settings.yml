@@ -1,4 +1,14 @@
+#If enabled, weapon kills will default to melee kills if the weapon does not have a custom display name
+Disable-Weapon-Kill-With-No-Custom-Name: false
+
+#If enabled, if a player was pushed into the void by a killer, and void kill message is not defined, use melee death.
+#This option is ignored if Default-Natural-Death-Not-Defined is set to true.
+Default-Melee-Last-Damage-Not-Defined: true
+
+#If enabled, if a player was pushed into the void by a killer, and void kill message is not defined, natural death message will be used.
+Default-Natural-Death-Not-Defined: true
+
 Expire-Last-Damage:
-  # How long until the last mob that damaged a player expires?
+  # How long until the last mob that damaged a player expires? (Becomes a natural death cause)
   # Default: 7
   Expire-Mob: 7

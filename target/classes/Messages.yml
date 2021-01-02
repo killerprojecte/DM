@@ -1,0 +1,17 @@
+Prefix: "&7[&cDM&7]"
+Commands:
+  DeathMessages:
+    Player-Only-Command: "&cOnly players can run this command."
+    No-Permission: "%prefix% &cYou do not have permission for this command."
+    Help:
+      - "%prefix% &aDeathMessages Command Help List:"
+      - ""
+      - "&a/deathmessages toggle &7- Toggle death messages on or off."
+      - "&a/deathmessages reload &7- Reload plugin configs."
+      - ""
+    Sub-Commands:
+      Reload:
+        Reloaded: "%prefix% &aReloaded all plugin configs."
+      Toggle:
+        Toggle-On: "%prefix% &aYou have toggled your death messages &lON"
+        Toggle-Off: "%prefix% &aYou have toggled your death messages &c&lOFF"

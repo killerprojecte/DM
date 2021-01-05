@@ -17,6 +17,7 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Tameable;
@@ -44,24 +45,37 @@ public class Assets {
         return newList;
     }
 
+    public static boolean isClimable(Material material){
+        return material.name().contains("LADDER") || material.name().contains("VINE") || material.equals(Material.SCAFFOLDING);
+    }
+
+    public static boolean isWeapon(ItemStack itemStack){
+        return itemStack.getType().toString().contains("SHOVEL")
+                || itemStack.getType().toString().contains("PICKAXE")
+                || itemStack.getType().toString().contains("AXE")
+                || itemStack.getType().toString().contains("HOE")
+                || itemStack.getType().toString().contains("SWORD")
+                || itemStack.getType().toString().contains("BOW");
+    }
+
     static String lastColor = null;
 
     public static TextComponent deathMessage(PlayerManager pm, boolean gang) {
         lastColor = null;
         LivingEntity mob = (LivingEntity) pm.getLastEntityDamager();
         boolean hasWeapon;
-        if (mob.getEquipment() == null
-                || mob.getEquipment().getItemInMainHand().getType().equals(Material.AIR)
-                || (!mob.getEquipment().getItemInMainHand().getType().toString().contains("SHOVEL")
-                && !mob.getEquipment().getItemInMainHand().getType().toString().contains("PICKAXE")
-                && !mob.getEquipment().getItemInMainHand().getType().toString().contains("AXE")
-                && !mob.getEquipment().getItemInMainHand().getType().toString().contains("HOE")
-                && !mob.getEquipment().getItemInMainHand().getType().toString().contains("SWORD")
-                && !mob.getEquipment().getItemInMainHand().getType().toString().contains("BOW"))
-                && pm.getLastDamage().equals(EntityDamageEvent.DamageCause.THORNS)) {
+        if (mob.getEquipment() == null){
+            hasWeapon = false;
+        } else if(!isWeapon(mob.getEquipment().getItemInMainHand())) {
+            hasWeapon = false;
+        } else if(pm.getLastDamage().equals(EntityDamageEvent.DamageCause.THORNS)){
             hasWeapon = false;
         } else {
             hasWeapon = true;
+        }
+        if(pm.getLastDamage().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)
+                && pm.getLastExplosiveEntity() instanceof EnderCrystal){
+            return get(gang, pm, mob, "End-Crystal");
         }
         if (hasWeapon) {
             if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
@@ -85,9 +99,9 @@ public class Assets {
     }
 
 
-    public static TextComponent getNaturalDeath(PlayerManager pm) {
+    public static TextComponent getNaturalDeath(PlayerManager pm, String damageCause) {
         Random random = new Random();
-        List<String> msgs = getPlayerDeathMessages().getStringList("Natural-Cause." + getSimpleCause(pm.getLastDamage()));
+        List<String> msgs = getPlayerDeathMessages().getStringList("Natural-Cause." + damageCause);
         if (msgs.isEmpty()) return null;
         String msg = msgs.get(random.nextInt(msgs.size()));
         TextComponent tc = new TextComponent();
@@ -215,7 +229,7 @@ public class Assets {
 
         if (msgs.isEmpty()) {
             if(Settings.getInstance().getConfig().getBoolean("Default-Natural-Death-Not-Defined")){
-                return getNaturalDeath(pm);
+                return getNaturalDeath(pm, damageCause);
             }
             if(Settings.getInstance().getConfig().getBoolean("Default-Melee-Last-Damage-Not-Defined")){
                 return get(gang, pm, mob, getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_ATTACK));

@@ -51,6 +51,7 @@ public class DeathMessages extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new EntityDamageByBlock(), this);
         Bukkit.getPluginManager().registerEvents(new EntityDamageByEntity(), this);
         Bukkit.getPluginManager().registerEvents(new EntityDeath(), this);
+        Bukkit.getPluginManager().registerEvents(new Explosion(), this);
         Bukkit.getPluginManager().registerEvents(new OnJoin(), this);
     }
 

@@ -13,7 +13,9 @@ D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\command
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\manager\PlayerManager.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\command\CommandManager.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\command\DeathMessagesCommand.java
+D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\listener\Explosion.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\assets\ConfigUpdater.java
+D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\command\CommandToggle.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\listener\EntityDamageByEntity.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\config\UserData.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\assets\RomanNumber.java

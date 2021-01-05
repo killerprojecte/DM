@@ -16,8 +16,8 @@ public class EntityDamage implements Listener {
             Player p = (Player) e.getEntity();
             PlayerManager pm = PlayerManager.getPlayer(p);
             pm.setLastDamageCause(p.getLastDamageCause().getCause());
+           // for fall large if ppl want it float dist = e.getEntity().getFallDistance();
         }
-
     }
 
 }

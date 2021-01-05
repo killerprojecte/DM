@@ -5,10 +5,7 @@ import net.joshb.deathmessages.config.Gangs;
 import net.joshb.deathmessages.manager.PlayerManager;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Tameable;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -26,16 +23,28 @@ public class EntityDeath implements Listener {
 
             if (!(pm.getLastEntityDamager() instanceof LivingEntity) || pm.getLastEntityDamager() == e.getEntity()) {
                 //Natural Death
-                for (Player pls : Bukkit.getOnlinePlayers()) {
-                    PlayerManager pms = PlayerManager.getPlayer(pls);
-                    if(!pms.getMessagesEnabled()){
-                        continue;
+                if(pm.getLastExplosiveEntity() instanceof EnderCrystal){
+                    for (Player pls : Bukkit.getOnlinePlayers()) {
+                        PlayerManager pms = PlayerManager.getPlayer(pls);
+                        if(!pms.getMessagesEnabled()){
+                            continue;
+                        }
+                        TextComponent tx = Assets.getNaturalDeath(pm, "End-Crystal");
+                        if (tx == null) return;
+                        pls.spigot().sendMessage(tx);
                     }
-                    TextComponent tx = Assets.getNaturalDeath(pm);
-                    if (tx == null) return;
-                    pls.spigot().sendMessage(tx);
+                } else {
+                    for (Player pls : Bukkit.getOnlinePlayers()) {
+                        PlayerManager pms = PlayerManager.getPlayer(pls);
+                        if(!pms.getMessagesEnabled()){
+                            continue;
+                        }
+                        TextComponent tx = Assets.getNaturalDeath(pm, Assets.getSimpleCause(pm.getLastDamage()));
+                        if (tx == null) return;
+                        pls.spigot().sendMessage(tx);
+                    }
                 }
-            } else {
+            }  else {
                 //Killed by mob
                 Entity ent = pm.getLastEntityDamager();
                 String mobName = ent.getType().getEntityClass().getSimpleName().toLowerCase();

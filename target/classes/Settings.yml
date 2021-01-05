@@ -12,3 +12,7 @@ Expire-Last-Damage:
   # How long until the last mob that damaged a player expires? (Becomes a natural death cause)
   # Default: 7
   Expire-Mob: 7
+
+World-Groups:
+  #If enabled,
+  Enabled: false

@@ -21,3 +21,4 @@ net\joshb\deathmessages\command\CommandManager.class
 net\joshb\deathmessages\DeathMessages.class
 net\joshb\deathmessages\command\CommandReload.class
 net\joshb\deathmessages\listener\EntityDamageByBlock.class
+net\joshb\deathmessages\listener\Explosion.class

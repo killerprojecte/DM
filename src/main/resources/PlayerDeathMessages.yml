@@ -2,7 +2,7 @@
 # %player% - returns the player name
 # %player_display% - returns the custom display name of the player
 # %weapon% - returns a tooltip of the item name, lore, and enchantments
-# %killer% - returns the entity"s name
+# %killer% - returns the entity's name
 # %biome% - returns the biome the player was in
 # %world% - returns the world name
 # %x% - returns the x position the player died at.
@@ -42,6 +42,8 @@ Natural-Cause:
     - "%player% thought they could swim forever"
   Explosion:
     - "%player% blew up"
+  End-Crystal:
+    - "%player% blew up! They were playing around with an end-crystal!"
   Void:
     - "%player% fell into the void"
   Lightning:
@@ -290,6 +292,8 @@ Mobs:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
+      Explosion:
+        - "%player% was blown up by a %killer%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
@@ -1155,6 +1159,8 @@ Mobs:
         - '%player% was pushed into lava by %killer%'
       Explosion:
         - '%killer% blew up %player%'
+      End-Crystal:
+        - "%killer% killed %player% by blowing up an end-crystal!"
       Void:
         - '%player% was pushed into the void by %killer%'
       Wither:

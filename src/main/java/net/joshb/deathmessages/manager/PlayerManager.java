@@ -24,6 +24,7 @@ public class PlayerManager {
     private boolean isBlacklisted;
     private DamageCause damageCause;
     private Entity lastEntityDamager;
+    private Entity lastExplosiveEntity;
     private Location location;
 
     private BukkitTask lastEntityTask;
@@ -83,6 +84,7 @@ public class PlayerManager {
     }
 
     public void setLastEntityDamager(Entity e){
+        setLastExplosiveEntity(null);
         this.lastEntityDamager = e;
         if(e == null) return;
         if(lastEntityTask != null){
@@ -98,6 +100,14 @@ public class PlayerManager {
 
     public Entity getLastEntityDamager() {
         return lastEntityDamager;
+    }
+
+    public void setLastExplosiveEntity(Entity e){
+        this.lastExplosiveEntity = e;
+    }
+
+    public Entity getLastExplosiveEntity() {
+        return lastExplosiveEntity;
     }
 
     public void setLastLocation(Location location){

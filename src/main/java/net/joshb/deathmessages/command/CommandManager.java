@@ -40,7 +40,7 @@ public class CommandManager implements CommandExecutor {
         } else {
             DeathMessagesCommand cmd = get(args[0]);
             if (!(cmd == null)) {
-                ArrayList<String> a = new ArrayList<String>(Arrays.asList(args));
+                ArrayList<String> a = new ArrayList<>(Arrays.asList(args));
                 a.remove(0);
                 args = a.toArray(new String[a.size()]);
                 cmd.onCommand(p, args);

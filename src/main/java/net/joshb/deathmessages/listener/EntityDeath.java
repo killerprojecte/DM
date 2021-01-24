@@ -1,5 +1,6 @@
 package net.joshb.deathmessages.listener;
 
+import net.joshb.deathmessages.DeathMessages;
 import net.joshb.deathmessages.assets.Assets;
 import net.joshb.deathmessages.config.Gangs;
 import net.joshb.deathmessages.manager.PlayerManager;
@@ -7,14 +8,13 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 
 public class EntityDeath implements Listener {
 
-
-    @EventHandler
-    public void onEntityDeath(EntityDeathEvent e) {
+    synchronized void onEntityDeath(EntityDeathEvent e) {
         if (e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
             PlayerManager pm = PlayerManager.getPlayer(p);
@@ -33,6 +33,28 @@ public class EntityDeath implements Listener {
                         if (tx == null) return;
                         pls.spigot().sendMessage(tx);
                     }
+                } else if(pm.getLastExplosiveEntity() instanceof TNTPrimed){
+                    for (Player pls : Bukkit.getOnlinePlayers()) {
+                        PlayerManager pms = PlayerManager.getPlayer(pls);
+                        if(!pms.getMessagesEnabled()){
+                            continue;
+                        }
+                        TextComponent tx = Assets.getNaturalDeath(pm, "TNT");
+                        if (tx == null) return;
+                        pls.spigot().sendMessage(tx);
+                    }
+                } else if(pm.getLastExplosiveEntity() instanceof Firework){
+                    for (Player pls : Bukkit.getOnlinePlayers()) {
+                        PlayerManager pms = PlayerManager.getPlayer(pls);
+                        if(!pms.getMessagesEnabled()){
+                            continue;
+                        }
+                        TextComponent tx = Assets.getNaturalDeath(pm, "Firework");
+                        if (tx == null) return;
+                        pls.spigot().sendMessage(tx);
+                    }
+                } else if(pm.getLastClimbing() != null){
+                    //Bukkit.broadcastMessage(p.getName() + " fell off " + pm.getLastClimbing().name() + " and died");
                 } else {
                     for (Player pls : Bukkit.getOnlinePlayers()) {
                         PlayerManager pms = PlayerManager.getPlayer(pls);
@@ -44,7 +66,7 @@ public class EntityDeath implements Listener {
                         pls.spigot().sendMessage(tx);
                     }
                 }
-            }  else {
+            } else {
                 //Killed by mob
                 Entity ent = pm.getLastEntityDamager();
                 String mobName = ent.getType().getEntityClass().getSimpleName().toLowerCase();
@@ -91,6 +113,41 @@ public class EntityDeath implements Listener {
                 }
             }
         }
-
     }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onEntityDeath_LOWEST(EntityDeathEvent e){
+        if(DeathMessages.eventPriority.equals(EventPriority.LOWEST)){
+            onEntityDeath(e);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    public void onEntityDeath_LOW(EntityDeathEvent e){
+        if(DeathMessages.eventPriority.equals(EventPriority.LOW)){
+            onEntityDeath(e);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onEntityDeath_NORMAL(EntityDeathEvent e){
+        if(DeathMessages.eventPriority.equals(EventPriority.NORMAL)){
+            onEntityDeath(e);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onEntityDeath_HIGH(EntityDeathEvent e){
+        if(DeathMessages.eventPriority.equals(EventPriority.HIGH)){
+            onEntityDeath(e);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onEntityDeath_HIGHEST(EntityDeathEvent e){
+        if(DeathMessages.eventPriority.equals(EventPriority.HIGHEST)){
+            onEntityDeath(e);
+        }
+    }
+
 }

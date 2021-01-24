@@ -1,4 +1,8 @@
 Prefix: "&7[&cDM&7]"
+Console:
+  #Send death messages to console
+  Enabled: true
+  Format: "&c[DeathMessage] %message%"
 Commands:
   DeathMessages:
     Player-Only-Command: "&cOnly players can run this command."

@@ -5,13 +5,15 @@ net\joshb\deathmessages\assets\ConfigUpdater.class
 net\joshb\deathmessages\command\CommandToggle.class
 net\joshb\deathmessages\config\Messages.class
 net\joshb\deathmessages\assets\Assets$1.class
+net\joshb\deathmessages\listener\OnMove.class
 net\joshb\deathmessages\config\UserData.class
 net\joshb\deathmessages\manager\PlayerManager.class
-net\joshb\deathmessages\assets\RomanNumber.class
+net\joshb\deathmessages\listener\PlayerDeath.class
 net\joshb\deathmessages\config\Settings.class
 net\joshb\deathmessages\command\DeathMessagesCommand.class
 net\joshb\deathmessages\config\Gangs.class
 net\joshb\deathmessages\listener\OnJoin.class
+net\joshb\deathmessages\assets\ChatColorHelper.class
 net\joshb\deathmessages\config\PlayerDeathMessages.class
 net\joshb\deathmessages\listener\EntityDeath.class
 net\joshb\deathmessages\listener\EntityDamageByEntity.class
@@ -21,4 +23,5 @@ net\joshb\deathmessages\command\CommandManager.class
 net\joshb\deathmessages\DeathMessages.class
 net\joshb\deathmessages\command\CommandReload.class
 net\joshb\deathmessages\listener\EntityDamageByBlock.class
+net\joshb\deathmessages\assets\PlaceholderAPIExtension.class
 net\joshb\deathmessages\listener\Explosion.class

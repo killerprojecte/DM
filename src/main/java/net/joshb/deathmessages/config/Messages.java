@@ -10,6 +10,8 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.logging.Level;
 
 public class Messages {
 
@@ -33,8 +35,12 @@ public class Messages {
         try {
             ConfigUpdater.update(DeathMessages.plugin, fileName + ".yml", file, Arrays.asList());
         } catch (Exception e){
-            System.out.println("COULD NOT SAVE FILE: " +fileName);
-            e.printStackTrace();
+            File f = new File(DeathMessages.plugin.getDataFolder(), fileName + ".broken." + new Date().getTime());
+            DeathMessages.plugin.getLogger().log(Level.SEVERE, "Could not save: " + fileName + ".yml");
+            DeathMessages.plugin.getLogger().log(Level.SEVERE, "Regenerating file and renaming the current file to: " + f.getName());
+            DeathMessages.plugin.getLogger().log(Level.SEVERE, "You can try fixing the file with a yaml parser online!");
+            file.renameTo(f);
+            initialize();
         }
     }
 
@@ -42,8 +48,12 @@ public class Messages {
         try {
             config.load(file);
         } catch (Exception e){
-            System.out.println("COULD NOT RELOAD FILE: " + fileName);
-            e.printStackTrace();
+            File f = new File(DeathMessages.plugin.getDataFolder(), fileName + ".broken." + new Date().getTime());
+            DeathMessages.plugin.getLogger().log(Level.SEVERE, "Could not reload: " + fileName + ".yml");
+            DeathMessages.plugin.getLogger().log(Level.SEVERE, "Regenerating file and renaming the current file to: " + f.getName());
+            DeathMessages.plugin.getLogger().log(Level.SEVERE, "You can try fixing the file with a yaml parser online!");
+            file.renameTo(f);
+            initialize();
         }
     }
 

@@ -2,6 +2,11 @@ name: DeathMessages
 version: ${project.version}
 main: net.joshb.deathmessages.DeathMessages
 api-version: 1.13
+softdepend:
+  - PlaceholderAPI
+  - WorldEdit
+  - WorldGuard
+category: test
 author: Joshb_
 commands:
   deathmessages:

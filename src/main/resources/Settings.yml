@@ -1,12 +1,30 @@
-#If enabled, weapon kills will default to melee kills if the weapon does not have a custom display name
-Disable-Weapon-Kill-With-No-Custom-Name: false
+# Disable the default messages from minecraft
+Disable-Default-Messages: true
 
-#If enabled, if a player was pushed into the void by a killer, and void kill message is not defined, use melee death.
-#This option is ignored if Default-Natural-Death-Not-Defined is set to true.
+# Add a prefix to all death messages? (Prefix from Messages.yml)
+Add-Prefix-To-All-Messages: true
+
+# If enabled, weapon kills will default to a defined kill if the weapon does not have a custom display name
+Disable-Weapon-Kill-With-No-Custom-Name:
+  Enabled: false
+  Source:
+    Projectile:
+      Default-To: Projectile-Unknown
+    Weapon:
+      Default-To: Melee
+
+# If enabled, if a player was pushed into the void by a killer, and void kill message is not defined, use melee death.
+# This option is ignored if Default-Natural-Death-Not-Defined is set to true.
 Default-Melee-Last-Damage-Not-Defined: true
 
-#If enabled, if a player was pushed into the void by a killer, and void kill message is not defined, natural death message will be used.
+# If enabled, for example, if a player was pushed into the void by a killer,
+# and void kill message is not defined in the player section, natural death message will be used.
 Default-Natural-Death-Not-Defined: true
+
+# Set the listener call priority for death messages.
+# LOWEST, LOW, NORMAL, HIGH, HIGHEST are allowed
+# MONITOR is not support and is defaulted to HIGH
+Death-Listener-Priority: HIGH
 
 Expire-Last-Damage:
   # How long until the last mob that damaged a player expires? (Becomes a natural death cause)
@@ -14,5 +32,5 @@ Expire-Last-Damage:
   Expire-Mob: 7
 
 World-Groups:
-  #If enabled,
+  # If enabled,
   Enabled: false

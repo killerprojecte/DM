@@ -1,11 +1,13 @@
 package net.joshb.deathmessages.manager;
 
-import net.joshb.deathmessages.config.Settings;
 import net.joshb.deathmessages.DeathMessages;
+import net.joshb.deathmessages.config.Settings;
 import net.joshb.deathmessages.config.UserData;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -25,6 +27,8 @@ public class PlayerManager {
     private DamageCause damageCause;
     private Entity lastEntityDamager;
     private Entity lastExplosiveEntity;
+    private Projectile lastProjectileEntity;
+    private Material climbing;
     private Location location;
 
     private BukkitTask lastEntityTask;
@@ -85,6 +89,7 @@ public class PlayerManager {
 
     public void setLastEntityDamager(Entity e){
         setLastExplosiveEntity(null);
+        setLastProjectileEntity(null);
         this.lastEntityDamager = e;
         if(e == null) return;
         if(lastEntityTask != null){
@@ -108,6 +113,22 @@ public class PlayerManager {
 
     public Entity getLastExplosiveEntity() {
         return lastExplosiveEntity;
+    }
+
+    public Projectile getLastProjectileEntity() {
+        return lastProjectileEntity;
+    }
+
+    public void setLastProjectileEntity(Projectile lastProjectileEntity){
+        this.lastProjectileEntity = lastProjectileEntity;
+    }
+
+    public Material getLastClimbing() {
+        return climbing;
+    }
+
+    public void setLastClimbing(Material climbing){
+        this.climbing = climbing;
     }
 
     public void setLastLocation(Location location){

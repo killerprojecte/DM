@@ -3,6 +3,7 @@
 # %player_display% - returns the custom display name of the player
 # %weapon% - returns a tooltip of the item name, lore, and enchantments
 # %killer% - returns the entity's name
+# %killer_display% - if the killer is a player, returns the display name of the player
 # %biome% - returns the biome the player was in
 # %world% - returns the world name
 # %x% - returns the x position the player died at.
@@ -24,10 +25,25 @@ Natural-Cause:
     - "%player% was pricked to death"
   Melee:
     - "%player% killed themselves"
-  Projectile:
+  Projectile-Unknown:
     - "%player% shot themselves"
+  Projectile-Arrow:
+    - "%player% shot themselves"
+  Projectile-Egg:
+    - "%player% egged themselves"
+  Projectile-EnderPearl:
+    - "%player% shot themselves"
+  Projectile-Fireball:
+    - "%player% fireballed themselves"
+  Projectile-FishHook:
+    - "%player% got a fishhook caught in their head"
+  Projectile-Snowball:
+    - "%player% shot themselves with snowball"
+  Projectile-Trident:
+    - "%player% shot themselves with trident"
   Suffocation:
     - "%player% was squished to death"
+    - "PERMISSION[deathmessages.premium]%player% was mashed up pretty good."
   Fall:
     - "%player% fell from a high place"
   Fire:
@@ -42,12 +58,16 @@ Natural-Cause:
     - "%player% thought they could swim forever"
   Explosion:
     - "%player% blew up"
+  TNT:
+    - "%player% was playing with tnt"
+  Firework:
+    - "%player% thought playing with fireworks was a good idea"
   End-Crystal:
     - "%player% blew up! They were playing around with an end-crystal!"
   Void:
     - "%player% fell into the void"
   Lightning:
-    - "%player% was struck by lighting"
+    - "%player% was struck by /lighting"
   Suicide:
     - "%player% killed themselves"
   Starvation:
@@ -78,14 +98,14 @@ Natural-Cause:
 Mobs:
   elderguardian:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -93,14 +113,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   witherskeleton:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -108,14 +128,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   stray:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -123,14 +143,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   husk:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -138,14 +158,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   zombievillager:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -153,14 +173,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   skeletonhorse:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -168,14 +188,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   zombiehorse:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -183,14 +203,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   armorstand:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -198,14 +218,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   donkey:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -213,14 +233,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   mule:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -228,14 +248,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   evoker:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -243,14 +263,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   vex:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -258,14 +278,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   vindicator:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -273,14 +293,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   illusioner:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -288,7 +308,7 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   creeper:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
@@ -297,7 +317,7 @@ Mobs:
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -305,14 +325,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   skeleton:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -320,14 +340,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   spider:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -335,14 +355,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   giant:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -350,14 +370,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   zombie:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -365,14 +385,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   slime:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -380,14 +400,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   ghast:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -395,14 +415,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   pigzombie:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -410,14 +430,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   enderman:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -425,14 +445,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   cavespider:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -440,14 +460,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   silverfish:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -455,14 +475,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   blaze:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -470,14 +490,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   magmacube:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -485,14 +505,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   enderdragon:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -500,14 +520,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   wither:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -515,14 +535,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   bat:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -530,14 +550,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   witch:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -545,14 +565,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   endermite:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -560,14 +580,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   guardian:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -575,14 +595,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   shulker:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -590,14 +610,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   pig:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -605,14 +625,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   sheep:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -620,14 +640,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   cow:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -635,14 +655,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   chicken:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -650,14 +670,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   squid:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -665,14 +685,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   wolf:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -680,14 +700,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   mushroomcow:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -695,14 +715,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   snowman:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -710,14 +730,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   ocelot:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -725,14 +745,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   irongolem:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -740,14 +760,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   horse:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -755,14 +775,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   rabbit:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -770,14 +790,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   polarbear:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -785,14 +805,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   llama:
     Solo:
-      Projectile:
-        - "%player% was shot by a %killer% somehow using %weapon%"
+      Projectile-LlamaSpit:
+        - "%player% was spat on by a %killer%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -800,14 +820,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   parrot:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -815,14 +835,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   villager:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -830,14 +850,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   turtle:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -845,14 +865,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   phantom:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -860,14 +880,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   cod:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -875,14 +895,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   salmon:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -890,14 +910,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   pufferfish:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -905,14 +925,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   tropicalfish:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -920,14 +940,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   drowned:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -935,14 +955,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   dolphin:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -950,14 +970,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   cat:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -965,14 +985,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   panda:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -980,14 +1000,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   pillager:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -995,14 +1015,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   ravager:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -1010,14 +1030,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   traderllama:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -1025,14 +1045,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   wanderingtrader:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -1040,14 +1060,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   fox:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -1055,14 +1075,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   bee:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was stung by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was stung by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -1070,14 +1090,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   hoglin:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -1085,14 +1105,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   piglin:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -1100,14 +1120,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   strider:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -1115,14 +1135,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   zoglin:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -1130,14 +1150,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   piglinbrute:
     Solo:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -1147,8 +1167,14 @@ Mobs:
     Solo:
       Contact:
         - '%player% was pushed into a cactus by %killer%'
-      Projectile:
-        - '%player% was shot by %killer% somehow using %weapon%'
+      Projectile-Unknown:
+        - "%player% was shot by %killer%"
+      Projectile-Arrow:
+        - "%player% was shot by %killer% somehow using %weapon%"
+      Projectile-Fireball:
+        - "%player% was fireballed by %killer%"
+      Projectile-Snowball:
+        - "%player% was hit in the head with a snowball thrown by %killer%"
       Weapon:
         - '%player% was slain by %killer% somehow using %weapon%'
       Melee:
@@ -1159,6 +1185,10 @@ Mobs:
         - '%player% was pushed into lava by %killer%'
       Explosion:
         - '%killer% blew up %player%'
+      TNT:
+        - "%killer% blew up %player% with tnt"
+      Firework:
+        - "%player% stood too close to %killer%'s fireworks"
       End-Crystal:
         - "%killer% killed %player% by blowing up an end-crystal!"
       Void:
@@ -1168,7 +1198,7 @@ Mobs:
       Thorns:
         - '%player% tried playing with %killer%''s armor with thorns'
     Gang:
-      Projectile:
+      Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"

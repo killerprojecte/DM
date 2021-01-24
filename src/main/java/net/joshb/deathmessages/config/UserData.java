@@ -5,6 +5,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
+import java.util.Date;
+import java.util.logging.Level;
 
 public class UserData {
 
@@ -28,8 +30,12 @@ public class UserData {
         try {
             config.save(file);
         } catch (IOException e){
-            System.out.println("COULD NOT SAVE FILE: " +fileName);
-            e.printStackTrace();
+            File f = new File(DeathMessages.plugin.getDataFolder(), fileName + ".broken." + new Date().getTime());
+            DeathMessages.plugin.getLogger().log(Level.SEVERE, "Could not save: " + fileName + ".yml");
+            DeathMessages.plugin.getLogger().log(Level.SEVERE, "Regenerating file and renaming the current file to: " + f.getName());
+            DeathMessages.plugin.getLogger().log(Level.SEVERE, "You can try fixing the file with a yaml parser online!");
+            file.renameTo(f);
+            initialize();
         }
     }
 
@@ -37,8 +43,12 @@ public class UserData {
         try {
             config.load(file);
         } catch (Exception e){
-            System.out.println("COULD NOT RELOAD FILE: " + fileName);
-            e.printStackTrace();
+            File f = new File(DeathMessages.plugin.getDataFolder(), fileName + ".broken." + new Date().getTime());
+            DeathMessages.plugin.getLogger().log(Level.SEVERE, "Could not reload: " + fileName + ".yml");
+            DeathMessages.plugin.getLogger().log(Level.SEVERE, "Regenerating file and renaming the current file to: " + f.getName());
+            DeathMessages.plugin.getLogger().log(Level.SEVERE, "You can try fixing the file with a yaml parser online!");
+            file.renameTo(f);
+            initialize();
         }
     }
 

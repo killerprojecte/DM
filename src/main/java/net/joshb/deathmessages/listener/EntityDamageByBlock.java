@@ -15,9 +15,7 @@ public class EntityDamageByBlock implements Listener {
             Player p = (Player) e.getEntity();
             PlayerManager pm = PlayerManager.getPlayer(p);
             pm.setLastDamageCause(p.getLastDamageCause().getCause());
-
         }
-
     }
 
 }

@@ -35,6 +35,16 @@ Expire-Last-Damage:
   # Default: 7
   Expire-Mob: 7
 
+# If enabled, death messages will only be sent to players in the same world the player died in.
+Per-World-Messages: false
+
+# Group worlds together to send messages to a group of worlds instead of messages per world.
+# Per-World-Messages must be set to true, otherwise, this setting is ignored.
+# World groups are unlimited, and the key names can be named whatever you want, they are ignored
+# and not used in the code.
+# If a world a player dies in is not specified, it will only broadcast to the world the player died in.
 World-Groups:
-  # If enabled,
-  Enabled: false
+  1:
+    - world
+    - world_nether
+    - world_the_end

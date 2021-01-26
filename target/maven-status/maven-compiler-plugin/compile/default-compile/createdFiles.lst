@@ -15,6 +15,7 @@ net\joshb\deathmessages\listener\OnJoin.class
 net\joshb\deathmessages\listener\customlisteners\BroadcastTameableDeathListener.class
 net\joshb\deathmessages\assets\ChatColorHelper.class
 net\joshb\deathmessages\api\events\BroadcastTamableDeathMessageEvent.class
+net\joshb\deathmessages\command\CommandBlacklist.class
 net\joshb\deathmessages\config\PlayerDeathMessages.class
 net\joshb\deathmessages\listener\EntityDeath.class
 net\joshb\deathmessages\listener\EntityDamageByEntity.class
@@ -28,4 +29,3 @@ net\joshb\deathmessages\DeathMessages.class
 net\joshb\deathmessages\command\CommandReload.class
 net\joshb\deathmessages\listener\EntityDamageByBlock.class
 net\joshb\deathmessages\assets\PlaceholderAPIExtension.class
-net\joshb\deathmessages\listener\Explosion.class

@@ -31,17 +31,13 @@
 # For players that have a specific permission set, EX: deathmessages.premium, the death message
 # will be sent that is formatted as followed:
 # PERMISSIONS[YOUR.PERM.HERE]%player% dead lol
-# For players that have a specific permission set that kills another player (Mobs.player ONLY), the death
-# message should be formatted as followed:
-# KILLER_PERMISSION[YOUR.PERM.HERE]%killer% buried %player% 6 blocks under.
-# Examples:
+# Example:
 #
 # Mobs:
 #   player:
 #     Melee:
 #       - "%player% was slain by %killer%"
 #       - "PERMISSION[deathmessages.premium]&6Premium %player% &fdied to %killer%
-#       - "KILLER_PERMISSION[deathmessages.epickiller]%killer% buried %player% 6 blocks under."
 
 Natural-Cause:
   Contact:

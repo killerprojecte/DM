@@ -1,11 +1,14 @@
 package net.joshb.deathmessages.api.events;
 
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+
+import java.util.List;
 
 
 public class BroadcastDeathMessageEvent extends Event implements Cancellable {
@@ -14,15 +17,18 @@ public class BroadcastDeathMessageEvent extends Event implements Cancellable {
     private final LivingEntity livingEntity;
     private final TextComponent textComponent;
     private final boolean isGangDeath;
+    private final List<World> broadcastedWorlds;
     private boolean isCancelled;
 
     private static final HandlerList HANDLERS = new HandlerList();
 
-    public BroadcastDeathMessageEvent(Player player, LivingEntity livingEntity, TextComponent textComponent, boolean isGangDeath) {
+    public BroadcastDeathMessageEvent(Player player, LivingEntity livingEntity, TextComponent textComponent,
+                                      List<World> broadcastedWorlds, boolean isGangDeath) {
         this.player = player;
         this.livingEntity = livingEntity;
         this.textComponent = textComponent;
         this.isGangDeath = isGangDeath;
+        this.broadcastedWorlds = broadcastedWorlds;
         this.isCancelled = false;
     }
 
@@ -59,5 +65,9 @@ public class BroadcastDeathMessageEvent extends Event implements Cancellable {
 
     public boolean isGangDeath(){
         return this.isGangDeath;
+    }
+
+    public List<World> getBroadcastedWorlds(){
+        return this.broadcastedWorlds;
     }
 }

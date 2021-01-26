@@ -17,6 +17,7 @@ public class CommandManager implements CommandExecutor {
     private final List<DeathMessagesCommand> commands = new ArrayList<>();
 
     public void initializeSubCommands(){
+        commands.add(new CommandBlacklist());
         commands.add(new CommandToggle());
         commands.add(new CommandReload());
     }

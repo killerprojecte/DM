@@ -18,10 +18,10 @@ import java.util.UUID;
 
 public class PlayerManager {
 
-    private Player p;
-    private UUID uuid;
-    private String name;
-    private String displayName;
+    private final Player p;
+    private final UUID uuid;
+    private final String name;
+    private final String displayName;
     private boolean messagesEnabled;
     private boolean isBlacklisted;
     private DamageCause damageCause;
@@ -42,6 +42,7 @@ public class PlayerManager {
         this.displayName = p.getDisplayName();
 
         if(!UserData.getInstance().getConfig().contains(p.getUniqueId().toString())){
+            UserData.getInstance().getConfig().set(p.getUniqueId().toString() + ".username", p.getName());
             UserData.getInstance().getConfig().set(p.getUniqueId().toString() + ".messages-enabled", true);
             UserData.getInstance().getConfig().set(p.getUniqueId().toString() + ".is-blacklisted", false);
             UserData.getInstance().save();
@@ -75,8 +76,6 @@ public class PlayerManager {
 
     public void setBlacklisted(boolean b){
         this.isBlacklisted = b;
-        UserData.getInstance().getConfig().set(p.getUniqueId().toString() + ".is-blacklisted", b);
-        UserData.getInstance().save();
     }
 
     public void setLastDamageCause(DamageCause dc){
@@ -139,7 +138,16 @@ public class PlayerManager {
 
     public static PlayerManager getPlayer(Player p){
         for(PlayerManager pm : players){
-            if(pm.getUUID() == p.getUniqueId()){
+            if(pm.getUUID().equals(p.getUniqueId())){
+                return pm;
+            }
+        }
+        return null;
+    }
+
+    public static PlayerManager getPlayer(UUID uuid){
+        for(PlayerManager pm : players){
+            if(pm.getUUID().equals(uuid)){
                 return pm;
             }
         }

@@ -33,8 +33,6 @@ public class Assets {
 
     static boolean addPrefix = Settings.getInstance().getConfig().getBoolean("Add-Prefix-To-All-Messages");
 
-    static String split = "$%#@#";
-
     public static String formatMessage(String path) {
         return ChatColor.translateAlternateColorCodes('&',
                 Messages.getInstance().getConfig().getString(path)
@@ -115,36 +113,9 @@ public class Assets {
 
     public static TextComponent getNaturalDeath(PlayerManager pm, String damageCause) {
         Random random = new Random();
-        List<String> msgs = getPlayerDeathMessages().getStringList("Natural-Cause." + damageCause);
-        //Permission, Messages
-        ListMultimap<String, String> permMessages = ArrayListMultimap.create();
-        List<String> permissions = new ArrayList<>();
-        List<String> tempList = new ArrayList<>();
-        for(String s : msgs){
-            if(s.startsWith("PERMISSION[")){
-                Matcher m = Pattern.compile("PERMISSION\\[([^)]+)\\]").matcher(s);
-                while (m.find()){
-                    String perm = m.group(1);
-                    if(!permissions.contains(perm)){
-                        permissions.add(perm);
-                    }
-                    permMessages.put(perm, s.replace("PERMISSION[" + perm + "]", ""));
-                }
-            }
-        }
-        for(String perm : permissions){
-            if(pm.getPlayer().hasPermission(perm)){
-                tempList.addAll(permMessages.get(perm));
-            }
-        }
-        if(!tempList.isEmpty()){
-            msgs = tempList;
-        }
-
-        System.out.println(msgs);
-
+        List<String> msgs = filterSortList(getPlayerDeathMessages().getStringList("Natural-Cause." + damageCause), pm);
         if (msgs.isEmpty()) return null;
-        String msg = msgs.get(random.nextInt(msgs.size()));
+                String msg = msgs.get(random.nextInt(msgs.size()));
         TextComponent tc = new TextComponent();
         if(addPrefix){
             String prefix = Assets.colorize(Messages.getInstance().getConfig().getString("Prefix"));
@@ -198,11 +169,11 @@ public class Assets {
         Random random = new Random();
         List<String> msgs;
         if (gang) {
-            msgs = getPlayerDeathMessages().getStringList("Mobs." +
-                    mob.getType().getEntityClass().getSimpleName().toLowerCase() + ".Gang.Weapon");
+            msgs = filterSortList(getPlayerDeathMessages().getStringList("Mobs." +
+                    mob.getType().getEntityClass().getSimpleName().toLowerCase() + ".Gang.Weapon"), pm);
         } else {
-            msgs = getPlayerDeathMessages().getStringList("Mobs." +
-                    mob.getType().getEntityClass().getSimpleName().toLowerCase() + ".Solo.Weapon");
+            msgs = filterSortList(getPlayerDeathMessages().getStringList("Mobs." +
+                    mob.getType().getEntityClass().getSimpleName().toLowerCase() + ".Solo.Weapon"), pm);
         }
         if (msgs.isEmpty()) return null;
         String msg = msgs.get(random.nextInt(msgs.size()));
@@ -280,11 +251,11 @@ public class Assets {
         Random random = new Random();
         List<String> msgs;
         if (gang) {
-            msgs = getPlayerDeathMessages().getStringList("Mobs." +
-                    mob.getType().getEntityClass().getSimpleName().toLowerCase() + ".Gang." + damageCause);
+            msgs = filterSortList(getPlayerDeathMessages().getStringList("Mobs." +
+                    mob.getType().getEntityClass().getSimpleName().toLowerCase() + ".Gang." + damageCause), pm);
         } else {
-            msgs = getPlayerDeathMessages().getStringList("Mobs." +
-                    mob.getType().getEntityClass().getSimpleName().toLowerCase() + ".Solo." + damageCause);
+            msgs = filterSortList(getPlayerDeathMessages().getStringList("Mobs." +
+                    mob.getType().getEntityClass().getSimpleName().toLowerCase() + ".Solo." + damageCause), pm);
         }
 
         if (msgs.isEmpty()) {
@@ -296,6 +267,7 @@ public class Assets {
             }
             return null;
         }
+
         String msg = msgs.get(random.nextInt(msgs.size()));
         TextComponent tc = new TextComponent();
         if(addPrefix){
@@ -343,11 +315,11 @@ public class Assets {
         Random random = new Random();
         List<String> msgs;
         if (gang) {
-            msgs = getPlayerDeathMessages().getStringList("Mobs." +
-                    mob.getType().getEntityClass().getSimpleName().toLowerCase() + ".Gang." + projectileDamage);
+            msgs = filterSortList(getPlayerDeathMessages().getStringList("Mobs." +
+                    mob.getType().getEntityClass().getSimpleName().toLowerCase() + ".Gang." + projectileDamage), pm);
         } else {
-            msgs = getPlayerDeathMessages().getStringList("Mobs." +
-                    mob.getType().getEntityClass().getSimpleName().toLowerCase() + ".Solo." + projectileDamage);
+            msgs = filterSortList(getPlayerDeathMessages().getStringList("Mobs." +
+                    mob.getType().getEntityClass().getSimpleName().toLowerCase() + ".Solo." + projectileDamage), pm);
         }
         String msg = msgs.get(random.nextInt(msgs.size()));
         TextComponent tc = new TextComponent();
@@ -364,10 +336,10 @@ public class Assets {
         }
         for (String splitMessage : firstSection.split(" ")) {
             if (splitMessage.equalsIgnoreCase("%weapon%") && pm.getLastProjectileEntity() instanceof Arrow) {
-                ItemStack i = mob.getEquipment().getItemInMainHand();
-                if (i == null) {
+                if(mob.getEquipment().getItemInMainHand() == null){
                     continue;
                 }
+                ItemStack i = mob.getEquipment().getItemInMainHand();
                 String displayName;
                 if (!i.hasItemMeta() && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().equals("")) {
                     if (Settings.getInstance().getConfig().getBoolean("Disable-Weapon-Kill-With-No-Custom-Name.Enabled")) {
@@ -425,8 +397,9 @@ public class Assets {
 
     public static TextComponent getTamable(PlayerManager pm, Tameable tameable) {
         Random random = new Random();
-        List<String> msgs = getEntityDeathMessages().getStringList("Tamable");
+        List<String> msgs = filterSortList(getEntityDeathMessages().getStringList("Tamable"), pm);
         if (msgs.isEmpty()) return null;
+
         String msg = msgs.get(random.nextInt(msgs.size()));
         TextComponent tc = new TextComponent();
         if(addPrefix){
@@ -468,6 +441,36 @@ public class Assets {
             }
         }
         return tc;
+    }
+
+    public static List<String> filterSortList(List<String> list, PlayerManager pm){
+        List<String> newList = list;
+        ListMultimap<String, String> permMessages = ArrayListMultimap.create();
+        List<String> permissions = new ArrayList<>();
+        List<String> tempList = new ArrayList<>();
+        for(String s : list){
+            if(s.startsWith("PERMISSION[")){
+                Matcher m = Pattern.compile("PERMISSION\\[([^)]+)\\]").matcher(s);
+                while (m.find()){
+                    String perm = m.group(1);
+                    if(!permissions.contains(perm)){
+                        permissions.add(perm);
+                    }
+                    permMessages.put(perm, s.replace("PERMISSION[" + perm + "]", ""));
+                }
+            }
+        }
+        for(String perm : permissions){
+            if(pm.getPlayer().hasPermission(perm)){
+                tempList.addAll(permMessages.get(perm));
+            }
+        }
+        if(!tempList.isEmpty()){
+            newList = tempList;
+        } else {
+            newList.removeIf(s -> s.startsWith("PERMISSION["));
+        }
+        return newList;
     }
 
     public static String colorize(String message) {

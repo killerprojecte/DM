@@ -1,7 +1,7 @@
 package net.joshb.deathmessages.listener;
 
 import net.joshb.deathmessages.assets.Assets;
-import net.joshb.deathmessages.manager.PlayerManager;
+import net.joshb.deathmessages.api.PlayerManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

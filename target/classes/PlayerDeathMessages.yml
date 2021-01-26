@@ -1,3 +1,9 @@
+# DeathMessages by Joshb_ (Original DeathMessagesPrime by CosmoConsole)
+# All configs from this plugin has an auto updater. Meaning if I add a value in the config from updates,
+# the value will be automatically added without regenerating the configs.
+#
+# Player Death Messages Config
+#
 #Placeholders:
 # %player% - returns the player name
 # %player_display% - returns the custom display name of the player
@@ -19,6 +25,23 @@
 # "%player% was killed by %killer%::&cLocations: X:%x%, Y:%y%, Z:%z%::COMMAND:tppos %x% %y% %z%"
 # "%player% was killed by %killer%::&cLocations: X:%x%, Y:%y%, Z:%z%"
 # "%player% was killed by %killer%::&cLocations: X:%x%, Y:%y%, Z:%z%::SUGGEST_COMMAND:msg %player% lol noob"
+#
+# Permissions Based Messages
+#
+# For players that have a specific permission set, EX: deathmessages.premium, the death message
+# will be sent that is formatted as followed:
+# PERMISSIONS[YOUR.PERM.HERE]%player% dead lol
+# For players that have a specific permission set that kills another player (Mobs.player ONLY), the death
+# message should be formatted as followed:
+# KILLER_PERMISSION[YOUR.PERM.HERE]%killer% buried %player% 6 blocks under.
+# Examples:
+#
+# Mobs:
+#   player:
+#     Melee:
+#       - "%player% was slain by %killer%"
+#       - "PERMISSION[deathmessages.premium]&6Premium %player% &fdied to %killer%
+#       - "KILLER_PERMISSION[deathmessages.epickiller]%killer% buried %player% 6 blocks under."
 
 Natural-Cause:
   Contact:
@@ -43,6 +66,7 @@ Natural-Cause:
     - "%player% shot themselves with trident"
   Suffocation:
     - "%player% was squished to death"
+    - "PERMISSION[deathmessages.premium]%player% was mashed up pretty good."
   Fall:
     - "%player% fell from a high place"
   Fire:
@@ -66,7 +90,7 @@ Natural-Cause:
   Void:
     - "%player% fell into the void"
   Lightning:
-    - "%player% was struck by lighting"
+    - "%player% was struck by /lighting"
   Suicide:
     - "%player% killed themselves"
   Starvation:

@@ -4,7 +4,9 @@ import net.joshb.deathmessages.assets.PlaceholderAPIExtension;
 import net.joshb.deathmessages.command.CommandManager;
 import net.joshb.deathmessages.config.*;
 import net.joshb.deathmessages.listener.*;
-import net.joshb.deathmessages.manager.PlayerManager;
+import net.joshb.deathmessages.api.PlayerManager;
+import net.joshb.deathmessages.listener.customlisteners.BroadcastPlayerDeathListener;
+import net.joshb.deathmessages.listener.customlisteners.BroadcastTameableDeathListener;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
@@ -73,6 +75,10 @@ public class DeathMessages extends JavaPlugin {
     }
 
     private void initializeListeners(){
+        //Custom Events
+        Bukkit.getPluginManager().registerEvents(new BroadcastPlayerDeathListener(), this);
+        Bukkit.getPluginManager().registerEvents(new BroadcastTameableDeathListener(), this);
+        //Bukkits events
         Bukkit.getPluginManager().registerEvents(new EntityDamage(), this);
         Bukkit.getPluginManager().registerEvents(new EntityDamageByBlock(), this);
         Bukkit.getPluginManager().registerEvents(new EntityDamageByEntity(), this);

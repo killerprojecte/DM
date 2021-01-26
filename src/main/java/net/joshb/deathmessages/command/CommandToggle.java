@@ -3,7 +3,7 @@ package net.joshb.deathmessages.command;
 import net.joshb.deathmessages.assets.Assets;
 import net.joshb.deathmessages.config.UserData;
 import net.joshb.deathmessages.enums.Permission;
-import net.joshb.deathmessages.manager.PlayerManager;
+import net.joshb.deathmessages.api.PlayerManager;
 import org.bukkit.entity.Player;
 
 public class CommandToggle extends DeathMessagesCommand {

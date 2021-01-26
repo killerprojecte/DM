@@ -2,7 +2,7 @@ package net.joshb.deathmessages.assets;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import net.joshb.deathmessages.DeathMessages;
-import net.joshb.deathmessages.manager.PlayerManager;
+import net.joshb.deathmessages.api.PlayerManager;
 import org.bukkit.entity.Player;
 
 public class PlaceholderAPIExtension extends PlaceholderExpansion {

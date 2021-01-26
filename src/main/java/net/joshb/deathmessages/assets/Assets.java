@@ -1,13 +1,15 @@
 package net.joshb.deathmessages.assets;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.joshb.deathmessages.DeathMessages;
+import net.joshb.deathmessages.api.PlayerManager;
 import net.joshb.deathmessages.config.EntityDeathMessages;
 import net.joshb.deathmessages.config.Messages;
 import net.joshb.deathmessages.config.PlayerDeathMessages;
 import net.joshb.deathmessages.config.Settings;
-import net.joshb.deathmessages.manager.PlayerManager;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -30,6 +32,8 @@ import java.util.regex.Pattern;
 public class Assets {
 
     static boolean addPrefix = Settings.getInstance().getConfig().getBoolean("Add-Prefix-To-All-Messages");
+
+    static String split = "$%#@#";
 
     public static String formatMessage(String path) {
         return ChatColor.translateAlternateColorCodes('&',
@@ -112,6 +116,33 @@ public class Assets {
     public static TextComponent getNaturalDeath(PlayerManager pm, String damageCause) {
         Random random = new Random();
         List<String> msgs = getPlayerDeathMessages().getStringList("Natural-Cause." + damageCause);
+        //Permission, Messages
+        ListMultimap<String, String> permMessages = ArrayListMultimap.create();
+        List<String> permissions = new ArrayList<>();
+        List<String> tempList = new ArrayList<>();
+        for(String s : msgs){
+            if(s.startsWith("PERMISSION[")){
+                Matcher m = Pattern.compile("PERMISSION\\[([^)]+)\\]").matcher(s);
+                while (m.find()){
+                    String perm = m.group(1);
+                    if(!permissions.contains(perm)){
+                        permissions.add(perm);
+                    }
+                    permMessages.put(perm, s.replace("PERMISSION[" + perm + "]", ""));
+                }
+            }
+        }
+        for(String perm : permissions){
+            if(pm.getPlayer().hasPermission(perm)){
+                tempList.addAll(permMessages.get(perm));
+            }
+        }
+        if(!tempList.isEmpty()){
+            msgs = tempList;
+        }
+
+        System.out.println(msgs);
+
         if (msgs.isEmpty()) return null;
         String msg = msgs.get(random.nextInt(msgs.size()));
         TextComponent tc = new TextComponent();

@@ -1,4 +1,4 @@
-package net.joshb.deathmessages.manager;
+package net.joshb.deathmessages.api;
 
 import net.joshb.deathmessages.DeathMessages;
 import net.joshb.deathmessages.config.Settings;

@@ -62,7 +62,7 @@ public class BroadcastTamableDeathMessageEvent extends Event implements Cancella
         return this.owner;
     }
 
-    public Tameable getLivingEntity(){
+    public Tameable getTameable(){
         return this.tameable;
     }
 

@@ -14,6 +14,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 
 import java.util.ArrayList;
@@ -46,8 +47,11 @@ public class EntityDeath implements Listener {
                     if (tx == null) return;
                     BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(p, null, tx, getWorlds(p), false);
                     Bukkit.getPluginManager().callEvent(event);
-                } else if (pm.getLastClimbing() != null) {
-                    //Bukkit.broadcastMessage(p.getName() + " fell off " + pm.getLastClimbing().name() + " and died");
+                } else if (pm.getLastClimbing() != null && pm.getLastDamage().equals(EntityDamageEvent.DamageCause.FALL)) {
+                    TextComponent tx = Assets.getNaturalDeath(pm, "Climbable");
+                    if (tx == null) return;
+                    BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(p, null, tx, getWorlds(p), false);
+                    Bukkit.getPluginManager().callEvent(event);
                 } else {
                     TextComponent tx = Assets.getNaturalDeath(pm, Assets.getSimpleCause(pm.getLastDamage()));
                     if (tx == null) return;
@@ -96,6 +100,9 @@ public class EntityDeath implements Listener {
 
     private List<World> getWorlds(Entity e){
         List<World> broadcastWorlds = new ArrayList<>();
+        if(Settings.getInstance().getConfig().getStringList("Disabled-Worlds").contains(e.getWorld().getName())){
+            return broadcastWorlds;
+        }
         if (Settings.getInstance().getConfig().getBoolean("Per-World-Messages")) {
             for (String groups : Settings.getInstance().getConfig().getConfigurationSection("World-Groups").getKeys(false)) {
                 List<String> worlds = Settings.getInstance().getConfig().getStringList("World-Groups." + groups);

@@ -30,6 +30,14 @@ Default-Natural-Death-Not-Defined: true
 # MONITOR is not support and is defaulted to HIGH
 Death-Listener-Priority: HIGH
 
+# If enabled, if mobs that have any specified characters from If-Contains, the default mob name will be displayed.
+Rename-Mobs:
+  Enabled: true
+  If-Contains: "♡♥❤■"
+
+# If enabled, mobs will always default to their entity name. Display names will always be ignored. (Besides players)
+Disable-Named-Mobs: false
+
 Expire-Last-Damage:
   # How long until the last mob that damaged a player expires? (Becomes a natural death cause)
   # Default: 7
@@ -48,3 +56,10 @@ World-Groups:
     - world
     - world_nether
     - world_the_end
+
+# Worlds that death messages will never be sent to.
+# Regardless of any other settings, messages will never be sent on these worlds.
+# If a world listed below belongs in a world group. Still, the messages will never be sent to any world.
+Disabled-Worlds:
+  - someDisabledWorld1
+  - someOtherDisabledWorld

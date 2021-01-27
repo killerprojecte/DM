@@ -130,4 +130,8 @@ public class DeathMessages extends JavaPlugin {
             new PlayerManager(p);
         }
     }
+
+    public static EventPriority getEventPriority(){
+        return eventPriority;
+    }
 }

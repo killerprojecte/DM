@@ -134,6 +134,10 @@ public class Assets {
                 String mssa = Assets.colorize(splitMessage.replaceAll("%block%", convertString(fb.getBlockData().getMaterial().name())));
                 tc.addExtra(mssa);
                 lastColor = getColorOfString(lastColor + mssa);
+            } else if(splitMessage.contains("%climbable%") && pm.getLastDamage().equals(EntityDamageEvent.DamageCause.FALL)) {
+                String mssa = Assets.colorize(splitMessage.replaceAll("%climbable%", convertString(pm.getLastClimbing().toString())));
+                tc.addExtra(mssa);
+                lastColor = getColorOfString(lastColor + mssa);
             } else {
                 if (lastColor != null) {
                     TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(playerDeathPlaceholders(lastColor + splitMessage, pm, null)) + " "));
@@ -523,10 +527,24 @@ public class Assets {
             }
             return msg;
         } else {
+            String mobName = mob.getName();
+            if(Settings.getInstance().getConfig().getBoolean("Rename-Mobs.Enabled")){
+                String[] chars = Settings.getInstance().getConfig().getString("Rename-Mobs.If-Contains").split("(?!^)");
+                for (String ch : chars){
+                    if(mobName.contains(ch)){
+                        mobName = convertString(mob.getType().toString().toLowerCase());
+                        break;
+                    }
+                }
+            }
+            if(!(mob instanceof Player) && Settings.getInstance().getConfig().getBoolean("Disable-Named-Mobs")){
+                mobName = convertString(mob.getType().toString().toLowerCase());
+            }
             msg = colorize(msg
                     .replaceAll("%player%", pm.getName())
                     .replaceAll("%player_display%", pm.getDisplayName())
-                    .replaceAll("%killer%", mob.getName())
+                    .replaceAll("%killer%", mobName)
+                    .replaceAll("%killer_type%", convertString(mob.getType().toString().toLowerCase()))
                     .replaceAll("%biome%", pm.getLastLocation().getBlock().getBiome().name())
                     .replaceAll("%world%", pm.getLastLocation().getWorld().getName())
                     .replaceAll("%x%", String.valueOf(pm.getLastLocation().getBlock().getX()))

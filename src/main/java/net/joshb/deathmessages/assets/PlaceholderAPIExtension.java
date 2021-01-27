@@ -107,6 +107,9 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
         if(identifier.equals("messages_enabled")){
             return String.valueOf(pm.getMessagesEnabled());
         }
+        if(identifier.equals("is_blacklisted")){
+            return String.valueOf(pm.isBlacklisted());
+        }
 
         return null;
     }

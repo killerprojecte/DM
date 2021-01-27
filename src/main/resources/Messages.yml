@@ -2,7 +2,6 @@ Prefix: "&7[&cDM&7]"
 Console:
   #Send death messages to console
   Enabled: true
-  Format: "&c[DeathMessage] [W:%world%] %message%"
 Commands:
   DeathMessages:
     Player-Only-Command: "&cOnly players can run this command."
@@ -10,6 +9,7 @@ Commands:
     Help:
       - "%prefix% &aDeathMessages Command Help List:"
       - ""
+      - "&a/deathmessages blacklist <username> - blacklists the user from death messages. They will still see other players' death messages, but not send them."
       - "&a/deathmessages toggle &7- Toggle death messages on or off."
       - "&a/deathmessages reload &7- Reload plugin configs."
       - ""

@@ -8,8 +8,9 @@
 # %player% - returns the player name
 # %player_display% - returns the custom display name of the player
 # %weapon% - returns a tooltip of the item name, lore, and enchantments
-# %killer% - returns the entity's name
+# %killer% - returns the entity's name. If there is no name set, it will be the entity type.
 # %killer_display% - if the killer is a player, returns the display name of the player
+# %killer_type% - returns the entity type name no matter the display name
 # %biome% - returns the biome the player was in
 # %world% - returns the world name
 # %x% - returns the x position the player died at.
@@ -65,6 +66,8 @@ Natural-Cause:
     - "PERMISSION[deathmessages.premium]%player% was mashed up pretty good."
   Fall:
     - "%player% fell from a high place"
+  Climbable:
+    - "%player% tried climbing to greater heights and fell off %climbable%"
   Fire:
     - "%player% thought standing in fire was a good idea"
   Fire-Tick:

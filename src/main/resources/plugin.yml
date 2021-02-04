@@ -6,7 +6,7 @@ softdepend:
   - PlaceholderAPI
   - WorldEdit
   - WorldGuard
-category: test
+  - DiscordBotAPI
 author: Joshb_
 commands:
   deathmessages:

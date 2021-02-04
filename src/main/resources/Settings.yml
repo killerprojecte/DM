@@ -8,9 +8,46 @@ Disable-Default-Messages: true
 # Add a prefix to all death messages? (Prefix from Messages.yml)
 Add-Prefix-To-All-Messages: true
 
+#Settings for specific hooks the plugins interact with
+Hooks:
+  # If WorldGuard is found, enable the hook
+  # This creates custom flags for regions. These flags are set to ALLOW by default
+  # Flags:
+  #   broadcast-deathmessage-player
+  #   broadcast-deathmessage-mobs
+  #   broadcast-deathmessage-natural
+  #   broadcast-deathmessage-tameable
+  # Use: /rg flag <regionName> <customFlag> allow/deny
+  # The above flags determine death message from being broadcasted if the pvp/pve is taking place in the region.
+  WorldGuard:
+    Enabled: true
+
+  # If DiscordBotAPI (https://www.spigotmc.org/resources/discordbotapi.86518/) is installed, and enabled here.
+  # To get Channel-IDs, you must have developer mode enabled in discord. Then, you will right click the channel
+  # you want to send a defined message. Then you will click "Copy ID" and paste your clipboard in "Channel-ID"
+  Discord:
+    Enabled: false
+    # Specify which channel certain death messages get sent.
+    Channels:
+      Player:
+        Enabled: true
+        Channel-ID: 0
+      Mob:
+        Enabled: true
+        Channel-ID: 0
+      Natural:
+        Enabled: true
+        Channel-ID: 0
+      Tameable:
+        Enabled: true
+        Channel-ID: 0
+
 # If enabled, weapon kills will default to a defined kill if the weapon does not have a custom display name
 Disable-Weapon-Kill-With-No-Custom-Name:
   Enabled: false
+  # If the weapon has enchantments and you still want the death type to still be Weapon, set this to false.
+  # Even if the weapon name is still default.
+  Ignore-Enchantments: true
   Source:
     Projectile:
       Default-To: Projectile-Unknown
@@ -63,3 +100,11 @@ World-Groups:
 Disabled-Worlds:
   - someDisabledWorld1
   - someOtherDisabledWorld
+
+# Custom Items
+# Add item display names here. If an item has the display name of something you provide here. Will be counted as
+# a Weapon Kill, not a melee kill.
+# REGEX is required here.
+Custom-Item-Display-Names-Is-Weapon:
+  - '&6SUPER\sCOOL\sGOLDEN\sAPPLE'
+  - 'SICKNAME'

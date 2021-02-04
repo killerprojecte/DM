@@ -48,6 +48,7 @@ public class Settings {
         try {
             config.load(file);
         } catch (Exception e){
+            e.printStackTrace();
             File f = new File(DeathMessages.plugin.getDataFolder(), fileName + ".broken." + new Date().getTime());
             DeathMessages.plugin.getLogger().log(Level.SEVERE, "Could not reload: " + fileName + ".yml");
             DeathMessages.plugin.getLogger().log(Level.SEVERE, "Regenerating file and renaming the current file to: " + f.getName());

@@ -24,19 +24,14 @@ public class CommandManager implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String cmdLabel, String[] args){
-        if(!(sender instanceof Player)){
-            sender.sendMessage(Assets.formatMessage("Commands.DeathMessages.Player-Only-Command"));
-            return false;
-        }
-        Player p = (Player) sender;
-        if(!p.hasPermission(Permission.DEATHMESSAGES_COMMAND.getValue())){
-            p.sendMessage(Assets.formatMessage("Commands.DeathMessages.No-Permission"));
+        if(sender instanceof Player && !sender.hasPermission(Permission.DEATHMESSAGES_COMMAND.getValue())){
+            sender.sendMessage(Assets.formatMessage("Commands.DeathMessages.No-Permission"));
             return false;
         }
         if(args.length == 0){
             for(String s : Assets.formatMessage(
                     Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Help"))){
-                p.sendMessage(s);
+                sender.sendMessage(s);
             }
         } else {
             DeathMessagesCommand cmd = get(args[0]);
@@ -44,7 +39,7 @@ public class CommandManager implements CommandExecutor {
                 ArrayList<String> a = new ArrayList<>(Arrays.asList(args));
                 a.remove(0);
                 args = a.toArray(new String[a.size()]);
-                cmd.onCommand(p, args);
+                cmd.onCommand(sender, args);
                 return false;
             }
 

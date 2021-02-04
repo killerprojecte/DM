@@ -1,5 +1,6 @@
 package net.joshb.deathmessages.api.events;
 
+import net.joshb.deathmessages.enums.MessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -19,17 +20,19 @@ public class BroadcastTamableDeathMessageEvent extends Event implements Cancella
     private final String owner;
     //The entity that was killed
     private final Tameable tameable;
+    private final MessageType messageType;
     private final TextComponent textComponent;
     private final List<World> broadcastedWorlds;
     private boolean isCancelled;
 
     private static final HandlerList HANDLERS = new HandlerList();
 
-    public BroadcastTamableDeathMessageEvent(Player player, String owner, Tameable tameable, TextComponent textComponent,
+    public BroadcastTamableDeathMessageEvent(Player player, String owner, Tameable tameable, MessageType messageType, TextComponent textComponent,
                                              List<World> broadcastedWorlds) {
         this.player = player;
         this.owner = owner;
         this.tameable = tameable;
+        this.messageType = messageType;
         this.textComponent = textComponent;
         this.broadcastedWorlds = broadcastedWorlds;
         this.isCancelled = false;
@@ -65,6 +68,8 @@ public class BroadcastTamableDeathMessageEvent extends Event implements Cancella
     public Tameable getTameable(){
         return this.tameable;
     }
+
+    public MessageType getMessageType(){ return this.messageType; }
 
     public TextComponent getTextComponent() {
         return this.textComponent;

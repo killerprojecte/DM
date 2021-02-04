@@ -132,7 +132,11 @@ public class ConfigUpdater {
 
             if (o instanceof String) {
                 String s = String.valueOf(o);
-                builder.append(prefixSpaces).append("  - \"").append(s).append("\"");
+                if(s.contains("\\")){
+                    builder.append(prefixSpaces).append("  - '").append(o).append("'");
+                } else {
+                    builder.append(prefixSpaces).append("  - \"").append(s).append("\"");
+                }
             } else if(o instanceof Character){
                 builder.append(prefixSpaces).append("  - '").append(o).append("'");
             } else if (o instanceof List) {

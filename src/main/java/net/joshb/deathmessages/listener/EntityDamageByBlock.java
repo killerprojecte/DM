@@ -1,7 +1,6 @@
 package net.joshb.deathmessages.listener;
 
 import net.joshb.deathmessages.api.PlayerManager;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,7 +15,6 @@ public class EntityDamageByBlock implements Listener {
             Player p = (Player) e.getEntity();
             PlayerManager pm = PlayerManager.getPlayer(p);
             pm.setLastDamageCause(e.getCause());
-            Bukkit.broadcastMessage(e.getCause().toString());
         }
     }
 

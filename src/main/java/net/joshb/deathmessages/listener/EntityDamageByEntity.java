@@ -1,6 +1,7 @@
 package net.joshb.deathmessages.listener;
 
 import net.joshb.deathmessages.api.PlayerManager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,7 +16,7 @@ public class EntityDamageByEntity implements Listener {
 
     @EventHandler
     public void entityDamageByEntity(EntityDamageByEntityEvent e) {
-        if (e.getEntity() instanceof Player) {
+        if (e.getEntity() instanceof Player && Bukkit.getOnlinePlayers().contains(e.getEntity())) {
             Player p = (Player) e.getEntity();
             PlayerManager pm = PlayerManager.getPlayer(p);
             if(e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)){
@@ -34,6 +35,9 @@ public class EntityDamageByEntity implements Listener {
                         pm.setLastEntityDamager((LivingEntity) firework.getShooter());
                     }
                     pm.setLastExplosiveEntity(e.getDamager());
+                } else {
+                    pm.setLastEntityDamager(e.getDamager());
+                    pm.setLastExplosiveEntity(e.getDamager());
                 }
             } else if (e.getDamager() instanceof Projectile) {
                 Projectile projectile = (Projectile) e.getDamager();
@@ -43,6 +47,9 @@ public class EntityDamageByEntity implements Listener {
                 pm.setLastEntityDamager(e.getDamager());
             } else if (e.getDamager().getType().isAlive()) {
                 pm.setLastEntityDamager(e.getDamager());
+            } else if (e.getDamager() instanceof EvokerFangs){
+                EvokerFangs evokerFangs = (EvokerFangs) e.getDamager();
+                pm.setLastEntityDamager(evokerFangs.getOwner());
             }
 
         }

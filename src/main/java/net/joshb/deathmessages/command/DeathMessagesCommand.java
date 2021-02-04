@@ -1,10 +1,10 @@
 package net.joshb.deathmessages.command;
 
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 
 public abstract class DeathMessagesCommand {
 
     public abstract String command();
 
-    public abstract void onCommand(Player p, String[] args);
+    public abstract void onCommand(CommandSender sender, String[] args);
 }

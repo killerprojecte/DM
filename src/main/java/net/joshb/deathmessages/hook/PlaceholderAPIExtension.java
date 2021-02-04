@@ -1,4 +1,4 @@
-package net.joshb.deathmessages.assets;
+package net.joshb.deathmessages.hook;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import net.joshb.deathmessages.DeathMessages;

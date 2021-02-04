@@ -1,7 +1,5 @@
 package net.joshb.deathmessages.assets;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.joshb.deathmessages.DeathMessages;
@@ -18,6 +16,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -34,9 +33,8 @@ public class Assets {
     static boolean addPrefix = Settings.getInstance().getConfig().getBoolean("Add-Prefix-To-All-Messages");
 
     public static String formatMessage(String path) {
-        return ChatColor.translateAlternateColorCodes('&',
-                Messages.getInstance().getConfig().getString(path)
-                        .replaceAll("%prefix%", Messages.getInstance().getConfig().getString("Prefix")));
+        return colorize(Messages.getInstance().getConfig().getString(path)
+                .replaceAll("%prefix%", Messages.getInstance().getConfig().getString("Prefix")));
     }
 
     public static List<String> formatMessage(List<String> list) {
@@ -48,11 +46,32 @@ public class Assets {
         return newList;
     }
 
-    public static boolean isClimable(Material material) {
-        return material.name().contains("LADDER")
-                || material.name().contains("VINE")
-                || material.equals(Material.SCAFFOLDING)
-                || material.name().contains("TRAPDOOR");
+    public static boolean isClimable(Block b) {
+        if(DeathMessages.majorVersion() >= 14){
+            return b.getType().name().contains("LADDER")
+                    || b.getType().name().contains("VINE")
+                    || b.getType().equals(Material.SCAFFOLDING)
+                    || b.getType().name().contains("TRAPDOOR");
+        }
+        return b.getType().name().contains("LADDER")
+                || b.getType().name().contains("VINE")
+                || b.getType().name().contains("TRAPDOOR");
+    }
+
+    public static boolean displayNameIsWeapon(ItemStack itemStack){
+        if(itemStack == null || !itemStack.hasItemMeta() || !itemStack.getItemMeta().hasDisplayName()){
+            return false;
+        }
+        String displayName = itemStack.getItemMeta().getDisplayName();
+
+        for(String s : Settings.getInstance().getConfig().getStringList("Custom-Item-Display-Names-Is-Weapon")){
+            Pattern pattern = Pattern.compile(Assets.colorize(s));
+            Matcher matcher = pattern.matcher(displayName);
+            if(matcher.find()){
+                return true;
+            }
+        }
+        return false;
     }
 
     public static boolean isWeapon(ItemStack itemStack) {
@@ -61,7 +80,8 @@ public class Assets {
                 || itemStack.getType().toString().contains("AXE")
                 || itemStack.getType().toString().contains("HOE")
                 || itemStack.getType().toString().contains("SWORD")
-                || itemStack.getType().toString().contains("BOW");
+                || itemStack.getType().toString().contains("BOW")
+                || displayNameIsWeapon(itemStack);
     }
 
     static String lastColor = null;
@@ -70,15 +90,28 @@ public class Assets {
         lastColor = null;
         LivingEntity mob = (LivingEntity) pm.getLastEntityDamager();
         boolean hasWeapon;
-        if (mob.getEquipment() == null) {
-            hasWeapon = false;
-        } else if (!isWeapon(mob.getEquipment().getItemInMainHand())) {
-            hasWeapon = false;
-        } else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.THORNS)) {
-            hasWeapon = false;
+        if(DeathMessages.majorVersion() < 9){
+            if (mob.getEquipment() == null || mob.getEquipment().getItemInHand() == null) {
+                hasWeapon = false;
+            } else if (!isWeapon(mob.getEquipment().getItemInHand())) {
+                hasWeapon = false;
+            } else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.THORNS)) {
+                hasWeapon = false;
+            } else {
+                hasWeapon = true;
+            }
         } else {
-            hasWeapon = true;
+            if (mob.getEquipment() == null || mob.getEquipment().getItemInMainHand() == null) {
+                hasWeapon = false;
+            } else if (!isWeapon(mob.getEquipment().getItemInMainHand())) {
+                hasWeapon = false;
+            } else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.THORNS)) {
+                hasWeapon = false;
+            } else {
+                hasWeapon = true;
+            }
         }
+
         if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
             if (pm.getLastExplosiveEntity() instanceof EnderCrystal) {
                 return get(gang, pm, mob, "End-Crystal");
@@ -86,6 +119,8 @@ public class Assets {
                 return get(gang, pm, mob, "TNT");
             } else if (pm.getLastExplosiveEntity() instanceof Firework) {
                 return get(gang, pm, mob, "Firework");
+            } else {
+                return get(gang, pm, mob, getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION));
             }
         }
         if (hasWeapon) {
@@ -95,7 +130,7 @@ public class Assets {
                     && pm.getLastProjectileEntity() instanceof Arrow) {
                 return getProjectile(gang, pm, mob, getSimpleProjectile(pm.getLastProjectileEntity()));
             } else {
-                return null;
+                return get(gang, pm, mob, getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_ATTACK));
             }
         } else {
             for (EntityDamageEvent.DamageCause dc : EntityDamageEvent.DamageCause.values()) {
@@ -113,13 +148,14 @@ public class Assets {
 
     public static TextComponent getNaturalDeath(PlayerManager pm, String damageCause) {
         Random random = new Random();
-        List<String> msgs = filterSortList(getPlayerDeathMessages().getStringList("Natural-Cause." + damageCause), pm);
+        List<String> msgs = sortList(getPlayerDeathMessages().getStringList("Natural-Cause." + damageCause), pm);
         if (msgs.isEmpty()) return null;
                 String msg = msgs.get(random.nextInt(msgs.size()));
-        TextComponent tc = new TextComponent();
+        TextComponent tc = new TextComponent("");
         if(addPrefix){
-            String prefix = Assets.colorize(Messages.getInstance().getConfig().getString("Prefix"));
-            tc.addExtra(prefix + " ");
+            TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(Messages.getInstance().getConfig().getString("Prefix"))));
+            tc.addExtra(tx);
+            tc.addExtra(" ");
         }
         String[] sec = msg.split("::");
         String firstSection;
@@ -173,18 +209,19 @@ public class Assets {
         Random random = new Random();
         List<String> msgs;
         if (gang) {
-            msgs = filterSortList(getPlayerDeathMessages().getStringList("Mobs." +
+            msgs = sortList(getPlayerDeathMessages().getStringList("Mobs." +
                     mob.getType().getEntityClass().getSimpleName().toLowerCase() + ".Gang.Weapon"), pm);
         } else {
-            msgs = filterSortList(getPlayerDeathMessages().getStringList("Mobs." +
+            msgs = sortList(getPlayerDeathMessages().getStringList("Mobs." +
                     mob.getType().getEntityClass().getSimpleName().toLowerCase() + ".Solo.Weapon"), pm);
         }
         if (msgs.isEmpty()) return null;
         String msg = msgs.get(random.nextInt(msgs.size()));
-        TextComponent tc = new TextComponent();
+        TextComponent tc = new TextComponent("");
         if(addPrefix){
-            String prefix = Assets.colorize(Messages.getInstance().getConfig().getString("Prefix"));
-            tc.addExtra(prefix + " ");
+            TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(Messages.getInstance().getConfig().getString("Prefix"))));
+            tc.addExtra(tx);
+            tc.addExtra(" ");
         }
         String[] sec = msg.split("::");
         String firstSection;
@@ -195,12 +232,24 @@ public class Assets {
         }
         for (String splitMessage : firstSection.split(" ")) {
             if (splitMessage.contains("%weapon%")) {
-                ItemStack i = mob.getEquipment().getItemInMainHand();
+                ItemStack i;
+                if(DeathMessages.majorVersion() <= 9){
+                    i = mob.getEquipment().getItemInHand();
+                } else {
+                     i = mob.getEquipment().getItemInMainHand();
+                }
                 String displayName;
                 if (!i.hasItemMeta() && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().equals("")) {
                     if (Settings.getInstance().getConfig().getBoolean("Disable-Weapon-Kill-With-No-Custom-Name.Enabled")) {
-                        return get(gang, pm, mob, Settings.getInstance().getConfig()
-                                .getString("Disable-Weapon-Kill-With-No-Custom-Name.Source.Weapon.Default-To"));
+                        if(!Settings.getInstance().getConfig().getBoolean("Disable-Weapon-Kill-With-No-Custom-Name.Ignore-Enchantments")){
+                            if(i.getEnchantments().size() == 0){
+                                return get(gang, pm, mob, Settings.getInstance().getConfig()
+                                        .getString("Disable-Weapon-Kill-With-No-Custom-Name.Source.Weapon.Default-To"));
+                            }
+                        } else {
+                            return get(gang, pm, mob, Settings.getInstance().getConfig()
+                                    .getString("Disable-Weapon-Kill-With-No-Custom-Name.Source.Weapon.Default-To"));
+                        }
                     }
                     displayName = Assets.convertString(i.getType().name());
                 } else {
@@ -255,10 +304,10 @@ public class Assets {
         Random random = new Random();
         List<String> msgs;
         if (gang) {
-            msgs = filterSortList(getPlayerDeathMessages().getStringList("Mobs." +
+            msgs = sortList(getPlayerDeathMessages().getStringList("Mobs." +
                     mob.getType().getEntityClass().getSimpleName().toLowerCase() + ".Gang." + damageCause), pm);
         } else {
-            msgs = filterSortList(getPlayerDeathMessages().getStringList("Mobs." +
+            msgs = sortList(getPlayerDeathMessages().getStringList("Mobs." +
                     mob.getType().getEntityClass().getSimpleName().toLowerCase() + ".Solo." + damageCause), pm);
         }
 
@@ -273,10 +322,11 @@ public class Assets {
         }
 
         String msg = msgs.get(random.nextInt(msgs.size()));
-        TextComponent tc = new TextComponent();
+        TextComponent tc = new TextComponent("");
         if(addPrefix){
-            String prefix = Assets.colorize(Messages.getInstance().getConfig().getString("Prefix"));
-            tc.addExtra(prefix + " ");
+            TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(Messages.getInstance().getConfig().getString("Prefix"))));
+            tc.addExtra(tx);
+            tc.addExtra(" ");
         }
         String[] sec = msg.split("::");
         String firstSection;
@@ -319,17 +369,18 @@ public class Assets {
         Random random = new Random();
         List<String> msgs;
         if (gang) {
-            msgs = filterSortList(getPlayerDeathMessages().getStringList("Mobs." +
+            msgs = sortList(getPlayerDeathMessages().getStringList("Mobs." +
                     mob.getType().getEntityClass().getSimpleName().toLowerCase() + ".Gang." + projectileDamage), pm);
         } else {
-            msgs = filterSortList(getPlayerDeathMessages().getStringList("Mobs." +
+            msgs = sortList(getPlayerDeathMessages().getStringList("Mobs." +
                     mob.getType().getEntityClass().getSimpleName().toLowerCase() + ".Solo." + projectileDamage), pm);
         }
         String msg = msgs.get(random.nextInt(msgs.size()));
-        TextComponent tc = new TextComponent();
+        TextComponent tc = new TextComponent("");
         if(addPrefix){
-            String prefix = Assets.colorize(Messages.getInstance().getConfig().getString("Prefix"));
-            tc.addExtra(prefix + " ");
+            TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(Messages.getInstance().getConfig().getString("Prefix"))));
+            tc.addExtra(tx);
+            tc.addExtra(" ");
         }
         String[] sec = msg.split("::");
         String firstSection;
@@ -339,7 +390,7 @@ public class Assets {
             firstSection = msg;
         }
         for (String splitMessage : firstSection.split(" ")) {
-            if (splitMessage.equalsIgnoreCase("%weapon%") && pm.getLastProjectileEntity() instanceof Arrow) {
+            if (splitMessage.contains("%weapon%") && pm.getLastProjectileEntity() instanceof Arrow) {
                 if(mob.getEquipment().getItemInMainHand() == null){
                     continue;
                 }
@@ -347,7 +398,7 @@ public class Assets {
                 String displayName;
                 if (!i.hasItemMeta() && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().equals("")) {
                     if (Settings.getInstance().getConfig().getBoolean("Disable-Weapon-Kill-With-No-Custom-Name.Enabled")) {
-                        return get(gang, pm, mob, Settings.getInstance().getConfig()
+                        return getProjectile(gang, pm, mob, Settings.getInstance().getConfig()
                                 .getString("Disable-Weapon-Kill-With-No-Custom-Name.Source.Projectile.Default-To"));
                     }
                     displayName = Assets.convertString(i.getType().name());
@@ -361,8 +412,7 @@ public class Assets {
                 if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].equals("")) {
                     displayName = displayName + spl[1];
                 }
-                displayName = Assets.colorize(displayName);
-                TextComponent weaponComp = new TextComponent(displayName);
+                TextComponent weaponComp = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(displayName)));
                 BaseComponent[] hoverEventComponents = new BaseComponent[]{
                         new TextComponent(NBTItem.convertItemtoNBT(i).getCompound().toString())
                 };
@@ -401,14 +451,15 @@ public class Assets {
 
     public static TextComponent getTamable(PlayerManager pm, Tameable tameable) {
         Random random = new Random();
-        List<String> msgs = filterSortList(getEntityDeathMessages().getStringList("Tamable"), pm);
+        List<String> msgs = sortList(getEntityDeathMessages().getStringList("Tamable"), pm);
         if (msgs.isEmpty()) return null;
 
         String msg = msgs.get(random.nextInt(msgs.size()));
-        TextComponent tc = new TextComponent();
+        TextComponent tc = new TextComponent("");
         if(addPrefix){
-            String prefix = Assets.colorize(Messages.getInstance().getConfig().getString("Prefix"));
-            tc.addExtra(prefix + " ");
+            TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(Messages.getInstance().getConfig().getString("Prefix"))));
+            tc.addExtra(tx);
+            tc.addExtra(" ");
         }
         String[] sec = msg.split("::");
         String firstSection;
@@ -419,13 +470,13 @@ public class Assets {
         }
         for (String splitMessage : firstSection.split(" ")) {
             if (lastColor != null) {
-                TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(playerDeathPlaceholders(lastColor + splitMessage, pm, tameable)) + " "));
+                TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(entityDeathPlaceholders(lastColor + splitMessage, pm, tameable)) + " "));
                 tc.addExtra(tx);
                 for(BaseComponent bs : tx.getExtra()){
                     lastColor = bs.getColor().toString();
                 }
             } else {
-                TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(playerDeathPlaceholders(splitMessage, pm, tameable)) + " "));
+                TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(entityDeathPlaceholders(splitMessage, pm, tameable)) + " "));
                 tc.addExtra(tx);
                 for(BaseComponent bs : tx.getExtra()){
                     lastColor = bs.getColor().toString();
@@ -447,32 +498,38 @@ public class Assets {
         return tc;
     }
 
-    public static List<String> filterSortList(List<String> list, PlayerManager pm){
+    public static List<String> sortList(List<String> list, PlayerManager pm){
         List<String> newList = list;
-        ListMultimap<String, String> permMessages = ArrayListMultimap.create();
-        List<String> permissions = new ArrayList<>();
-        List<String> tempList = new ArrayList<>();
+        List<String> returnList = new ArrayList<>();
         for(String s : list){
-            if(s.startsWith("PERMISSION[")){
+            //Check for permission messages
+            if(s.contains("PERMISSION[")){
                 Matcher m = Pattern.compile("PERMISSION\\[([^)]+)\\]").matcher(s);
                 while (m.find()){
                     String perm = m.group(1);
-                    if(!permissions.contains(perm)){
-                        permissions.add(perm);
+                    if(pm.getPlayer().hasPermission(perm)){
+                        returnList.add(s.replace("PERMISSION[" + perm + "]", ""));
                     }
-                    permMessages.put(perm, s.replace("PERMISSION[" + perm + "]", ""));
+                }
+            }
+            //Check for region specific messages
+            if (s.contains("REGION[")){
+                Matcher m = Pattern.compile("REGION\\[([^)]+)\\]").matcher(s);
+                while (m.find()){
+                    String regionID = m.group(1);
+                    if(DeathMessages.worldGuardExtension == null){
+                        continue;
+                    }
+                    if(DeathMessages.worldGuardExtension.isInRegion(pm.getPlayer(), regionID)){
+                        returnList.add(s.replace("REGION[" + regionID + "]", ""));
+                    }
                 }
             }
         }
-        for(String perm : permissions){
-            if(pm.getPlayer().hasPermission(perm)){
-                tempList.addAll(permMessages.get(perm));
-            }
-        }
-        if(!tempList.isEmpty()){
-            newList = tempList;
+        if(!returnList.isEmpty()){
+            newList = returnList;
         } else {
-            newList.removeIf(s -> s.startsWith("PERMISSION["));
+            newList.removeIf(s -> s.contains("PERMISSION[") || s.contains("REGION["));
         }
         return newList;
     }
@@ -498,7 +555,7 @@ public class Assets {
     public static String entityDeathPlaceholders(String msg, PlayerManager killer, Tameable tameable) {
         msg = colorize(msg
                 .replaceAll("%killer%", killer.getName())
-                .replaceAll("%biome%", tameable.getLocation().getBlock().getBiome().name())
+                .replaceAll("%biome%", tameable.getLocation().getBlock().getBiome().getKey().getKey())
                 .replaceAll("%world%", tameable.getLocation().getWorld().getName())
                 .replaceAll("%tamable%", tameable.getType().getEntityClass().getSimpleName())
                 .replaceAll("%tamable_displayname%", tameable.getName())
@@ -516,7 +573,7 @@ public class Assets {
         if (mob == null) {
             msg = colorize(msg
                     .replaceAll("%player%", pm.getName())
-                    .replaceAll("%player_display%", pm.getDisplayName())
+                    .replaceAll("%player_display%", pm.getPlayer().getDisplayName())
                     .replaceAll("%biome%", pm.getLastLocation().getBlock().getBiome().name())
                     .replaceAll("%world%", pm.getLastLocation().getWorld().getName())
                     .replaceAll("%x%", String.valueOf(pm.getLastLocation().getBlock().getX()))
@@ -542,7 +599,7 @@ public class Assets {
             }
             msg = colorize(msg
                     .replaceAll("%player%", pm.getName())
-                    .replaceAll("%player_display%", pm.getDisplayName())
+                    .replaceAll("%player_display%", pm.getPlayer().getDisplayName())
                     .replaceAll("%killer%", mobName)
                     .replaceAll("%killer_type%", convertString(mob.getType().toString().toLowerCase()))
                     .replaceAll("%biome%", pm.getLastLocation().getBlock().getBiome().name())

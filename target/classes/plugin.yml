@@ -1,12 +1,12 @@
 name: DeathMessages
-version: 1.0.0
+version: 1.1.1
 main: net.joshb.deathmessages.DeathMessages
 api-version: 1.13
 softdepend:
   - PlaceholderAPI
   - WorldEdit
   - WorldGuard
-category: test
+  - DiscordBotAPI
 author: Joshb_
 commands:
   deathmessages:

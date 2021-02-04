@@ -32,6 +32,10 @@
 # For players that have a specific permission set, EX: deathmessages.premium, the death message
 # will be sent that is formatted as followed:
 # PERMISSIONS[YOUR.PERM.HERE]%player% dead lol
+#
+# Players that are in a region (With WorldGuard hook enabled) and is defined below, will be sending a custom
+# region messages.
+# Formatted as followed: "REGION[REGION_NAME]%player% died in a region"
 # Example:
 #
 # Mobs:
@@ -39,6 +43,9 @@
 #     Melee:
 #       - "%player% was slain by %killer%"
 #       - "PERMISSION[deathmessages.premium]&6Premium %player% &fdied to %killer%
+#       - "REGION[spawn]Idiot %player% died in spawn lol"
+#       If the player has permission and in a region
+#       - "REGION[spawn]PERMISSION[deathmessages.premium]Idiot premium %player% died in spawn lol"
 
 Natural-Cause:
   Contact:
@@ -272,6 +279,8 @@ Mobs:
     Solo:
       Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
+      Magic:
+        - "%player% was killed by a %killer% using da magic"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
@@ -546,6 +555,10 @@ Mobs:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
+      Explosion:
+        - "%player% stood too close to a %killer% while it was spawning"
+      Projectile-Fireball:
+        - "%player% died to a wither skull"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
@@ -1022,6 +1035,8 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   pillager:
     Solo:
+      Contact:
+        - "%player% was pushed into a cactus by %killer%"
       Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
@@ -1188,7 +1203,7 @@ Mobs:
   player:
     Solo:
       Contact:
-        - '%player% was pushed into a cactus by %killer%'
+        - "%player% was pushed into a cactus by %killer%"
       Projectile-Unknown:
         - "%player% was shot by %killer%"
       Projectile-Arrow:
@@ -1198,15 +1213,17 @@ Mobs:
       Projectile-Snowball:
         - "%player% was hit in the head with a snowball thrown by %killer%"
       Weapon:
-        - '%player% was slain by %killer% somehow using %weapon%'
+        - "%player% was slain by %killer% somehow using %weapon%"
       Melee:
-        - '%player% was slain by %killer%'
+        - "%player% was slain by %killer%"
+      Suffocation:
+        - "%player% suffocated in a wall while fighting %killer_display%"
       Fall:
-        - '%player% was pushed off a high place by %killer%'
+        - "%player% was pushed off a high place by %killer%"
       Lava:
-        - '%player% was pushed into lava by %killer%'
+        - "%player% was pushed into lava by %killer%"
       Explosion:
-        - '%killer% blew up %player%'
+        - "%killer% blew up %player%"
       TNT:
         - "%killer% blew up %player% with tnt"
       Firework:
@@ -1214,11 +1231,11 @@ Mobs:
       End-Crystal:
         - "%killer% killed %player% by blowing up an end-crystal!"
       Void:
-        - '%player% was pushed into the void by %killer%'
+        - "%player% was pushed into the void by %killer%"
       Wither:
-        - '%player% withered away from %killer%''s magic'
+        - "%player% withered away from %killer%'s magic"
       Thorns:
-        - '%player% tried playing with %killer%''s armor with thorns'
+        - "%player% tried playing with %killer%'s armor with thorns"
     Gang:
       Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"

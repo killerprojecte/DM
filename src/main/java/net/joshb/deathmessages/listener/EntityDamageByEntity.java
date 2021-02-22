@@ -31,10 +31,14 @@ public class EntityDamageByEntity implements Listener {
                     pm.setLastExplosiveEntity(e.getDamager());
                 } else if (e.getDamager() instanceof Firework){
                     Firework firework = (Firework) e.getDamager();
-                    if(firework.getShooter() instanceof LivingEntity){
-                        pm.setLastEntityDamager((LivingEntity) firework.getShooter());
+                    try{
+                        if(firework.getShooter() instanceof LivingEntity){
+                            pm.setLastEntityDamager((LivingEntity) firework.getShooter());
+                        }
+                        pm.setLastExplosiveEntity(e.getDamager());
+                    } catch (NoSuchMethodError ignored){
+                        //McMMO ability
                     }
-                    pm.setLastExplosiveEntity(e.getDamager());
                 } else {
                     pm.setLastEntityDamager(e.getDamager());
                     pm.setLastExplosiveEntity(e.getDamager());

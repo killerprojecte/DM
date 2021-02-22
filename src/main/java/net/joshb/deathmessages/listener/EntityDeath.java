@@ -24,7 +24,7 @@ import java.util.List;
 public class EntityDeath implements Listener {
 
     synchronized void onEntityDeath(EntityDeathEvent e) {
-        if (e.getEntity() instanceof Player) {
+        if (e.getEntity() instanceof Player && Bukkit.getOnlinePlayers().contains(e.getEntity())) {
             Player p = (Player) e.getEntity();
             PlayerManager pm = PlayerManager.getPlayer(p);
             pm.setLastLocation(p.getLocation());
@@ -55,6 +55,10 @@ public class EntityDeath implements Listener {
                 } else if (pm.getLastClimbing() != null && pm.getLastDamage().equals(EntityDamageEvent.DamageCause.FALL)) {
                     TextComponent tx = Assets.getNaturalDeath(pm, "Climbable");
                     if (tx == null) return;
+                    BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(p, null, MessageType.NATURAL, tx, getWorlds(p), false);
+                    Bukkit.getPluginManager().callEvent(event);
+                } else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
+                    TextComponent tx = Assets.getNaturalDeath(pm, Assets.getSimpleProjectile(pm.getLastProjectileEntity()));
                     BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(p, null, MessageType.NATURAL, tx, getWorlds(p), false);
                     Bukkit.getPluginManager().callEvent(event);
                 } else {

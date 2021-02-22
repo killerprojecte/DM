@@ -14,6 +14,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class PlayerManager {
@@ -52,14 +53,14 @@ public class PlayerManager {
         players.add(this);
     }
 
-    public Player getPlayer(){ return p; }
+    public Player getPlayer(){ return Objects.requireNonNull(p); }
 
     public UUID getUUID(){
-        return uuid;
+        return Objects.requireNonNull(uuid);
     }
 
     public String getName(){
-        return name;
+        return Objects.requireNonNull(name);
     }
 
     public String getDisplayName() { return displayName; }

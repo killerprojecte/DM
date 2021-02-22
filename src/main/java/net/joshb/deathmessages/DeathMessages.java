@@ -42,10 +42,10 @@ public class DeathMessages extends JavaPlugin {
         initializeListeners();
         initializeCommands();
         initializeHooks();
+        initializeOnlinePlayers();
     }
 
     public void onLoad(){
-        initializeOnlinePlayers();
         initializeHooksOnLoad();
     }
 
@@ -55,11 +55,13 @@ public class DeathMessages extends JavaPlugin {
     }
 
     public static String serverVersion(){
-        return Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
+        return Bukkit.getServer().getClass().getPackage().getName().replace(".", ",")
+                .split(",")[3];
     }
 
     public static int majorVersion(){
-        return Integer.parseInt(serverVersion().replace("1_", "").replaceAll("_R\\d", "").replaceAll("v", ""));
+        return Integer.parseInt(serverVersion().replace("1_", "")
+                .replaceAll("_R\\d", "").replaceAll("v", ""));
     }
 
     public static int worldGuardVersion(){
@@ -119,8 +121,10 @@ public class DeathMessages extends JavaPlugin {
             getLogger().log(Level.INFO, "PlaceholderAPI found. Enabling Hook.");
         }
 
-        if(Bukkit.getPluginManager().getPlugin("WorldGuard") != null &&
+        if(!Bukkit.getPluginManager().isPluginEnabled("WorldGuard") &&
                 Settings.getInstance().getConfig().getBoolean("Hooks.WorldGuard.Enabled")){
+            getLogger().log(Level.SEVERE, "You enabled the WorldGuard hook in your settings.yml with WorldGuard " +
+                    "not installed! Please disable!");
             worldGuardExtension = null;
         } else {
             if(worldGuardExtension != null){
@@ -145,12 +149,14 @@ public class DeathMessages extends JavaPlugin {
             Plugin plugMan = Bukkit.getPluginManager().getPlugin("PlugMan");
             getLogger().log(Level.INFO, "PlugMan found. Adding this plugin to its ignored plugins list.");
             try {
-                List<String> ignoredPlugins = (List<String>) plugMan.getClass().getMethod("getIgnoredPlugins").invoke(plugMan);
+                List<String> ignoredPlugins = (List<String>) plugMan.getClass().getMethod("getIgnoredPlugins")
+                        .invoke(plugMan);
                 if (!ignoredPlugins.contains("DeathMessages")) {
                     ignoredPlugins.add("DeathMessages");
                 }
             } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException exception) {
-                getLogger().log(Level.SEVERE, "Error adding plugin to ignored plugins list: " + exception.getMessage());
+                getLogger().log(Level.SEVERE, "Error adding plugin to ignored plugins list: " +
+                        exception.getMessage());
             }
         }
     }
@@ -159,7 +165,15 @@ public class DeathMessages extends JavaPlugin {
         if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null) {
             try {
                 (worldGuardExtension = new WorldGuardExtension()).register();
-                worldGuardVersion = Integer.parseInt(Bukkit.getPluginManager().getPlugin("WorldGuard").getDescription().getVersion().split("\\.")[0]);
+                worldGuardVersion = Integer.parseInt(Bukkit.getPluginManager().getPlugin("WorldGuard")
+                        .getDescription().getVersion().split("\\.")[0]);
+                if(worldGuardVersion < 7) {
+                    getLogger().log(Level.SEVERE, "WorldGuard v" + worldGuardVersion + " is not supported yet. " +
+                            "Please use WorldGuard v7 or higher!");
+                    worldGuardExtension = null;
+                } else {
+                    getLogger().log(Level.INFO, "WorldGuard v" + worldGuardVersion + " found. Enabling Hook.");
+                }
             } catch (Exception e){
                 worldGuardExtension = null;
                 getLogger().log(Level.SEVERE, "Error loading WorldGuardHook. Error: " + e.getMessage());
@@ -169,7 +183,8 @@ public class DeathMessages extends JavaPlugin {
 
     private void partner(){
         getLogger().log(Level.INFO, "Partnered with Sparked Host");
-        getLogger().log(Level.INFO, "Grab a server today with the code `Josh` for 15% off @ https://sparkedhost.com");
+        getLogger().log(Level.INFO, "Grab a server today with the code `Josh` for 15% off @" +
+                " https://sparkedhost.com");
     }
 
     private void initializeOnlinePlayers(){

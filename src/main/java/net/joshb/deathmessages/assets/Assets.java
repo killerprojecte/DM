@@ -160,13 +160,18 @@ public class Assets {
         String[] sec = msg.split("::");
         String firstSection;
         if (msg.contains("::")) {
-            firstSection = sec[0];
+            if(sec.length == 0){
+                firstSection = msg;
+            } else {
+                firstSection = sec[0];
+            }
         } else {
             firstSection = msg;
         }
         for (String splitMessage : firstSection.split(" ")) {
             if (splitMessage.contains("%block%") && pm.getLastEntityDamager() instanceof FallingBlock) {
                 FallingBlock fb = (FallingBlock) pm.getLastEntityDamager();
+               // XMaterial.matchXMaterial(fb.getBlockData().getMaterial());
                 String mssa = Assets.colorize(splitMessage.replaceAll("%block%", convertString(fb.getBlockData().getMaterial().name())));
                 tc.addExtra(mssa);
                 lastColor = getColorOfString(lastColor + mssa);
@@ -226,7 +231,11 @@ public class Assets {
         String[] sec = msg.split("::");
         String firstSection;
         if (msg.contains("::")) {
-            firstSection = sec[0];
+            if(sec.length == 0){
+                firstSection = msg;
+            } else {
+                firstSection = sec[0];
+            }
         } else {
             firstSection = msg;
         }
@@ -331,7 +340,11 @@ public class Assets {
         String[] sec = msg.split("::");
         String firstSection;
         if (msg.contains("::")) {
-            firstSection = sec[0];
+            if(sec.length == 0){
+                firstSection = msg;
+            } else {
+                firstSection = sec[0];
+            }
         } else {
             firstSection = msg;
         }
@@ -375,6 +388,12 @@ public class Assets {
             msgs = sortList(getPlayerDeathMessages().getStringList("Mobs." +
                     mob.getType().getEntityClass().getSimpleName().toLowerCase() + ".Solo." + projectileDamage), pm);
         }
+        if(msgs.isEmpty()){
+            if (Settings.getInstance().getConfig().getBoolean("Default-Melee-Last-Damage-Not-Defined")) {
+                return get(gang, pm, mob, getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_ATTACK));
+            }
+            return null;
+        }
         String msg = msgs.get(random.nextInt(msgs.size()));
         TextComponent tc = new TextComponent("");
         if(addPrefix){
@@ -385,7 +404,11 @@ public class Assets {
         String[] sec = msg.split("::");
         String firstSection;
         if (msg.contains("::")) {
-            firstSection = sec[0];
+            if(sec.length == 0){
+                firstSection = msg;
+            } else {
+                firstSection = sec[0];
+            }
         } else {
             firstSection = msg;
         }
@@ -398,8 +421,11 @@ public class Assets {
                 String displayName;
                 if (!i.hasItemMeta() && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().equals("")) {
                     if (Settings.getInstance().getConfig().getBoolean("Disable-Weapon-Kill-With-No-Custom-Name.Enabled")) {
-                        return getProjectile(gang, pm, mob, Settings.getInstance().getConfig()
-                                .getString("Disable-Weapon-Kill-With-No-Custom-Name.Source.Projectile.Default-To"));
+                        if(!Settings.getInstance().getConfig()
+                                .getString("Disable-Weapon-Kill-With-No-Custom-Name.Source.Projectile.Default-To").equals(projectileDamage)){
+                            return getProjectile(gang, pm, mob, Settings.getInstance().getConfig()
+                                    .getString("Disable-Weapon-Kill-With-No-Custom-Name.Source.Projectile.Default-To"));
+                        }
                     }
                     displayName = Assets.convertString(i.getType().name());
                 } else {
@@ -464,7 +490,11 @@ public class Assets {
         String[] sec = msg.split("::");
         String firstSection;
         if (msg.contains("::")) {
-            firstSection = sec[0];
+            if(sec.length == 0){
+                firstSection = msg;
+            } else {
+                firstSection = sec[0];
+            }
         } else {
             firstSection = msg;
         }
@@ -557,7 +587,8 @@ public class Assets {
                 .replaceAll("%killer%", killer.getName())
                 .replaceAll("%biome%", tameable.getLocation().getBlock().getBiome().getKey().getKey())
                 .replaceAll("%world%", tameable.getLocation().getWorld().getName())
-                .replaceAll("%tamable%", tameable.getType().getEntityClass().getSimpleName())
+                .replaceAll("%tamable%", Messages.getInstance().getConfig().getString("Mobs."
+                        + tameable.getType().getEntityClass().getSimpleName().toLowerCase()))
                 .replaceAll("%tamable_displayname%", tameable.getName())
                 .replaceAll("%owner%", tameable.getOwner().getName())
                 .replaceAll("%x%", String.valueOf(tameable.getLocation().getBlock().getX()))
@@ -589,24 +620,25 @@ public class Assets {
                 String[] chars = Settings.getInstance().getConfig().getString("Rename-Mobs.If-Contains").split("(?!^)");
                 for (String ch : chars){
                     if(mobName.contains(ch)){
-                        mobName = convertString(mob.getType().toString().toLowerCase());
+                        mobName = Messages.getInstance().getConfig().getString("Mobs." + mob.getType().toString().toLowerCase());
                         break;
                     }
                 }
             }
             if(!(mob instanceof Player) && Settings.getInstance().getConfig().getBoolean("Disable-Named-Mobs")){
-                mobName = convertString(mob.getType().toString().toLowerCase());
+                mobName = Messages.getInstance().getConfig().getString("Mobs." + mob.getType().toString().toLowerCase());
             }
-            msg = colorize(msg
+            msg = msg
                     .replaceAll("%player%", pm.getName())
                     .replaceAll("%player_display%", pm.getPlayer().getDisplayName())
                     .replaceAll("%killer%", mobName)
-                    .replaceAll("%killer_type%", convertString(mob.getType().toString().toLowerCase()))
+                    .replaceAll("%killer_type%", Messages.getInstance().getConfig().getString("Mobs."
+                            + mob.getType().toString().toLowerCase()))
                     .replaceAll("%biome%", pm.getLastLocation().getBlock().getBiome().name())
                     .replaceAll("%world%", pm.getLastLocation().getWorld().getName())
                     .replaceAll("%x%", String.valueOf(pm.getLastLocation().getBlock().getX()))
                     .replaceAll("%y%", String.valueOf(pm.getLastLocation().getBlock().getY()))
-                    .replaceAll("%z%", String.valueOf(pm.getLastLocation().getBlock().getZ())));
+                    .replaceAll("%z%", String.valueOf(pm.getLastLocation().getBlock().getZ()));
             if(mob instanceof Player){
                 Player p = (Player) mob;
                 msg = msg.replaceAll("%killer_display%", p.getDisplayName());

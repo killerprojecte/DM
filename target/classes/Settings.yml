@@ -101,6 +101,19 @@ Disabled-Worlds:
   - someDisabledWorld1
   - someOtherDisabledWorld
 
+Private-Messages:
+  # All messages will still be sent to the console log no matter the setting.
+  # Discord messages will be effected depending on if the below settings are changed.
+  # Example: Setting Player to true will not send the message to discord.
+  # The victim and the killer will only have the death message sent to them.
+  Player: false
+  # The victim will only have the death message sent to them.
+  Mobs: false
+  # The victim will only have the death message sent to them.
+  Natural: false
+  # The killer will only have the message sent to them.
+  Tameable: false
+
 # Custom Items
 # Add item display names here. If an item has the display name of something you provide here. Will be counted as
 # a Weapon Kill, not a melee kill.

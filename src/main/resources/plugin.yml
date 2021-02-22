@@ -7,6 +7,7 @@ softdepend:
   - WorldEdit
   - WorldGuard
   - DiscordBotAPI
+  - DiscordSRV
 author: Joshb_
 commands:
   deathmessages:

@@ -87,6 +87,10 @@ public class DiscordBotAPIExtension {
             color = null;
         }
         eb.setColor(color);
+        String name = getMessages().getString("Discord.DeathMessage.Author.Name");
+        String url = getMessages().getString("Discord.DeathMessage.Author.URL");
+        String iconURL = getMessages().getString("Discord.DeathMessage.Author.Icon-URL");
+        eb.setAuthor(name, url, iconURL);
         eb.setThumbnail(getMessages().getString("Discord.DeathMessage.Image").replaceAll("%uuid%",
                 pm.getUUID().toString()).replaceAll("%username%", pm.getName()));
         eb.setTitle(Assets.entityDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Title"), pm,

@@ -3,6 +3,7 @@ net\joshb\deathmessages\config\EntityDeathMessages.class
 net\joshb\deathmessages\hook\PlaceholderAPIExtension.class
 net\joshb\deathmessages\enums\MessageType.class
 net\joshb\deathmessages\assets\ConfigUpdater.class
+net\joshb\deathmessages\assets\XMaterial$1.class
 net\joshb\deathmessages\hook\DiscordAssets.class
 net\joshb\deathmessages\command\CommandToggle.class
 net\joshb\deathmessages\config\Messages.class
@@ -19,12 +20,14 @@ net\joshb\deathmessages\config\Gangs.class
 net\joshb\deathmessages\listener\OnJoin.class
 net\joshb\deathmessages\listener\customlisteners\BroadcastTameableDeathListener.class
 net\joshb\deathmessages\hook\DiscordBotAPIExtension.class
+net\joshb\deathmessages\assets\XMaterial$Data.class
 net\joshb\deathmessages\api\events\BroadcastTamableDeathMessageEvent.class
 net\joshb\deathmessages\command\CommandBlacklist.class
 net\joshb\deathmessages\config\PlayerDeathMessages.class
 net\joshb\deathmessages\listener\EntityDeath.class
 net\joshb\deathmessages\listener\EntityDamageByEntity.class
 net\joshb\deathmessages\api\PlayerManager.class
+net\joshb\deathmessages\assets\XMaterial.class
 net\joshb\deathmessages\hook\DiscordSRVExtension.class
 net\joshb\deathmessages\assets\Assets.class
 net\joshb\deathmessages\api\events\BroadcastDeathMessageEvent.class

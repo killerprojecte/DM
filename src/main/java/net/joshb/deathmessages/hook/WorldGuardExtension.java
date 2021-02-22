@@ -64,24 +64,24 @@ public class WorldGuardExtension {
         }
     }
 
-    public boolean inBroadcastRegion(final Player p, MessageType messageType) {
+    public StateFlag.State getRegionState(final Player p, MessageType messageType) {
         if (this.regionContainer == null) {
-            return true;
+            return StateFlag.State.ALLOW;
         }
         final Location loc = new Location(BukkitAdapter.adapt(p.getLocation().getWorld()) , p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ());
         final RegionQuery query = regionContainer.createQuery();
         final ApplicableRegionSet set = query.getApplicableRegions(loc);
         final LocalPlayer lp = WorldGuardPlugin.inst().wrapPlayer(p);
         if(messageType.equals(MessageType.PLAYER)){
-            return set.queryState(lp, BROADCAST_PLAYER) != StateFlag.State.DENY;
+            return set.queryState(lp, BROADCAST_PLAYER);
         } else if(messageType.equals(MessageType.MOB)){
-            return set.queryState(lp, BROADCAST_MOBS) != StateFlag.State.DENY;
+            return set.queryState(lp, BROADCAST_MOBS);
         } else if(messageType.equals(MessageType.NATURAL)){
-            return set.queryState(lp, BROADCAST_NATURAL) != StateFlag.State.DENY;
+            return set.queryState(lp, BROADCAST_NATURAL);
         } else if(messageType.equals(MessageType.TAMEABLE)){
-            return set.queryState(lp, BROADCAST_TAMEABLE) != StateFlag.State.DENY;
+            return set.queryState(lp, BROADCAST_TAMEABLE);
         }
-        return true;
+        return StateFlag.State.ALLOW;
     }
 
     public boolean isInRegion(Player p, String regionID){

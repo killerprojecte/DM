@@ -26,11 +26,100 @@ Commands:
         Blacklist-Remove: "%prefix% &aRemoved &e%player% &afrom being blacklisted."
 Discord:
   DeathMessage:
+    # Besides the color, you can leave all this blank id you want.
     Color: BLUE
+    # NEW: this was how the old DMP had messages formatted (Playerhead - IconURL, Name - the death message)
+    Author:
+      # The message of the author
+      Name: '%message%'
+      # The clickable link
+      URL: ""
+      # The picture that shows up in the author name
+      Icon-URL: "https://crafatar.com/avatars/%uuid%"
     Title: DeathMessage
     Description: '%message%'
     Image: https://crafatar.com/avatars/%uuid%
     # Block title|Block value|inline boolean
+    # To have no content, set content to 'Content: []'
     Content:
       - "Location:|World: %world%, X: %x%, Y: %y%, Z: %z%|false"
     Footer: ""
+#Translations
+# Mobs: these translations will effect the %killer% placeholder
+Mobs:
+  elderguardian: "Elder Guardian"
+  witherskeleton: "Wither Skeleton"
+  stray: "Stray"
+  husk: "Husk"
+  zombievillager: "Zombie Villager"
+  skeletonhorse: "Skeleton Horse"
+  zombiehorse: "Zombie Horse"
+  armorstand: "Armor Stand"
+  donkey: "Donkey"
+  mule: "Mule"
+  evoker: "Evoker"
+  vex: "Vex"
+  vindicator: "Vindicator"
+  illusioner: "Illusioner"
+  creeper: "Creeper"
+  skeleton: "Skeleton"
+  spider: "Spider"
+  giant: "Giant"
+  zombie: "Zombie"
+  slime: "Slime"
+  ghast: "Ghast"
+  pigzombie: "Pig Zombie"
+  enderman: "Enderman"
+  cavespider: "Cave Spider"
+  silverfish: "Silverfish"
+  blaze: "Blaze"
+  magmacube: "Magma Cube"
+  enderdragon: "Ender Dragon"
+  wither: "Wither"
+  bat: "Bat"
+  witch: "Witch"
+  endermite: "Endermite"
+  guardian: "Guardian"
+  shulker: "Shulker"
+  pig: "Pig"
+  sheep: "Sheep"
+  cow: "Cow"
+  chicken: "Chicken"
+  squid: "Squid"
+  wolf: "Wolf"
+  mushroomcow: "Mushroom Cow"
+  snowman: "Snowman"
+  ocelot: "Ocelot"
+  irongolem: "Iron Golem"
+  horse: "Horse"
+  rabbit: "Rabbit"
+  polarbear: "Polar Bear"
+  llama: "Llama"
+  parrot: "Parrot"
+  villager: "Villager"
+  turtle: "Turtle"
+  phantom: "Phantom"
+  cod: "Cod"
+  salmon: "Salmon"
+  pufferfish: "Puffer Fish"
+  tropicalfish: "Tropical Fish"
+  drowned: "Drowned"
+  dolphin: "Dolphin"
+  cat: "Cat"
+  panda: "Panda"
+  pillager: "Pillager"
+  ravager: "Ravager"
+  traderllama: "Trader Llama"
+  wanderingtrader: "Wandering Trader"
+  fox: "Fox"
+  bee: "Bee"
+  hoglin: "Hoglin"
+  piglin: "Piglin"
+  strider: "Strider"
+  zoglin: "Zoglin"
+  piglinbrute: "Piglin Brute"
+# Blocks: these translations will effect the %block% placeholder from getting squished by (Anvil), or falling off from(Ladder).
+Blocks:
+
+
+    

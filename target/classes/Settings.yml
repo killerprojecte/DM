@@ -22,7 +22,8 @@ Hooks:
   WorldGuard:
     Enabled: true
 
-  # If DiscordBotAPI (https://www.spigotmc.org/resources/discordbotapi.86518/) is installed, and enabled here.
+  # If DiscordBotAPI (https://www.spigotmc.org/resources/discordbotapi.86518/) or DiscordSRV
+  # (https://www.spigotmc.org/resources/discordsrv.18494/)is installed, and enabled here.
   # To get Channel-IDs, you must have developer mode enabled in discord. Then, you will right click the channel
   # you want to send a defined message. Then you will click "Copy ID" and paste your clipboard in "Channel-ID"
   Discord:
@@ -113,6 +114,12 @@ Private-Messages:
   Natural: false
   # The killer will only have the message sent to them.
   Tameable: false
+
+# Set the cooldown for player deaths to prevent spam
+# Cooldown time in seconds
+# Console messages ignore cooldowns and will still send to console
+# Default: 0 (disabled)
+Cooldown: 0
 
 # Custom Items
 # Add item display names here. If an item has the display name of something you provide here. Will be counted as

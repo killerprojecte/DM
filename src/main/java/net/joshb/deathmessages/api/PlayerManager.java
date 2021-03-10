@@ -9,6 +9,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -30,7 +31,11 @@ public class PlayerManager {
     private Entity lastExplosiveEntity;
     private Projectile lastProjectileEntity;
     private Material climbing;
+    private Location explosionCauser;
     private Location location;
+    private int cooldown = 0;
+    private BukkitTask cooldownTask;
+    private Inventory cachedInventory;
 
     private BukkitTask lastEntityTask;
 
@@ -135,7 +140,40 @@ public class PlayerManager {
         this.location = location;
     }
 
+    public void setExplosionCauser(Location location){
+        this.explosionCauser = location;
+    }
+
+    public Location getExplosionCauser(){ return explosionCauser; }
+
     public Location getLastLocation() { return location; }
+
+    public int getCooldown(){ return cooldown; }
+
+    public boolean isInCooldown(){
+        return cooldown > 0;
+    }
+
+    public void setCooldown() {
+        cooldown = Settings.getInstance().getConfig().getInt("Cooldown");
+        cooldownTask = new BukkitRunnable(){
+            @Override
+            public void run() {
+                if(cooldown <= 0){
+                    this.cancel();
+                }
+                cooldown--;
+            }
+        }.runTaskTimer(DeathMessages.plugin, 0, 20);
+    }
+
+    public void setCachedInventory(Inventory inventory){
+        cachedInventory = inventory;
+    }
+
+    public Inventory getCachedInventory(){
+        return getCachedInventory();
+    }
 
     public static PlayerManager getPlayer(Player p){
         for(PlayerManager pm : players){

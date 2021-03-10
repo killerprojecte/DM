@@ -4,6 +4,7 @@ import com.sk89q.worldguard.protection.flags.StateFlag;
 import net.joshb.deathmessages.DeathMessages;
 import net.joshb.deathmessages.api.PlayerManager;
 import net.joshb.deathmessages.api.events.BroadcastDeathMessageEvent;
+import net.joshb.deathmessages.assets.Assets;
 import net.joshb.deathmessages.config.Messages;
 import net.joshb.deathmessages.config.Settings;
 import net.joshb.deathmessages.enums.MessageType;
@@ -22,7 +23,16 @@ public class BroadcastPlayerDeathListener implements Listener {
     public void broadcastListener(BroadcastDeathMessageEvent e) {
         if (!e.isCancelled()) {
             if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
-                Bukkit.getConsoleSender().sendMessage(e.getTextComponent().toLegacyText());
+                String message = Assets.playerDeathPlaceholders(Messages.getInstance().getConfig().getString("Console.Message"), PlayerManager.getPlayer(e.getPlayer()), e.getLivingEntity());
+                message = message.replaceAll("%message%", e.getTextComponent().toLegacyText());
+                Bukkit.getConsoleSender().sendMessage(message);
+            }
+
+            PlayerManager pm = PlayerManager.getPlayer(e.getPlayer());
+            if(pm.isInCooldown()){
+                return;
+            } else {
+                pm.setCooldown();
             }
 
             boolean privatePlayer = Settings.getInstance().getConfig().getBoolean("Private-Messages.Player");
@@ -33,6 +43,9 @@ public class BroadcastPlayerDeathListener implements Listener {
             discordSent = false;
 
             for (World w : e.getBroadcastedWorlds()) {
+                if(Settings.getInstance().getConfig().getStringList("Disabled-Worlds").contains(w.getName())){
+                    continue;
+                }
                 for (Player pls : w.getPlayers()) {
                     PlayerManager pms = PlayerManager.getPlayer(pls);
                     if(e.getMessageType().equals(MessageType.PLAYER)){

@@ -1,6 +1,7 @@
 package net.joshb.deathmessages.listener;
 
 import net.joshb.deathmessages.DeathMessages;
+import net.joshb.deathmessages.api.ExplosionManager;
 import net.joshb.deathmessages.api.PlayerManager;
 import net.joshb.deathmessages.api.events.BroadcastDeathMessageEvent;
 import net.joshb.deathmessages.api.events.BroadcastTamableDeathMessageEvent;
@@ -10,6 +11,7 @@ import net.joshb.deathmessages.config.Settings;
 import net.joshb.deathmessages.enums.MessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -54,6 +56,19 @@ public class EntityDeath implements Listener {
                     Bukkit.getPluginManager().callEvent(event);
                 } else if (pm.getLastClimbing() != null && pm.getLastDamage().equals(EntityDamageEvent.DamageCause.FALL)) {
                     TextComponent tx = Assets.getNaturalDeath(pm, "Climbable");
+                    if (tx == null) return;
+                    BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(p, null, MessageType.NATURAL, tx, getWorlds(p), false);
+                    Bukkit.getPluginManager().callEvent(event);
+                } else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
+                    ExplosionManager explosionManager = ExplosionManager.getManagerIfEffected(p);
+                    if(explosionManager == null) return;
+                    TextComponent tx = null;
+                    if(explosionManager.getMaterial().name().contains("BED")){
+                        tx = Assets.getNaturalDeath(pm, "Bed");
+                    }
+                    if(DeathMessages.majorVersion() >= 16 && explosionManager.getMaterial().equals(Material.RESPAWN_ANCHOR)){
+                        tx = Assets.getNaturalDeath(pm, "Respawn-Anchor");
+                    }
                     if (tx == null) return;
                     BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(p, null, MessageType.NATURAL, tx, getWorlds(p), false);
                     Bukkit.getPluginManager().callEvent(event);

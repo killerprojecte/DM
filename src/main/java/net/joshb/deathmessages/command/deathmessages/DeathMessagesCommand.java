@@ -1,4 +1,4 @@
-package net.joshb.deathmessages.command;
+package net.joshb.deathmessages.command.deathmessages;
 
 import org.bukkit.command.CommandSender;
 

@@ -13,6 +13,7 @@
 # %killer_type% - returns the entity type from Mobs.<Mob> in Messages.yml
 # %biome% - returns the biome the player was in
 # %world% - returns the world name
+# %world_environment% - returns the environment of the world (normal, nether, the_end) (These are configurable in Messages.yml (Environment))
 # %x% - returns the x position the player died at.
 # %y% - returns the y position the player died at.
 # %z% - returns the z position the player died at.
@@ -49,6 +50,10 @@
 #       - "REGION[spawn]PERMISSION[deathmessages.premium]Idiot premium %player% died in spawn lol"
 
 Natural-Cause:
+  Bed:
+    - "%player% tried sleeping in the %world_environment% :kappa:"
+  Respawn-Anchor:
+    - "%player% tried using the respawn anchor in the %world_environment%!"
   Contact:
     - "%player% was pricked to death"
   Melee:
@@ -1203,6 +1208,10 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   player:
     Solo:
+      Bed:
+        - "%player% stood too close to %killer%'s bed in the %world_environment%"
+      Respawn-Anchor:
+        - "%player% stood too close to %killer%'s respawn anchor in the %world_environment%"
       Contact:
         - "%player% was pushed into a cactus by %killer%"
       Projectile-Unknown:

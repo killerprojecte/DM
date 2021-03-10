@@ -1,5 +1,5 @@
 name: DeathMessages
-version: 1.1.8
+version: 1.2.3
 main: net.joshb.deathmessages.DeathMessages
 api-version: 1.13
 softdepend:
@@ -13,3 +13,6 @@ commands:
   deathmessages:
     description: Main plugin command
     aliases: [dm]
+  deathmessagestoggle:
+    description: Alias for /dm toggle in one command
+    aliases: [dmt, dmtoggle]

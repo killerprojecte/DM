@@ -45,7 +45,9 @@ public class EntityDamageByEntity implements Listener {
                 }
             } else if (e.getDamager() instanceof Projectile) {
                 Projectile projectile = (Projectile) e.getDamager();
-                pm.setLastEntityDamager((LivingEntity) projectile.getShooter());
+                if(projectile.getShooter() instanceof LivingEntity) {
+                    pm.setLastEntityDamager((LivingEntity) projectile.getShooter());
+                }
                 pm.setLastProjectileEntity(projectile);
             } else if (e.getDamager() instanceof FallingBlock) {
                 pm.setLastEntityDamager(e.getDamager());

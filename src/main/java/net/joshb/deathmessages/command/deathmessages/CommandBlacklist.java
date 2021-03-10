@@ -1,4 +1,4 @@
-package net.joshb.deathmessages.command;
+package net.joshb.deathmessages.command.deathmessages;
 
 import net.joshb.deathmessages.api.PlayerManager;
 import net.joshb.deathmessages.assets.Assets;

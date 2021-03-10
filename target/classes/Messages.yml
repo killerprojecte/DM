@@ -2,6 +2,7 @@ Prefix: "&7[&cDM&7]"
 Console:
   #Send death messages to console
   Enabled: true
+  Message: "%message% (Extra: World:%world%, X:%x%, Y:%y%)"
 Commands:
   DeathMessages:
     Player-Only-Command: "&cOnly players can run this command."
@@ -24,9 +25,20 @@ Commands:
         Username-None-Existent: "%prefix% &cCould not find the player with the username &e%player%"
         Blacklist-Add: "%prefix% &aBlacklisted &e%player%&a!"
         Blacklist-Remove: "%prefix% &aRemoved &e%player% &afrom being blacklisted."
+      Version: "%prefix% &aRunning DeathMessages %version% by Joshb_"
 Discord:
   DeathMessage:
+    Remove-Plugin-Prefix: false
+    # Besides the color, you can leave all this blank if you want.
     Color: BLUE
+    # NEW: this was how the old DMP had messages formatted (Playerhead - IconURL, Name - the death message)
+    Author:
+      # The message of the author
+      Name: '%message%'
+      # The clickable link
+      URL: ""
+      # The picture that shows up in the author name
+      Icon-URL: "https://crafatar.com/avatars/%uuid%"
     Title: DeathMessage
     Description: '%message%'
     Image: https://crafatar.com/avatars/%uuid%
@@ -34,7 +46,15 @@ Discord:
     # To have no content, set content to 'Content: []'
     Content:
       - "Location:|World: %world%, X: %x%, Y: %y%, Z: %z%|false"
-    Footer: ""
+    Footer:
+      Text: "Footer text here"
+      Icon-URL: https://crafatar.com/avatars/%uuid%
+    Timestamp: true
+    # Defining the message below will ignore all above embed values and just return regular text.
+    # Meaning if you change Text: "" to anything else, the plugin will send regular text.
+    # You may use \n to make another line.
+    # Example: Text: "%message%\nX:%x%\nY:%y%\nZ:%z%"
+    Text: ""
 #Translations
 # Mobs: these translations will effect the %killer% placeholder
 Mobs:
@@ -109,8 +129,14 @@ Mobs:
   strider: "Strider"
   zoglin: "Zoglin"
   piglinbrute: "Piglin Brute"
-# Blocks: these translations will effect the %block% placeholder from getting squished by (Anvil), or falling off from(Ladder).
 Blocks:
-
-
-    
+  ladder: "Ladder"
+  anvil: "Anvil"
+  vine: "Vine"
+  twisted_vines_plant: "Twisted Vine"
+  weeping_vines_plant: "Weeping Vine"
+Environment:
+  normal: "over-world"
+  nether: "nether"
+  the_end: "the end"
+  unknown: "unknown"

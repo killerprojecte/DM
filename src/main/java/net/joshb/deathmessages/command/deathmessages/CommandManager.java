@@ -1,4 +1,4 @@
-package net.joshb.deathmessages.command;
+package net.joshb.deathmessages.command.deathmessages;
 
 import net.joshb.deathmessages.assets.Assets;
 import net.joshb.deathmessages.config.Messages;
@@ -20,6 +20,7 @@ public class CommandManager implements CommandExecutor {
         commands.add(new CommandBlacklist());
         commands.add(new CommandToggle());
         commands.add(new CommandReload());
+        commands.add(new CommandVersion());
     }
 
     @Override

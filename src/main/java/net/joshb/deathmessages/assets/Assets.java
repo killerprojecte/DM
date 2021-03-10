@@ -3,6 +3,7 @@ package net.joshb.deathmessages.assets;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.joshb.deathmessages.DeathMessages;
+import net.joshb.deathmessages.api.ExplosionManager;
 import net.joshb.deathmessages.api.PlayerManager;
 import net.joshb.deathmessages.config.EntityDeathMessages;
 import net.joshb.deathmessages.config.Messages;
@@ -16,6 +17,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
@@ -25,6 +27,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,7 +43,7 @@ public class Assets {
     public static List<String> formatMessage(List<String> list) {
         List<String> newList = new ArrayList<>();
         for (String s : list) {
-            newList.add(ChatColor.translateAlternateColorCodes('&', s
+            newList.add(colorize(s
                     .replaceAll("%prefix%", Messages.getInstance().getConfig().getString("Prefix"))));
         }
         return newList;
@@ -87,6 +90,7 @@ public class Assets {
     static String lastColor = null;
 
     public static TextComponent deathMessage(PlayerManager pm, boolean gang) {
+
         lastColor = null;
         LivingEntity mob = (LivingEntity) pm.getLastEntityDamager();
         boolean hasWeapon;
@@ -121,6 +125,19 @@ public class Assets {
                 return get(gang, pm, mob, "Firework");
             } else {
                 return get(gang, pm, mob, getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION));
+            }
+        }
+        if(pm.getLastDamage().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)){
+            //Bed kill
+            ExplosionManager explosionManager = ExplosionManager.getManagerIfEffected(pm.getPlayer());
+            if(explosionManager.getMaterial().name().contains("BED")){
+                PlayerManager pyro = PlayerManager.getPlayer(explosionManager.getPyro());
+                return get(gang, pm, pyro.getPlayer(), "Bed");
+            }
+            //Respawn Anchor kill
+            if(DeathMessages.majorVersion() >= 16 && explosionManager.getMaterial().equals(Material.RESPAWN_ANCHOR)){
+                PlayerManager pyro = PlayerManager.getPlayer(explosionManager.getPyro());
+                return get(gang, pm, pyro.getPlayer(), "Respawn-Anchor");
             }
         }
         if (hasWeapon) {
@@ -170,15 +187,35 @@ public class Assets {
         }
         for (String splitMessage : firstSection.split(" ")) {
             if (splitMessage.contains("%block%") && pm.getLastEntityDamager() instanceof FallingBlock) {
-                FallingBlock fb = (FallingBlock) pm.getLastEntityDamager();
-               // XMaterial.matchXMaterial(fb.getBlockData().getMaterial());
-                String mssa = Assets.colorize(splitMessage.replaceAll("%block%", convertString(fb.getBlockData().getMaterial().name())));
-                tc.addExtra(mssa);
-                lastColor = getColorOfString(lastColor + mssa);
+                try {
+                    FallingBlock fb = (FallingBlock) pm.getLastEntityDamager();
+                    String material = XMaterial.matchXMaterial(fb.getBlockData().getMaterial()).parseMaterial().toString().toLowerCase();
+                    String configValue = Messages.getInstance().getConfig().getString("Blocks." + material);
+                    String mssa = Assets.colorize(splitMessage.replaceAll("%block%", configValue));
+                    tc.addExtra(mssa);
+                    lastColor = getColorOfString(lastColor + mssa);
+                } catch (NullPointerException e){
+                    DeathMessages.plugin.getLogger().log(Level.SEVERE, "Could not parse %block%. Please check your config for a wrong value." +
+                            " Your materials could be spelt wrong or it does not exists in the config. If this problem persist, contact support" +
+                            " on the discord https://discord.gg/K9zVDwt");
+                    pm.setLastEntityDamager(null);
+                    return getNaturalDeath(pm, getSimpleCause(EntityDamageEvent.DamageCause.SUFFOCATION));
+                }
+
             } else if(splitMessage.contains("%climbable%") && pm.getLastDamage().equals(EntityDamageEvent.DamageCause.FALL)) {
-                String mssa = Assets.colorize(splitMessage.replaceAll("%climbable%", convertString(pm.getLastClimbing().toString())));
-                tc.addExtra(mssa);
-                lastColor = getColorOfString(lastColor + mssa);
+                try {
+                    String material = XMaterial.matchXMaterial(pm.getLastClimbing()).parseMaterial().toString().toLowerCase();
+                    String configValue = Messages.getInstance().getConfig().getString("Blocks." + material);
+                    String mssa = Assets.colorize(splitMessage.replaceAll("%climbable%", configValue));
+                    tc.addExtra(mssa);
+                    lastColor = getColorOfString(lastColor + mssa);
+                } catch (NullPointerException e){
+                    DeathMessages.plugin.getLogger().log(Level.SEVERE, "Could not parse %climbable%. Please check your config for a wrong value." +
+                            " Your materials could be spelt wrong or it does not exists in the config. If this problem persist, contact support" +
+                            " on the discord https://discord.gg/K9zVDwt");
+                    pm.setLastClimbing(null);
+                    return getNaturalDeath(pm, getSimpleCause(EntityDamageEvent.DamageCause.FALL));
+                }
             } else {
                 if (lastColor != null) {
                     TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(playerDeathPlaceholders(lastColor + splitMessage, pm, null)) + " "));
@@ -587,6 +624,7 @@ public class Assets {
                 .replaceAll("%killer%", killer.getName())
                 .replaceAll("%biome%", tameable.getLocation().getBlock().getBiome().getKey().getKey())
                 .replaceAll("%world%", tameable.getLocation().getWorld().getName())
+                .replaceAll("%world_environment%", getEnvironment(tameable.getLocation().getWorld().getEnvironment()))
                 .replaceAll("%tamable%", Messages.getInstance().getConfig().getString("Mobs."
                         + tameable.getType().getEntityClass().getSimpleName().toLowerCase()))
                 .replaceAll("%tamable_displayname%", tameable.getName())
@@ -607,6 +645,7 @@ public class Assets {
                     .replaceAll("%player_display%", pm.getPlayer().getDisplayName())
                     .replaceAll("%biome%", pm.getLastLocation().getBlock().getBiome().name())
                     .replaceAll("%world%", pm.getLastLocation().getWorld().getName())
+                    .replaceAll("%world_environment%", getEnvironment(pm.getLastLocation().getWorld().getEnvironment()))
                     .replaceAll("%x%", String.valueOf(pm.getLastLocation().getBlock().getX()))
                     .replaceAll("%y%", String.valueOf(pm.getLastLocation().getBlock().getY()))
                     .replaceAll("%z%", String.valueOf(pm.getLastLocation().getBlock().getZ())));
@@ -636,6 +675,7 @@ public class Assets {
                             + mob.getType().toString().toLowerCase()))
                     .replaceAll("%biome%", pm.getLastLocation().getBlock().getBiome().name())
                     .replaceAll("%world%", pm.getLastLocation().getWorld().getName())
+                    .replaceAll("%world_environment%", getEnvironment(pm.getLastLocation().getWorld().getEnvironment()))
                     .replaceAll("%x%", String.valueOf(pm.getLastLocation().getBlock().getX()))
                     .replaceAll("%y%", String.valueOf(pm.getLastLocation().getBlock().getY()))
                     .replaceAll("%z%", String.valueOf(pm.getLastLocation().getBlock().getZ()));
@@ -662,6 +702,19 @@ public class Assets {
             }
         }
         return sb.toString();
+    }
+
+    public static String getEnvironment(World.Environment environment){
+        switch (environment){
+            case NORMAL:
+                return Messages.getInstance().getConfig().getString("Environment.normal");
+            case NETHER:
+                return Messages.getInstance().getConfig().getString("Environment.nether");
+            case THE_END:
+                return Messages.getInstance().getConfig().getString("Environment.the_end");
+            default:
+                return Messages.getInstance().getConfig().getString("Environment.unknown");
+        }
     }
 
     public static String getSimpleProjectile(Projectile projectile) {

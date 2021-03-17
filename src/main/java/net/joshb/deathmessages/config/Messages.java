@@ -1,15 +1,11 @@
 package net.joshb.deathmessages.config;
 
-import net.joshb.deathmessages.assets.ConfigUpdater;
+import net.joshb.deathmessages.assets.CommentedConfiguration;
 import net.joshb.deathmessages.DeathMessages;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.logging.Level;
 
@@ -17,7 +13,7 @@ public class Messages {
 
     private String fileName = "Messages";
 
-    FileConfiguration config;
+    CommentedConfiguration config;
 
     File file;
 
@@ -27,13 +23,13 @@ public class Messages {
         return instance;
     }
 
-    public FileConfiguration getConfig(){
+    public CommentedConfiguration getConfig(){
         return config;
     }
 
     public void save(){
         try {
-            ConfigUpdater.update(DeathMessages.plugin, fileName + ".yml", file, Arrays.asList());
+            config.save(file);
         } catch (Exception e){
             File f = new File(DeathMessages.plugin.getDataFolder(), fileName + ".broken." + new Date().getTime());
             DeathMessages.plugin.getLogger().log(Level.SEVERE, "Could not save: " + fileName + ".yml");
@@ -68,9 +64,12 @@ public class Messages {
             file.getParentFile().mkdirs();
             copy(DeathMessages.plugin.getResource(fileName + ".yml"), file);
         }
-        config = YamlConfiguration.loadConfiguration(file);
-        save();
-        reload();
+        config = CommentedConfiguration.loadConfiguration(file);
+        try{
+            config.syncWithConfig(file, DeathMessages.plugin.getResource(fileName + ".yml"), "");
+        } catch (Exception e){
+
+        }
     }
 
     private void copy(InputStream in, File file) {

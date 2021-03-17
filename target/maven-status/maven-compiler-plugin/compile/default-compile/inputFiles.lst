@@ -18,6 +18,7 @@ D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\api\Exp
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\api\events\BroadcastTamableDeathMessageEvent.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\api\PlayerManager.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\listener\PlayerDeath.java
+D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\assets\CommentedConfiguration.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\hook\DiscordBotAPIExtension.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\assets\XMaterial.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\hook\DiscordSRVExtension.java
@@ -33,7 +34,6 @@ D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\enums\M
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\command\deathmessages\CommandToggle.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\api\events\BroadcastDeathMessageEvent.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\command\deathmessages\alias\CommandDeathMessagesToggle.java
-D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\assets\ConfigUpdater.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\command\deathmessages\DeathMessagesCommand.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\config\UserData.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\hook\PlaceholderAPIExtension.java

@@ -87,11 +87,7 @@ public class Assets {
                 || displayNameIsWeapon(itemStack);
     }
 
-    static String lastColor = null;
-
     public static TextComponent deathMessage(PlayerManager pm, boolean gang) {
-
-        lastColor = null;
         LivingEntity mob = (LivingEntity) pm.getLastEntityDamager();
         boolean hasWeapon;
         if(DeathMessages.majorVersion() < 9){
@@ -185,6 +181,8 @@ public class Assets {
         } else {
             firstSection = msg;
         }
+        String lastColor = "";
+        String lastFont = "";
         for (String splitMessage : firstSection.split(" ")) {
             if (splitMessage.contains("%block%") && pm.getLastEntityDamager() instanceof FallingBlock) {
                 try {
@@ -217,18 +215,14 @@ public class Assets {
                     return getNaturalDeath(pm, getSimpleCause(EntityDamageEvent.DamageCause.FALL));
                 }
             } else {
-                if (lastColor != null) {
-                    TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(playerDeathPlaceholders(lastColor + splitMessage, pm, null)) + " "));
-                    tc.addExtra(tx);
-                    for(BaseComponent bs : tx.getExtra()){
+                TextComponent tx = new TextComponent(TextComponent.fromLegacyText(colorize(playerDeathPlaceholders( lastColor  + lastFont + splitMessage, pm, null)) + " "));
+                tc.addExtra(tx);
+
+                for(BaseComponent bs : tx.getExtra()){
+                    if(!(bs.getColor() == null)) {
                         lastColor = bs.getColor().toString();
                     }
-                } else {
-                    TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(playerDeathPlaceholders(splitMessage, pm, null)) + " "));
-                    tc.addExtra(tx);
-                    for(BaseComponent bs : tx.getExtra()){
-                        lastColor = bs.getColor().toString();
-                    }
+                    lastFont = formating(bs);
                 }
             }
         }
@@ -276,6 +270,8 @@ public class Assets {
         } else {
             firstSection = msg;
         }
+        String lastColor = "";
+        String lastFont = "";
         for (String splitMessage : firstSection.split(" ")) {
             if (splitMessage.contains("%weapon%")) {
                 ItemStack i;
@@ -308,29 +304,23 @@ public class Assets {
                 if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].equals("")) {
                     displayName = displayName + spl[1];
                 }
-                TextComponent weaponComp = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(displayName)));
+                TextComponent weaponComp = new TextComponent(TextComponent.fromLegacyText(colorize(displayName)));
                 BaseComponent[] hoverEventComponents = new BaseComponent[]{
                         new TextComponent(NBTItem.convertItemtoNBT(i).getCompound().toString())
                 };
                 weaponComp.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, hoverEventComponents));
                 tc.addExtra(weaponComp);
             } else {
-                if (lastColor != null) {
-                    TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(playerDeathPlaceholders(lastColor + splitMessage, pm, mob)) + " "));
-                    tc.addExtra(tx);
-                    for(BaseComponent bs : tx.getExtra()){
+                TextComponent tx = new TextComponent(TextComponent.fromLegacyText(colorize(playerDeathPlaceholders(lastColor + lastFont + splitMessage, pm, mob)) + " "));
+                tc.addExtra(tx);
+                for(BaseComponent bs : tx.getExtra()){
+                    if(!(bs.getColor() == null)) {
                         lastColor = bs.getColor().toString();
                     }
-                } else {
-                    TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(playerDeathPlaceholders(splitMessage, pm, mob)) + " "));
-                    tc.addExtra(tx);
-                    for(BaseComponent bs : tx.getExtra()){
-                        lastColor = bs.getColor().toString();
-                    }
+                    lastFont = formating(bs);
                 }
             }
         }
-        lastColor = null;
         if (sec.length >= 2) {
             tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(playerDeathPlaceholders(sec[1], pm, mob))));
         }
@@ -385,19 +375,16 @@ public class Assets {
         } else {
             firstSection = msg;
         }
+        String lastColor = "";
+        String lastFont = "";
         for (String splitMessage : firstSection.split(" ")) {
-            if (lastColor != null) {
-                TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(playerDeathPlaceholders(lastColor + splitMessage, pm, mob)) + " "));
-                tc.addExtra(tx);
-                for(BaseComponent bs : tx.getExtra()){
+            TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(playerDeathPlaceholders(lastColor + lastFont + splitMessage, pm, mob)) + " "));
+            tc.addExtra(tx);
+            for(BaseComponent bs : tx.getExtra()){
+                if(!(bs.getColor() == null)) {
                     lastColor = bs.getColor().toString();
                 }
-            } else {
-                TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(playerDeathPlaceholders(splitMessage, pm, mob)) + " "));
-                tc.addExtra(tx);
-                for(BaseComponent bs : tx.getExtra()){
-                    lastColor = bs.getColor().toString();
-                }
+                lastFont = formating(bs);
             }
         }
         if (sec.length >= 2) {
@@ -449,6 +436,8 @@ public class Assets {
         } else {
             firstSection = msg;
         }
+        String lastColor = "";
+        String lastFont = "";
         for (String splitMessage : firstSection.split(" ")) {
             if (splitMessage.contains("%weapon%") && pm.getLastProjectileEntity() instanceof Arrow) {
                 if(mob.getEquipment().getItemInMainHand() == null){
@@ -482,18 +471,13 @@ public class Assets {
                 weaponComp.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, hoverEventComponents));
                 tc.addExtra(weaponComp);
             } else {
-                if (lastColor != null) {
-                    TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(playerDeathPlaceholders(lastColor + splitMessage, pm, mob)) + " "));
-                    tc.addExtra(tx);
-                    for(BaseComponent bs : tx.getExtra()){
+                TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(playerDeathPlaceholders(lastColor + lastFont + splitMessage, pm, mob)) + " "));
+                tc.addExtra(tx);
+                for(BaseComponent bs : tx.getExtra()){
+                    if(!(bs.getColor() == null)) {
                         lastColor = bs.getColor().toString();
                     }
-                } else {
-                    TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(playerDeathPlaceholders(splitMessage, pm, mob)) + " "));
-                    tc.addExtra(tx);
-                    for(BaseComponent bs : tx.getExtra()){
-                        lastColor = bs.getColor().toString();
-                    }
+                    lastFont = formating(bs);
                 }
             }
         }
@@ -535,19 +519,16 @@ public class Assets {
         } else {
             firstSection = msg;
         }
+        String lastColor = "";
+        String lastFont = "";
         for (String splitMessage : firstSection.split(" ")) {
-            if (lastColor != null) {
-                TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(entityDeathPlaceholders(lastColor + splitMessage, pm, tameable)) + " "));
-                tc.addExtra(tx);
-                for(BaseComponent bs : tx.getExtra()){
+            TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(entityDeathPlaceholders(lastColor + lastFont + splitMessage, pm, tameable)) + " "));
+            tc.addExtra(tx);
+            for(BaseComponent bs : tx.getExtra()){
+                if(!(bs.getColor() == null)) {
                     lastColor = bs.getColor().toString();
                 }
-            } else {
-                TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(entityDeathPlaceholders(splitMessage, pm, tameable)) + " "));
-                tc.addExtra(tx);
-                for(BaseComponent bs : tx.getExtra()){
-                    lastColor = bs.getColor().toString();
-                }
+                lastFont = formating(bs);
             }
         }
         if (sec.length >= 2) {
@@ -702,6 +683,16 @@ public class Assets {
             }
         }
         return sb.toString();
+    }
+
+    public static String formating(BaseComponent tx){
+        String returning = "";
+        if(tx.isBold()) returning = returning + "&l";
+        if(tx.isItalic()) returning = returning + "&o";
+        if(tx.isObfuscated()) returning = returning + "&k";
+        if(tx.isStrikethrough()) returning = returning + "&m";
+        if(tx.isUnderlined()) returning = returning + "&n";
+        return returning;
     }
 
     public static String getEnvironment(World.Environment environment){

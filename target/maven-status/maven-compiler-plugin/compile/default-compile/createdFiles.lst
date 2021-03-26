@@ -10,6 +10,7 @@ net\joshb\deathmessages\assets\Assets$1.class
 net\joshb\deathmessages\command\deathmessages\CommandToggle.class
 net\joshb\deathmessages\listener\OnMove.class
 net\joshb\deathmessages\config\UserData.class
+net\joshb\deathmessages\listener\SupportLogger.class
 net\joshb\deathmessages\hook\WorldGuardExtension.class
 net\joshb\deathmessages\listener\PlayerDeath.class
 net\joshb\deathmessages\config\Gangs.class
@@ -32,10 +33,12 @@ net\joshb\deathmessages\listener\EntityDamageByBlock.class
 net\joshb\deathmessages\config\EntityDeathMessages.class
 net\joshb\deathmessages\api\events\DMBlockExplodeEvent.class
 net\joshb\deathmessages\listener\customlisteners\BroadcastPlayerDeathListener.class
+net\joshb\deathmessages\command\deathmessages\CommandEdit.class
 net\joshb\deathmessages\config\Settings.class
 net\joshb\deathmessages\command\deathmessages\CommandReload.class
 net\joshb\deathmessages\hook\DiscordAssets$1.class
 net\joshb\deathmessages\hook\DiscordBotAPIExtension.class
+META-INF\org\apache\logging\log4j\core\config\plugins\Log4j2Plugins.dat
 net\joshb\deathmessages\assets\XMaterial$Data.class
 net\joshb\deathmessages\api\events\BroadcastTamableDeathMessageEvent.class
 net\joshb\deathmessages\config\PlayerDeathMessages.class
@@ -45,4 +48,5 @@ net\joshb\deathmessages\assets\Assets.class
 net\joshb\deathmessages\api\events\BroadcastDeathMessageEvent.class
 net\joshb\deathmessages\listener\EntityDamage.class
 net\joshb\deathmessages\command\deathmessages\CommandManager.class
+net\joshb\deathmessages\command\deathmessages\TabCompleter.class
 net\joshb\deathmessages\api\PlayerManager$1.class

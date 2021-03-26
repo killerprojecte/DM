@@ -24,8 +24,10 @@ public class ExplosionManager {
         this.material = material;
         this.location = location;
         this.effected = effected;
+
         explosions.add(this);
         //Destroys class. Wont need the info anymore
+
         new BukkitRunnable(){
             @Override
             public void run() {

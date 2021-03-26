@@ -2,6 +2,7 @@ package net.joshb.deathmessages;
 
 import net.joshb.deathmessages.api.PlayerManager;
 import net.joshb.deathmessages.command.deathmessages.CommandManager;
+import net.joshb.deathmessages.command.deathmessages.TabCompleter;
 import net.joshb.deathmessages.command.deathmessages.alias.CommandDeathMessagesToggle;
 import net.joshb.deathmessages.config.*;
 import net.joshb.deathmessages.hook.DiscordBotAPIExtension;
@@ -41,6 +42,8 @@ public class DeathMessages extends JavaPlugin {
         plugin = this;
         partner();
         initializeConfigs();
+        //Logger log = (Logger) LogManager.getRootLogger();
+        //log.addAppender(new SupportLogger());
         initializeListeners();
         initializeCommands();
         initializeHooks();
@@ -116,6 +119,7 @@ public class DeathMessages extends JavaPlugin {
         CommandManager cm = new CommandManager();
         cm.initializeSubCommands();
         getCommand("deathmessages").setExecutor(cm);
+        getCommand("deathmessages").setTabCompleter(new TabCompleter());
         getCommand("deathmessagestoggle").setExecutor(new CommandDeathMessagesToggle());
     }
 
@@ -159,7 +163,7 @@ public class DeathMessages extends JavaPlugin {
                 if (!ignoredPlugins.contains("DeathMessages")) {
                     ignoredPlugins.add("DeathMessages");
                 }
-            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException exception) {
+            } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException exception) {
                 getLogger().log(Level.SEVERE, "Error adding plugin to ignored plugins list: " +
                         exception.getMessage());
             }

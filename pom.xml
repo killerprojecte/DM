@@ -6,7 +6,7 @@
 
     <groupId>me.Joshb.DeathMessages</groupId>
     <artifactId>DeathMessages</artifactId>
-    <version>1.2.3</version>
+    <version>1.2.4</version>
 
     <build>
         <sourceDirectory>src/main/java</sourceDirectory>
@@ -29,7 +29,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>3.8.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -38,7 +38,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4.3</version>
+                <version>3.2.4</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -58,6 +58,10 @@
             </plugin>
         </plugins>
     </build>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <repositories>
         <repository>
@@ -139,6 +143,11 @@
             <artifactId>discordsrv</artifactId>
             <version>1.21.3</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.14.0</version>
         </dependency>
     </dependencies>
 </project>

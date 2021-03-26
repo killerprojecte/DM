@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>me.Joshb.DeathMessages</groupId>
   <artifactId>DeathMessages</artifactId>
-  <version>1.2.3</version>
+  <version>1.2.4</version>
   <build>
     <sourceDirectory>src/main/java</sourceDirectory>
     <resources>
@@ -24,7 +24,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.5.1</version>
+        <version>3.8.1</version>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
@@ -32,7 +32,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>2.4.3</version>
+        <version>3.2.4</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -84,28 +84,6 @@
       <artifactId>spigot-api</artifactId>
       <version>1.16.3-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>commons-lang</artifactId>
-          <groupId>commons-lang</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>guava</artifactId>
-          <groupId>com.google.guava</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>gson</artifactId>
-          <groupId>com.google.code.gson</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>bungeecord-chat</artifactId>
-          <groupId>net.md-5</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>snakeyaml</artifactId>
-          <groupId>org.yaml</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>me.clip</groupId>
@@ -118,84 +96,12 @@
       <artifactId>worldedit-core</artifactId>
       <version>7.2.1-SNAPSHOT</version>
       <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>core</artifactId>
-          <groupId>com.sk89q.worldedit.worldedit-libs</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>truezip</artifactId>
-          <groupId>de.schlichtherle</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>truevfs-profile-default_2.13</artifactId>
-          <groupId>net.java.truevfs</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>rhino-runtime</artifactId>
-          <groupId>org.mozilla</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>jsr305</artifactId>
-          <groupId>com.google.code.findbugs</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>slf4j-api</artifactId>
-          <groupId>org.slf4j</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>fastutil</artifactId>
-          <groupId>it.unimi.dsi</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>antlr4-runtime</artifactId>
-          <groupId>org.antlr</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>guava</artifactId>
-          <groupId>com.google.guava</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>snakeyaml</artifactId>
-          <groupId>org.yaml</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>gson</artifactId>
-          <groupId>com.google.code.gson</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.sk89q.worldguard</groupId>
       <artifactId>worldguard-bukkit</artifactId>
       <version>7.0.4</version>
       <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>worldedit-bukkit</artifactId>
-          <groupId>com.sk89q.worldedit</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>worldguard-core</artifactId>
-          <groupId>com.sk89q.worldguard</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>paperlib</artifactId>
-          <groupId>io.papermc</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>commandbook</artifactId>
-          <groupId>com.sk89q</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>bstats-bukkit</artifactId>
-          <groupId>org.bstats</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>guava</artifactId>
-          <groupId>com.google.guava</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.sk89q.worldguard</groupId>
@@ -214,89 +120,9 @@
       <artifactId>discordsrv</artifactId>
       <version>1.21.3</version>
       <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>JDA</artifactId>
-          <groupId>net.dv8tion</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>nv-websocket-client</artifactId>
-          <groupId>com.neovisionaries</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>trove4j</artifactId>
-          <groupId>net.sf.trove4j</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>configuralize</artifactId>
-          <groupId>github.scarsz</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>slf4j-jdk14</artifactId>
-          <groupId>org.slf4j</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>commons-io</artifactId>
-          <groupId>commons-io</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>commons-collections</artifactId>
-          <groupId>commons-collections</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>commons-lang3</artifactId>
-          <groupId>org.apache.commons</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>commons-codec</artifactId>
-          <groupId>commons-codec</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>emoji-java</artifactId>
-          <groupId>com.vdurmont</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>java-semver</artifactId>
-          <groupId>com.github.zafarkhaja</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>http-request</artifactId>
-          <groupId>com.github.kevinsawicki</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>minidns-hla</artifactId>
-          <groupId>org.minidns</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>reflections</artifactId>
-          <groupId>org.reflections</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>spring-expression</artifactId>
-          <groupId>org.springframework</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>MCDiscordReserializer</artifactId>
-          <groupId>dev.vankka</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>text-api</artifactId>
-          <groupId>net.kyori</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>text-serializer-legacy</artifactId>
-          <groupId>net.kyori</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>text-adapter-bukkit</artifactId>
-          <groupId>net.kyori</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>guava</artifactId>
-          <groupId>com.google.guava</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
   </dependencies>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
 </project>
-

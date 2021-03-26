@@ -2,7 +2,6 @@ package net.joshb.deathmessages.command.deathmessages;
 
 import net.joshb.deathmessages.api.PlayerManager;
 import net.joshb.deathmessages.assets.Assets;
-import net.joshb.deathmessages.config.UserData;
 import net.joshb.deathmessages.enums.Permission;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -27,7 +26,7 @@ public class CommandToggle extends DeathMessagesCommand {
             return;
         }
         PlayerManager pm = PlayerManager.getPlayer(p);
-        boolean b = UserData.getInstance().getConfig().getBoolean(p.getUniqueId().toString() + ".messages-enabled");
+        boolean b = pm.getMessagesEnabled();
         if(b){
             pm.setMessagesEnabled(false);
             p.sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-Off"));

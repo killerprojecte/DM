@@ -18,6 +18,7 @@ public class CommandManager implements CommandExecutor {
 
     public void initializeSubCommands(){
         commands.add(new CommandBlacklist());
+        //commands.add(new CommandEdit());
         commands.add(new CommandToggle());
         commands.add(new CommandReload());
         commands.add(new CommandVersion());

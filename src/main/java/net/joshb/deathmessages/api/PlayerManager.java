@@ -41,20 +41,28 @@ public class PlayerManager {
 
     private static List<PlayerManager> players = new ArrayList<>();
 
+    public boolean saveUserData = Settings.getInstance().getConfig().getBoolean("Saved-User-Data");
+
     public PlayerManager(Player p){
         this.p = p;
         this.uuid = p.getUniqueId();
         this.name = p.getName();
         this.displayName = p.getDisplayName();
 
-        if(!UserData.getInstance().getConfig().contains(p.getUniqueId().toString())){
+
+        if(saveUserData && !UserData.getInstance().getConfig().contains(p.getUniqueId().toString())){
             UserData.getInstance().getConfig().set(p.getUniqueId().toString() + ".username", p.getName());
             UserData.getInstance().getConfig().set(p.getUniqueId().toString() + ".messages-enabled", true);
             UserData.getInstance().getConfig().set(p.getUniqueId().toString() + ".is-blacklisted", false);
             UserData.getInstance().save();
         }
-        messagesEnabled = UserData.getInstance().getConfig().getBoolean(p.getUniqueId().toString() + ".messages-enabled");
-        isBlacklisted = UserData.getInstance().getConfig().getBoolean(p.getUniqueId().toString() + ".is-blacklisted");
+        if(saveUserData){
+            messagesEnabled = UserData.getInstance().getConfig().getBoolean(p.getUniqueId().toString() + ".messages-enabled");
+            isBlacklisted = UserData.getInstance().getConfig().getBoolean(p.getUniqueId().toString() + ".is-blacklisted");
+        } else {
+            messagesEnabled = true;
+            isBlacklisted = false;
+        }
         players.add(this);
     }
 
@@ -68,20 +76,24 @@ public class PlayerManager {
         return Objects.requireNonNull(name);
     }
 
-    public String getDisplayName() { return displayName; }
-
     public boolean getMessagesEnabled() { return messagesEnabled; }
 
-    public void setMessagesEnabled(boolean b){
+    public void setMessagesEnabled(boolean b) {
         this.messagesEnabled = b;
-        UserData.getInstance().getConfig().set(p.getUniqueId().toString() + ".messages-enabled", b);
-        UserData.getInstance().save();
+        if (saveUserData) {
+            UserData.getInstance().getConfig().set(p.getUniqueId().toString() + ".messages-enabled", b);
+            UserData.getInstance().save();
+        }
     }
 
     public boolean isBlacklisted() { return isBlacklisted; }
 
     public void setBlacklisted(boolean b){
         this.isBlacklisted = b;
+        if (saveUserData) {
+            UserData.getInstance().getConfig().set(p.getUniqueId().toString() + ".is-blacklisted", b);
+            UserData.getInstance().save();
+        }
     }
 
     public void setLastDamageCause(DamageCause dc){
@@ -147,8 +159,6 @@ public class PlayerManager {
     public Location getExplosionCauser(){ return explosionCauser; }
 
     public Location getLastLocation() { return location; }
-
-    public int getCooldown(){ return cooldown; }
 
     public boolean isInCooldown(){
         return cooldown > 0;

@@ -43,6 +43,10 @@ Hooks:
         Enabled: true
         Channel-ID: 0
 
+# If enabled, user data will be saved. (Blacklist, and /dm toggle data)
+# If disabled, data wont be saved in UserData.yml
+Saved-User-Data: true
+
 # If enabled, weapon kills will default to a defined kill if the weapon does not have a custom display name
 Disable-Weapon-Kill-With-No-Custom-Name:
   Enabled: false

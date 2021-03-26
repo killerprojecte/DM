@@ -66,9 +66,9 @@ public class Messages {
         }
         config = CommentedConfiguration.loadConfiguration(file);
         try{
-            config.syncWithConfig(file, DeathMessages.plugin.getResource(fileName + ".yml"), "");
+            config.syncWithConfig(file, DeathMessages.plugin.getResource(fileName + ".yml"), "none");
         } catch (Exception e){
-
+            e.printStackTrace();
         }
     }
 

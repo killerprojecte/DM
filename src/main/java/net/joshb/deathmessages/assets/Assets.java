@@ -25,6 +25,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -35,8 +36,51 @@ public class Assets {
 
     static boolean addPrefix = Settings.getInstance().getConfig().getBoolean("Add-Prefix-To-All-Messages");
 
+    public static List<String> damageTypes = Arrays.asList(
+            "Projectile-Arrow",
+            "Projectile-Dragon-Fireball",
+            "Projectile-Egg",
+            "Projectile-EnderPearl",
+            "Projectile-Fireball",
+            "Projectile-FishHook",
+            "Projectile-LlamaSpit",
+            "Projectile-Snowball",
+            "Projectile-Trident",
+            "Projectile-WitherSkull",
+            "Projectile-ShulkerBullet",
+            "Contact",
+            "Melee",
+            "Suffocation",
+            "Fall",
+            "Fire",
+            "Fire-Tick",
+            "Melting",
+            "Lava",
+            "Drowning",
+            "Explosion",
+            "Void",
+            "Lightning",
+            "Suicide",
+            "Starvation",
+            "Poison",
+            "Magic",
+            "Wither",
+            "Falling-Block",
+            "Dragon-Breath",
+            "Custom",
+            "Fly-Into-Wall",
+            "Hot-Floor",
+            "Cramming",
+            "Dryout",
+            "Unknown");
+
     public static String formatMessage(String path) {
         return colorize(Messages.getInstance().getConfig().getString(path)
+                .replaceAll("%prefix%", Messages.getInstance().getConfig().getString("Prefix")));
+    }
+
+    public static String formatString(String string) {
+        return colorize(string
                 .replaceAll("%prefix%", Messages.getInstance().getConfig().getString("Prefix")));
     }
 
@@ -281,7 +325,7 @@ public class Assets {
                      i = mob.getEquipment().getItemInMainHand();
                 }
                 String displayName;
-                if (!i.hasItemMeta() && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().equals("")) {
+                if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().equals("")) {
                     if (Settings.getInstance().getConfig().getBoolean("Disable-Weapon-Kill-With-No-Custom-Name.Enabled")) {
                         if(!Settings.getInstance().getConfig().getBoolean("Disable-Weapon-Kill-With-No-Custom-Name.Ignore-Enchantments")){
                             if(i.getEnchantments().size() == 0){
@@ -304,7 +348,7 @@ public class Assets {
                 if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].equals("")) {
                     displayName = displayName + spl[1];
                 }
-                TextComponent weaponComp = new TextComponent(TextComponent.fromLegacyText(colorize(displayName)));
+                TextComponent weaponComp = new TextComponent(TextComponent.fromLegacyText(displayName));
                 BaseComponent[] hoverEventComponents = new BaseComponent[]{
                         new TextComponent(NBTItem.convertItemtoNBT(i).getCompound().toString())
                 };
@@ -440,12 +484,17 @@ public class Assets {
         String lastFont = "";
         for (String splitMessage : firstSection.split(" ")) {
             if (splitMessage.contains("%weapon%") && pm.getLastProjectileEntity() instanceof Arrow) {
-                if(mob.getEquipment().getItemInMainHand() == null){
+                ItemStack i;
+                if(DeathMessages.majorVersion() < 9){
+                    i = mob.getEquipment().getItemInHand();
+                } else {
+                    i = mob.getEquipment().getItemInMainHand();
+                }
+                if(i == null){
                     continue;
                 }
-                ItemStack i = mob.getEquipment().getItemInMainHand();
                 String displayName;
-                if (!i.hasItemMeta() && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().equals("")) {
+                if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().equals("")) {
                     if (Settings.getInstance().getConfig().getBoolean("Disable-Weapon-Kill-With-No-Custom-Name.Enabled")) {
                         if(!Settings.getInstance().getConfig()
                                 .getString("Disable-Weapon-Kill-With-No-Custom-Name.Source.Projectile.Default-To").equals(projectileDamage)){
@@ -532,8 +581,7 @@ public class Assets {
             }
         }
         if (sec.length >= 2) {
-            tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(entityDeathPlaceholders(sec[1], pm, tameable))));
-        }
+            tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(entityDeathPlaceholders(sec[1], pm, tameable))));        }
         if (sec.length == 3) {
             if (sec[2].startsWith("COMMAND:")) {
                 String cmd = sec[2].split(":")[1];

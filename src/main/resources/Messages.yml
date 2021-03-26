@@ -10,9 +10,10 @@ Commands:
     Help:
       - "%prefix% &aDeathMessages Command Help List:"
       - ""
-      - "&a/deathmessages blacklist <username> - blacklists the user from death messages. They will still see other players' death messages, but not send them."
+      - "&a/deathmessages blacklist <username> &7- blacklists the user from death messages. They will still see other players' death messages, but not send them."
       - "&a/deathmessages toggle &7- Toggle death messages on or off."
       - "&a/deathmessages reload &7- Reload plugin configs."
+      - "&a/deathmessages edit <player> <mobName> <solo, gang> <damage-type> <add, remove, list> (remove only=Placeholder) &7- Edits the death messages."
       - ""
     Sub-Commands:
       Reload:
@@ -26,6 +27,11 @@ Commands:
         Blacklist-Add: "%prefix% &aBlacklisted &e%player%&a!"
         Blacklist-Remove: "%prefix% &aRemoved &e%player% &afrom being blacklisted."
       Version: "%prefix% &aRunning DeathMessages %version% by Joshb_"
+      Edit:
+        Usage: "%prefix% &a/deathmessages edit <player> <mobName> <solo, gang> <damage-type> <add, remove, list> (remove only=Placeholder) &7- Edits the death messages."
+        Invalid-Mob-Type: "%prefix% &cThe mob name you specified does not exist."
+        Invalid-Damage-Type: "%prefix% &cThe damage type you specified does not exist. Try using tab complete to select one."
+        Invalid-Arguments: "%prefix% &cInvalid arguments. Use &a/dm edit &cto view them."
 Discord:
   DeathMessage:
     Remove-Plugin-Prefix: false

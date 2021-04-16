@@ -6,3 +6,5 @@ By downloading DeathMessages from SpigotMC (https://www.spigotmc.org/resources/d
 - The customer has every right to suggest changes to DeathMessages.
 
 TOS subjected to changes at any time
+
+You are erged to join the discord https://discord.gg/K9zVDwt as that is where the community sits.

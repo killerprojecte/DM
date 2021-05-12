@@ -4,6 +4,8 @@ import net.joshb.deathmessages.config.Settings;
 import net.joshb.deathmessages.enums.MessageType;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.List;
+
 public class DiscordAssets {
 
     public DiscordAssets() {
@@ -15,16 +17,16 @@ public class DiscordAssets {
         return instance;
     }
 
-    public String getChannelID(MessageType messageType) {
+    public List<String> getIDs(MessageType messageType) {
         switch (messageType) {
             case PLAYER:
-                return getSettings().getString("Hooks.Discord.Channels.Player.Channel-ID");
+                return getSettings().getStringList("Hooks.Discord.Channels.Player.Channels");
             case MOB:
-                return getSettings().getString("Hooks.Discord.Channels.Mob.Channel-ID");
+                return getSettings().getStringList("Hooks.Discord.Channels.Mob.Channels");
             case NATURAL:
-                return getSettings().getString("Hooks.Discord.Channels.Natural.Channel-ID");
+                return getSettings().getStringList("Hooks.Discord.Channels.Natural.Channels");
             case TAMEABLE:
-                return getSettings().getString("Hooks.Discord.Channels.Tameable.Channel-ID");
+                return getSettings().getStringList("Hooks.Discord.Channels.Tameable.Channels");
             default:
                 return null;
         }

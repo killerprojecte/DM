@@ -7,13 +7,16 @@ net\joshb\deathmessages\assets\XMaterial$1.class
 net\joshb\deathmessages\hook\DiscordAssets.class
 net\joshb\deathmessages\config\Messages.class
 net\joshb\deathmessages\assets\Assets$1.class
+net\joshb\deathmessages\listener\OnChat.class
 net\joshb\deathmessages\command\deathmessages\CommandToggle.class
 net\joshb\deathmessages\listener\OnMove.class
 net\joshb\deathmessages\config\UserData.class
 net\joshb\deathmessages\listener\SupportLogger.class
 net\joshb\deathmessages\hook\WorldGuardExtension.class
+net\joshb\deathmessages\config\ConfigManager.class
 net\joshb\deathmessages\listener\PlayerDeath.class
 net\joshb\deathmessages\config\Gangs.class
+net\joshb\deathmessages\command\deathmessages\CommandBackup.class
 net\joshb\deathmessages\listener\OnJoin.class
 net\joshb\deathmessages\command\deathmessages\CommandBlacklist.class
 net\joshb\deathmessages\listener\customlisteners\BroadcastTameableDeathListener.class
@@ -32,7 +35,9 @@ net\joshb\deathmessages\DeathMessages.class
 net\joshb\deathmessages\listener\EntityDamageByBlock.class
 net\joshb\deathmessages\config\EntityDeathMessages.class
 net\joshb\deathmessages\api\events\DMBlockExplodeEvent.class
+net\joshb\deathmessages\command\deathmessages\CommandRestore.class
 net\joshb\deathmessages\listener\customlisteners\BroadcastPlayerDeathListener.class
+net\joshb\deathmessages\assets\Constants.class
 net\joshb\deathmessages\command\deathmessages\CommandEdit.class
 net\joshb\deathmessages\config\Settings.class
 net\joshb\deathmessages\command\deathmessages\CommandReload.class

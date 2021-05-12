@@ -15,6 +15,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import java.util.regex.Matcher;
+
 public class BroadcastPlayerDeathListener implements Listener {
 
     private boolean discordSent = false;
@@ -24,7 +26,7 @@ public class BroadcastPlayerDeathListener implements Listener {
         if (!e.isCancelled()) {
             if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
                 String message = Assets.playerDeathPlaceholders(Messages.getInstance().getConfig().getString("Console.Message"), PlayerManager.getPlayer(e.getPlayer()), e.getLivingEntity());
-                message = message.replaceAll("%message%", e.getTextComponent().toLegacyText());
+                message = message.replaceAll("%message%", Matcher.quoteReplacement(e.getTextComponent().toLegacyText()));
                 Bukkit.getConsoleSender().sendMessage(message);
             }
 
@@ -74,6 +76,9 @@ public class BroadcastPlayerDeathListener implements Listener {
     }
 
     private void normal(BroadcastDeathMessageEvent e, PlayerManager pms, Player pls){
+        if (pms.getMessagesEnabled()) {
+            pls.spigot().sendMessage(e.getTextComponent());
+        }
         if (DeathMessages.worldGuardExtension != null) {
             if (DeathMessages.worldGuardExtension.getRegionState(pls, e.getMessageType()).equals(StateFlag.State.DENY)
                 || DeathMessages.worldGuardExtension.getRegionState(e.getPlayer(), e.getMessageType()).equals(StateFlag.State.DENY)) {
@@ -87,9 +92,6 @@ public class BroadcastPlayerDeathListener implements Listener {
         if (DeathMessages.discordSRVExtension != null && !discordSent) {
             DeathMessages.discordSRVExtension.sendDiscordMessage(PlayerManager.getPlayer(e.getPlayer()), e.getMessageType(), ChatColor.stripColor(e.getTextComponent().toLegacyText()));
             discordSent = true;
-        }
-        if (pms.getMessagesEnabled()) {
-            pls.spigot().sendMessage(e.getTextComponent());
         }
     }
 }

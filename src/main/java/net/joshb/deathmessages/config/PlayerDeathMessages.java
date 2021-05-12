@@ -11,7 +11,7 @@ import java.util.logging.Level;
 
 public class PlayerDeathMessages {
 
-    private String fileName = "PlayerDeathMessages";
+    public final String fileName = "PlayerDeathMessages";
 
     CommentedConfiguration config;
 
@@ -55,10 +55,6 @@ public class PlayerDeathMessages {
     }
 
     public void initialize(){
-        if (!DeathMessages.plugin.getDataFolder().exists()) {
-            DeathMessages.plugin.getDataFolder().mkdir();
-        }
-
         file = new File(DeathMessages.plugin.getDataFolder(), fileName + ".yml");
 
         if(!file.exists()){

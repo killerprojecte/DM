@@ -14,6 +14,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import java.util.regex.Matcher;
+
 public class BroadcastTameableDeathListener implements Listener {
 
     @EventHandler
@@ -21,7 +23,7 @@ public class BroadcastTameableDeathListener implements Listener {
         if (!e.isCancelled()) {
             if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
                 String message = Assets.entityDeathPlaceholders(Messages.getInstance().getConfig().getString("Console.Message"), PlayerManager.getPlayer(e.getPlayer()), e.getTameable());
-                message = message.replaceAll("%message%", e.getTextComponent().toLegacyText());
+                message = message.replaceAll("%message%", Matcher.quoteReplacement(e.getTextComponent().toLegacyText()));
                 Bukkit.getConsoleSender().sendMessage(message);
             }
 

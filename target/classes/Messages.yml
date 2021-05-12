@@ -28,10 +28,22 @@ Commands:
         Blacklist-Remove: "%prefix% &aRemoved &e%player% &afrom being blacklisted."
       Version: "%prefix% &aRunning DeathMessages %version% by Joshb_"
       Edit:
-        Usage: "%prefix% &a/deathmessages edit <player> <mobName> <solo, gang> <damage-type> <add, remove, list> (remove only=Placeholder) &7- Edits the death messages."
+        Usage: "%prefix% &a/dm edit <player> <mobName> <solo, gang> <damage-type> <add, remove, list> (remove only=Placeholder) &7- Edits the death messages."
         Invalid-Mob-Type: "%prefix% &cThe mob name you specified does not exist."
         Invalid-Damage-Type: "%prefix% &cThe damage type you specified does not exist. Try using tab complete to select one."
         Invalid-Arguments: "%prefix% &cInvalid arguments. Use &a/dm edit &cto view them."
+        Invalid-Placeholder: "%prefix% &cThe placeholder must be numeric."
+        Removed-Message: "%prefix% &cRemoved '%message%'"
+        Invalid-Selection: "%prefix% &cThe message with that placeholder does not exist."
+        Adding-Start: "%prefix% &a You are in add message mode. Start typing in chat to add a new message."
+        Added-Message: "%prefix% &aAdded &e'&r%message%&e' &a to %mob_name% > %mode% > %damage_type%"
+      Backup:
+        Usage: "%prefix% &a/dm backup <true, false> &7- Backup plugin files. True will not save user-data, false will save user-data."
+        Backed-Up: "%prefix% &aBackup &e#%backup-code% &ahas been saved."
+      Restore:
+        Usage: "%prefix% &a/dm restore <backup-code> <true, false> &7- True will not restore user-data, false will restore user-data."
+        Restored: "%prefix% &aPlugin files restored from backup &e#%backup-code%"
+        Backup-Not-Found: "%prefix% &cThe backup with that code does not exist."
 Discord:
   DeathMessage:
     Remove-Plugin-Prefix: false

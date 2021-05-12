@@ -10,7 +10,7 @@ import java.util.logging.Level;
 
 public class UserData {
 
-    private String fileName = "UserData";
+    public final String fileName = "UserData";
 
     FileConfiguration config;
 
@@ -53,9 +53,6 @@ public class UserData {
     }
 
     public void initialize(){
-        if (!DeathMessages.plugin.getDataFolder().exists()) {
-            DeathMessages.plugin.getDataFolder().mkdir();
-        }
 
         file = new File(DeathMessages.plugin.getDataFolder(), fileName + ".yml");
 

@@ -17,10 +17,12 @@ public class CommandManager implements CommandExecutor {
     private final List<DeathMessagesCommand> commands = new ArrayList<>();
 
     public void initializeSubCommands(){
+        commands.add(new CommandBackup());
         commands.add(new CommandBlacklist());
-        //commands.add(new CommandEdit());
-        commands.add(new CommandToggle());
+        commands.add(new CommandEdit());
         commands.add(new CommandReload());
+        commands.add(new CommandRestore());
+        commands.add(new CommandToggle());
         commands.add(new CommandVersion());
     }
 

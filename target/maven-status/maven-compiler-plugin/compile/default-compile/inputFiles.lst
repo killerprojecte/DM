@@ -5,6 +5,8 @@ D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\hook\Wo
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\command\deathmessages\CommandVersion.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\api\events\DMBlockExplodeEvent.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\listener\EntityDamageByBlock.java
+D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\assets\Constants.java
+D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\listener\OnChat.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\assets\Assets.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\enums\Permission.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\command\deathmessages\CommandBlacklist.java
@@ -13,6 +15,7 @@ D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\listene
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\listener\SupportLogger.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\DeathMessages.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\config\Settings.java
+D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\command\deathmessages\CommandRestore.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\listener\InteractEvent.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\listener\EntityDamageByEntity.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\api\ExplosionManager.java
@@ -25,12 +28,13 @@ D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\hook\Di
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\assets\XMaterial.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\hook\DiscordSRVExtension.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\listener\customlisteners\BlockExplosion.java
-D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\config\TestConfig.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\listener\customlisteners\BroadcastTameableDeathListener.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\config\EntityDeathMessages.java
+D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\config\ConfigManager.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\command\deathmessages\CommandReload.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\listener\customlisteners\BroadcastPlayerDeathListener.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\config\Gangs.java
+D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\command\deathmessages\CommandBackup.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\config\Messages.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\command\deathmessages\CommandEdit.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\command\deathmessages\CommandManager.java

@@ -12,7 +12,7 @@ import java.util.logging.Level;
 
 public class EntityDeathMessages {
 
-    private String fileName = "EntityDeathMessages";
+    public final String fileName = "EntityDeathMessages";
 
     CommentedConfiguration config;
 
@@ -55,10 +55,6 @@ public class EntityDeathMessages {
     }
 
     public void initialize(){
-        if (!DeathMessages.plugin.getDataFolder().exists()) {
-            DeathMessages.plugin.getDataFolder().mkdir();
-        }
-
         file = new File(DeathMessages.plugin.getDataFolder(), fileName + ".yml");
 
         if(!file.exists()){

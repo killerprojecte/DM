@@ -46,8 +46,8 @@ public class InteractEvent implements Listener {
             if (DeathMessages.majorVersion() >= 16) {
                 if (b.getType().equals(Material.RESPAWN_ANCHOR)) {
                     RespawnAnchor anchor = (RespawnAnchor) b.getBlockData();
-
-                    if (!(anchor.getCharges() == anchor.getMaximumCharges())) return;
+                    
+                    if (!(anchor.getCharges() == anchor.getMaximumCharges()) && !e.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.GLOWSTONE)) return;
                     List<UUID> effected = new ArrayList<>();
                     for (Player p : e.getClickedBlock().getWorld().getPlayers()) {
                         PlayerManager effect = PlayerManager.getPlayer(p);

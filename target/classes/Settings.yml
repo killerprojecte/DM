@@ -24,24 +24,28 @@ Hooks:
 
   # If DiscordBotAPI (https://www.spigotmc.org/resources/discordbotapi.86518/) or DiscordSRV
   # (https://www.spigotmc.org/resources/discordsrv.18494/)is installed, and enabled here.
-  # To get Channel-IDs, you must have developer mode enabled in discord. Then, you will right click the channel
-  # you want to send a defined message. Then you will click "Copy ID" and paste your clipboard in "Channel-ID"
+  # To get the Guild ID and Channel-IDs, you must have developer mode enabled in discord. Then, you will right click the
+  # guild and click on "Copy ID". Then, you will right click the channel you want to send the messages to and again, click
+  # "Copy ID". The format for the list of Channels is: "guild_ID:channel_ID"
+  # Example: "218258614192450048:827286062147837621"
+  # THE ABOVE EXAMPLE SHOULD NOT BE USED IN LIVE APPLICATIONS! DO NOT ATTEMPT TO USE IT.
   Discord:
     Enabled: false
     # Specify which channel certain death messages get sent.
     Channels:
       Player:
         Enabled: true
-        Channel-ID: 0
+        Channels:
+          - "218258614192450048:827286062147837621"
       Mob:
         Enabled: true
-        Channel-ID: 0
+        Channels: []
       Natural:
         Enabled: true
-        Channel-ID: 0
+        Channels: []
       Tameable:
         Enabled: true
-        Channel-ID: 0
+        Channels: []
 
 # If enabled, user data will be saved. (Blacklist, and /dm toggle data)
 # If disabled, data wont be saved in UserData.yml

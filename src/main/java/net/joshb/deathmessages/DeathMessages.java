@@ -40,7 +40,6 @@ public class DeathMessages extends JavaPlugin {
 
     public void onEnable(){
         plugin = this;
-        partner();
         initializeConfigs();
         //Logger log = (Logger) LogManager.getRootLogger();
         //log.addAppender(new SupportLogger());
@@ -74,12 +73,7 @@ public class DeathMessages extends JavaPlugin {
     }
 
     private void initializeConfigs(){
-        EntityDeathMessages.getInstance().initialize();
-        Gangs.getInstance().initialize();
-        Messages.getInstance().initialize();
-        PlayerDeathMessages.getInstance().initialize();
-        Settings.getInstance().initialize();
-        UserData.getInstance().initialize();
+        ConfigManager.getInstance().initialize();
 
         String eventPri = Settings.getInstance().getConfig().getString("Death-Listener-Priority");
         if(eventPri.equalsIgnoreCase("LOWEST")){
@@ -110,6 +104,7 @@ public class DeathMessages extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new EntityDamageByEntity(), this);
         Bukkit.getPluginManager().registerEvents(new EntityDeath(), this);
         Bukkit.getPluginManager().registerEvents(new InteractEvent(), this);
+        Bukkit.getPluginManager().registerEvents(new OnChat(), this);
         Bukkit.getPluginManager().registerEvents(new OnJoin(), this);
         Bukkit.getPluginManager().registerEvents(new OnMove(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerDeath(), this);
@@ -188,12 +183,6 @@ public class DeathMessages extends JavaPlugin {
                 getLogger().log(Level.SEVERE, "Error loading WorldGuardHook. Error: " + e.getMessage());
             }
         }
-    }
-
-    private void partner(){
-        getLogger().log(Level.INFO, "Partnered with Sparked Host");
-        getLogger().log(Level.INFO, "Grab a server today with the code `Josh` for 15% off @" +
-                " https://sparkedhost.com");
     }
 
     private void initializeOnlinePlayers(){

@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.joshb.deathmessages.DeathMessages;
 import net.joshb.deathmessages.api.PlayerManager;
 import net.joshb.deathmessages.assets.Assets;
 import net.joshb.deathmessages.config.Messages;
@@ -16,8 +17,9 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Tameable;
 
 import java.awt.*;
-import java.lang.reflect.Field;
 import java.time.Instant;
+import java.util.List;
+import java.util.logging.Level;
 
 public class DiscordBotAPIExtension {
 
@@ -27,75 +29,98 @@ public class DiscordBotAPIExtension {
 
 
     public void sendDiscordMessage(PlayerManager pm, MessageType messageType, String message) {
-        String channelID = DiscordAssets.getInstance().getChannelID(messageType);
-        if (DiscordAssets.getInstance().getChannelID(messageType).equals("0")) return;
-        Guild g = DiscordBotAPI.getJDA().getGuilds().get(0);
-        TextChannel textChannel = g.getTextChannelById(channelID);
-        if (textChannel == null) return;
-        if(getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")){
-            String prefix = Assets.colorize(getMessages().getString("Prefix"));
-            prefix = ChatColor.stripColor(prefix);
-            prefix = prefix.replaceAll("[\\[\\](){}]","");
-            message = message.replaceAll(prefix, "");
-        }
-        if(getMessages().getString("Discord.DeathMessage.Text").equalsIgnoreCase("")){
-            textChannel.sendMessage(deathMessageToDiscordMessage(pm, message)).queue();
-        } else {
-            String[] spl = getMessages().getString("Discord.DeathMessage.Text").split("\\\\n");
-            StringBuilder sb = new StringBuilder();
-            for (String s : spl) {
-                sb.append(s + "\n");
+        List<String> channels = DiscordAssets.getInstance().getIDs(messageType);
+        for(String groups : channels) {
+            if (!groups.contains(":")) {
+                continue;
             }
-            if (pm.getLastEntityDamager() instanceof FallingBlock) {
-                textChannel.sendMessage(Assets.playerDeathPlaceholders(sb.toString(), pm,
-                        null).replaceAll("%message%", message)).queue();
+            String[] groupSplit = groups.split(":");
+            String guildID = groupSplit[0];
+            String channelID = groupSplit[1];
+            if (DiscordBotAPI.getJDA().getGuildById(guildID) == null) {
+                DeathMessages.plugin.getLogger().log(Level.SEVERE, "Could not find the discord guild with ID: " + guildID);
+                continue;
+            }
+            Guild g = DiscordBotAPI.getJDA().getGuildById(guildID);
+            if (g.getTextChannelById(channelID) == null) {
+                DeathMessages.plugin.getLogger().log(Level.SEVERE, "Could not find the discord text channel with ID: "
+                        + channelID + " in guild: " + g.getName());
+                continue;
+            }
+            TextChannel textChannel = g.getTextChannelById(channelID);
+            if(getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")){
+                String prefix = Assets.colorize(getMessages().getString("Prefix"));
+                prefix = ChatColor.stripColor(prefix);
+                prefix = prefix.replaceAll("[\\[\\](){}]","");
+                message = message.replaceAll(prefix, "");
+            }
+            if(getMessages().getString("Discord.DeathMessage.Text").equalsIgnoreCase("")){
+                textChannel.sendMessage(deathMessageToDiscordMessage(pm, message)).queue();
             } else {
-                textChannel.sendMessage(Assets.playerDeathPlaceholders(sb.toString(), pm,
-                        (LivingEntity) pm.getLastEntityDamager()).replaceAll("%message%", message)).queue();
+                String[] spl = getMessages().getString("Discord.DeathMessage.Text").split("\\\\n");
+                StringBuilder sb = new StringBuilder();
+                for (String s : spl) {
+                    sb.append(s + "\n");
+                }
+                if (pm.getLastEntityDamager() instanceof FallingBlock) {
+                    textChannel.sendMessage(Assets.playerDeathPlaceholders(sb.toString(), pm,
+                            null).replaceAll("%message%", message)).queue();
+                } else {
+                    textChannel.sendMessage(Assets.playerDeathPlaceholders(sb.toString(), pm,
+                            (LivingEntity) pm.getLastEntityDamager()).replaceAll("%message%", message)).queue();
+                }
             }
         }
     }
 
     public void sendTameableDiscordMessage(PlayerManager pm, MessageType messageType, String message, Tameable tameable) {
-        String channelID = DiscordAssets.getInstance().getChannelID(messageType);
-        if (DiscordAssets.getInstance().getChannelID(messageType).equals("0")) return;
-        Guild g = DiscordBotAPI.getJDA().getGuilds().get(0);
-        TextChannel textChannel = g.getTextChannelById(channelID);
-        if (textChannel == null) return;
-        if(getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")){
-            String prefix = Assets.colorize(getMessages().getString("Prefix"));
-            prefix = ChatColor.stripColor(prefix);
-            prefix = prefix.replaceAll("[\\[\\](){}]","");
-            message = message.replaceAll(prefix, "");
-        }
-        if(getMessages().getString("Discord.DeathMessage.Text").equalsIgnoreCase("")){
-            textChannel.sendMessage(deathMessageToDiscordMessage(pm, message, tameable)).queue();
-        } else {
-            String[] spl = getMessages().getString("Discord.DeathMessage.Text").split("\\\\n");
-            StringBuilder sb = new StringBuilder();
-            for(String s : spl){
-                sb.append(s + "\n");
+        List<String> channels = DiscordAssets.getInstance().getIDs(messageType);
+        for(String groups : channels) {
+            if (!groups.contains(":")) {
+                continue;
             }
-            if (pm.getLastEntityDamager() instanceof FallingBlock) {
-                textChannel.sendMessage(Assets.playerDeathPlaceholders(sb.toString(), pm,
-                        null).replaceAll("%message%", message)).queue();
+            String[] groupSplit = groups.split(":");
+            String guildID = groupSplit[0];
+            String channelID = groupSplit[1];
+            if (DiscordBotAPI.getJDA().getGuildById(guildID) == null) {
+                DeathMessages.plugin.getLogger().log(Level.SEVERE, "Could not find the discord guild with ID: " + guildID);
+                continue;
+            }
+            Guild g = DiscordBotAPI.getJDA().getGuildById(guildID);
+            if (g.getTextChannelById(channelID) == null) {
+                DeathMessages.plugin.getLogger().log(Level.SEVERE, "Could not find the discord text channel with ID: "
+                        + channelID + " in guild: " + g.getName());
+                continue;
+            }
+            TextChannel textChannel = g.getTextChannelById(channelID);
+            if (getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")) {
+                String prefix = Assets.colorize(getMessages().getString("Prefix"));
+                prefix = ChatColor.stripColor(prefix);
+                prefix = prefix.replaceAll("[\\[\\](){}]", "");
+                message = message.replaceAll(prefix, "");
+            }
+            if (getMessages().getString("Discord.DeathMessage.Text").equalsIgnoreCase("")) {
+                textChannel.sendMessage(deathMessageToDiscordMessage(pm, message, tameable)).queue();
             } else {
-                textChannel.sendMessage(Assets.playerDeathPlaceholders(sb.toString(), pm,
-                        (LivingEntity) pm.getLastEntityDamager()).replaceAll("%message%", message)).queue();
+                String[] spl = getMessages().getString("Discord.DeathMessage.Text").split("\\\\n");
+                StringBuilder sb = new StringBuilder();
+                for (String s : spl) {
+                    sb.append(s + "\n");
+                }
+                if (pm.getLastEntityDamager() instanceof FallingBlock) {
+                    textChannel.sendMessage(Assets.playerDeathPlaceholders(sb.toString(), pm,
+                            null).replaceAll("%message%", message)).queue();
+                } else {
+                    textChannel.sendMessage(Assets.playerDeathPlaceholders(sb.toString(), pm,
+                            (LivingEntity) pm.getLastEntityDamager()).replaceAll("%message%", message)).queue();
+                }
             }
         }
     }
 
     public MessageEmbed deathMessageToDiscordMessage(PlayerManager pm, String message) {
         EmbedBuilder eb = new EmbedBuilder();
-        Color color;
-        try {
-            Field field = Class.forName("java.awt.Color").getField(getMessages().getString("Discord.DeathMessage.Color"));
-            color = (Color) field.get(null);
-        } catch (Exception e) {
-            color = null;
-        }
-        eb.setColor(color);
+        eb.setColor(getDeathMessageColor());
         String name = getMessages().getString("Discord.DeathMessage.Author.Name").replaceAll("%message%", message);
         String url = getMessages().getString("Discord.DeathMessage.Author.URL").replaceAll("%uuid%",
                 pm.getUUID().toString()).replaceAll("%username%", pm.getName());
@@ -117,8 +142,14 @@ public class DiscordBotAPIExtension {
             eb.setThumbnail(getMessages().getString("Discord.DeathMessage.Image").replaceAll("%uuid%",
                     pm.getUUID().toString()).replaceAll("%username%", pm.getName()));
         }
-        String title = Assets.playerDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Title"), pm,
-                (LivingEntity) pm.getLastEntityDamager()).replaceAll("%message%", message);
+        String title;
+        if(pm.getLastEntityDamager() instanceof LivingEntity){
+            title = Assets.playerDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Title"), pm,
+                    (LivingEntity) pm.getLastEntityDamager()).replaceAll("%message%", message);
+        } else {
+            title = Assets.playerDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Title"), pm,
+                    null).replaceAll("%message%", message);
+        }
         if(!title.equalsIgnoreCase("")){
             eb.setTitle(title);
         }
@@ -159,14 +190,7 @@ public class DiscordBotAPIExtension {
 
     public MessageEmbed deathMessageToDiscordMessage(PlayerManager pm, String message, Tameable tameable) {
         EmbedBuilder eb = new EmbedBuilder();
-        Color color;
-        try {
-            Field field = Class.forName("java.awt.Color").getField(getMessages().getString("Discord.DeathMessage.Color"));
-            color = (Color) field.get(null);
-        } catch (Exception e) {
-            color = null;
-        }
-        eb.setColor(color);
+        eb.setColor(getDeathMessageColor());
         String name = getMessages().getString("Discord.DeathMessage.Author.Name").replaceAll("%message%", message);
         String url = getMessages().getString("Discord.DeathMessage.Author.URL").replaceAll("%uuid%",
                 pm.getUUID().toString()).replaceAll("%username%", pm.getName());
@@ -225,6 +249,30 @@ public class DiscordBotAPIExtension {
             }
         }
         return eb.build();
+    }
+
+    //Suggested by kuu#3050
+    private int getDeathMessageColor() {
+        final int color = org.bukkit.Color.BLACK.asRGB();
+        try {
+            if (getMessages().isColor("Discord.DeathMessage.Color")) {
+                return getMessages().getColor("Discord.DeathMessage.Color").asRGB();
+            }
+            if (getMessages().isString("Discord.DeathMessage.Color")) {
+                String colorString = getMessages().getString("Discord.DeathMessage.Color");
+                try {
+                    return Color.decode(colorString).getRGB();
+                } catch (Exception ignored) {
+                    org.bukkit.Color c = (org.bukkit.Color) Class.forName("org.bukkit.Color").getField(colorString).get(null);
+                    return c.asRGB();
+                }
+            }
+            return getMessages().getInt("Discord.DeathMessage.Color", color);
+        } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
+            DeathMessages.plugin.getLogger().log(Level.SEVERE, "Error while parsing " + getMessages().getString("Discord.DeathMessage.Color") + " as a color!");
+            DeathMessages.plugin.getLogger().log(Level.SEVERE, "Make sure your using spigot for your server!");
+            return color;
+        }
     }
 
     private FileConfiguration getMessages() {

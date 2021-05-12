@@ -12,7 +12,7 @@ import java.util.logging.Level;
 
 public class Settings {
 
-    private String fileName = "Settings";
+    public final String fileName = "Settings";
 
     CommentedConfiguration config;
 
@@ -56,10 +56,6 @@ public class Settings {
     }
 
     public void initialize(){
-        if (!DeathMessages.plugin.getDataFolder().exists()) {
-            DeathMessages.plugin.getDataFolder().mkdir();
-        }
-
         file = new File(DeathMessages.plugin.getDataFolder(), fileName + ".yml");
 
         if(!file.exists()){
@@ -68,7 +64,7 @@ public class Settings {
         }
         config = CommentedConfiguration.loadConfiguration(file);
         try{
-            config.syncWithConfig(file, DeathMessages.plugin.getResource(fileName + ".yml"), "");
+            config.syncWithConfig(file, DeathMessages.plugin.getResource(fileName + ".yml"), "none");
         } catch (Exception e){
 
         }

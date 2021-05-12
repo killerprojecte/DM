@@ -3,24 +3,8 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>me.Joshb.DeathMessages</groupId>
   <artifactId>DeathMessages</artifactId>
-  <version>1.2.4</version>
+  <version>1.3.4</version>
   <build>
-    <sourceDirectory>src/main/java</sourceDirectory>
-    <resources>
-      <resource>
-        <targetPath>.</targetPath>
-        <filtering>true</filtering>
-        <directory>${basedir}/src/main/resources/</directory>
-        <includes>
-          <include>EntityDeathMessages.yml</include>
-          <include>Gangs.yml</include>
-          <include>Messages.yml</include>
-          <include>PlayerDeathMessages.yml</include>
-          <include>plugin.yml</include>
-          <include>Settings.yml</include>
-        </includes>
-      </resource>
-    </resources>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>

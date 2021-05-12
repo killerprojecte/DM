@@ -19,11 +19,7 @@ public class CommandReload extends DeathMessagesCommand {
             sender.sendMessage(Assets.formatMessage("Commands.DeathMessages.No-Permission"));
             return;
         }
-        EntityDeathMessages.getInstance().reload();
-        Gangs.getInstance().reload();
-        Messages.getInstance().reload();
-        PlayerDeathMessages.getInstance().reload();
-        Settings.getInstance().reload();
+        ConfigManager.getInstance().reload();
         sender.sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Reload.Reloaded"));
     }
 }

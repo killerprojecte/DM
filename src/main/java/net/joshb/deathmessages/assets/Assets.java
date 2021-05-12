@@ -24,10 +24,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,6 +34,8 @@ public class Assets {
     static boolean addPrefix = Settings.getInstance().getConfig().getBoolean("Add-Prefix-To-All-Messages");
 
     public static List<String> damageTypes = Arrays.asList(
+            "Bed",
+            "Respawn-Anchor",
             "Projectile-Arrow",
             "Projectile-Dragon-Fireball",
             "Projectile-Egg",
@@ -52,12 +51,16 @@ public class Assets {
             "Melee",
             "Suffocation",
             "Fall",
+            "Climbable",
             "Fire",
             "Fire-Tick",
             "Melting",
             "Lava",
             "Drowning",
             "Explosion",
+            "Tnt",
+            "Firework",
+            "End-Crystal",
             "Void",
             "Lightning",
             "Suicide",
@@ -73,6 +76,16 @@ public class Assets {
             "Cramming",
             "Dryout",
             "Unknown");
+
+    public static boolean isNumeric(String s) {
+        for (char c : s.toCharArray()) {
+            if (!Character.isDigit(c))
+                return false;
+        }
+        return true;
+    }
+
+    public static HashMap<String, String> addingMessage = new HashMap<>();
 
     public static String formatMessage(String path) {
         return colorize(Messages.getInstance().getConfig().getString(path)
@@ -231,7 +244,12 @@ public class Assets {
             if (splitMessage.contains("%block%") && pm.getLastEntityDamager() instanceof FallingBlock) {
                 try {
                     FallingBlock fb = (FallingBlock) pm.getLastEntityDamager();
-                    String material = XMaterial.matchXMaterial(fb.getBlockData().getMaterial()).parseMaterial().toString().toLowerCase();
+                    String material;
+                    if(DeathMessages.majorVersion() < 13){
+                        material = XMaterial.matchXMaterial(fb.getMaterial()).parseMaterial().toString().toLowerCase();
+                    } else {
+                        material = XMaterial.matchXMaterial(fb.getBlockData().getMaterial()).parseMaterial().toString().toLowerCase();
+                    }
                     String configValue = Messages.getInstance().getConfig().getString("Blocks." + material);
                     String mssa = Assets.colorize(splitMessage.replaceAll("%block%", configValue));
                     tc.addExtra(mssa);
@@ -246,7 +264,12 @@ public class Assets {
 
             } else if(splitMessage.contains("%climbable%") && pm.getLastDamage().equals(EntityDamageEvent.DamageCause.FALL)) {
                 try {
-                    String material = XMaterial.matchXMaterial(pm.getLastClimbing()).parseMaterial().toString().toLowerCase();
+                    String material;
+                    if(DeathMessages.majorVersion() < 13){
+                        material = XMaterial.matchXMaterial(pm.getLastClimbing()).parseMaterial().toString().toLowerCase();
+                    } else {
+                        material = XMaterial.matchXMaterial(pm.getLastClimbing()).parseMaterial().toString().toLowerCase();
+                    }
                     String configValue = Messages.getInstance().getConfig().getString("Blocks." + material);
                     String mssa = Assets.colorize(splitMessage.replaceAll("%climbable%", configValue));
                     tc.addExtra(mssa);
@@ -266,7 +289,7 @@ public class Assets {
                     if(!(bs.getColor() == null)) {
                         lastColor = bs.getColor().toString();
                     }
-                    lastFont = formating(bs);
+                    lastFont = formatting(bs);
                 }
             }
         }
@@ -343,10 +366,10 @@ public class Assets {
                 }
                 String[] spl = splitMessage.split("%weapon%");
                 if (spl.length != 0 && spl[0] != null && !spl[0].equals("")) {
-                    displayName = spl[0] + displayName;
+                    displayName = Assets.colorize(spl[0]) + displayName;
                 }
                 if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].equals("")) {
-                    displayName = displayName + spl[1];
+                    displayName = displayName + Assets.colorize(spl[1]);
                 }
                 TextComponent weaponComp = new TextComponent(TextComponent.fromLegacyText(displayName));
                 BaseComponent[] hoverEventComponents = new BaseComponent[]{
@@ -361,7 +384,7 @@ public class Assets {
                     if(!(bs.getColor() == null)) {
                         lastColor = bs.getColor().toString();
                     }
-                    lastFont = formating(bs);
+                    lastFont = formatting(bs);
                 }
             }
         }
@@ -428,7 +451,7 @@ public class Assets {
                 if(!(bs.getColor() == null)) {
                     lastColor = bs.getColor().toString();
                 }
-                lastFont = formating(bs);
+                lastFont = formatting(bs);
             }
         }
         if (sec.length >= 2) {
@@ -508,12 +531,12 @@ public class Assets {
                 }
                 String[] spl = splitMessage.split("%weapon%");
                 if (spl.length != 0 && spl[0] != null && !spl[0].equals("")) {
-                    displayName = spl[0] + displayName;
+                    displayName = Assets.colorize(spl[0]) + ChatColor.RESET  + displayName;
                 }
                 if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].equals("")) {
-                    displayName = displayName + spl[1];
+                    displayName = displayName + ChatColor.RESET + Assets.colorize(spl[1]);
                 }
-                TextComponent weaponComp = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(displayName)));
+                TextComponent weaponComp = new TextComponent(TextComponent.fromLegacyText(displayName));
                 BaseComponent[] hoverEventComponents = new BaseComponent[]{
                         new TextComponent(NBTItem.convertItemtoNBT(i).getCompound().toString())
                 };
@@ -526,7 +549,7 @@ public class Assets {
                     if(!(bs.getColor() == null)) {
                         lastColor = bs.getColor().toString();
                     }
-                    lastFont = formating(bs);
+                    lastFont = formatting(bs);
                 }
             }
         }
@@ -577,7 +600,7 @@ public class Assets {
                 if(!(bs.getColor() == null)) {
                     lastColor = bs.getColor().toString();
                 }
-                lastFont = formating(bs);
+                lastFont = formatting(bs);
             }
         }
         if (sec.length >= 2) {
@@ -651,7 +674,6 @@ public class Assets {
     public static String entityDeathPlaceholders(String msg, PlayerManager killer, Tameable tameable) {
         msg = colorize(msg
                 .replaceAll("%killer%", killer.getName())
-                .replaceAll("%biome%", tameable.getLocation().getBlock().getBiome().getKey().getKey())
                 .replaceAll("%world%", tameable.getLocation().getWorld().getName())
                 .replaceAll("%world_environment%", getEnvironment(tameable.getLocation().getWorld().getEnvironment()))
                 .replaceAll("%tamable%", Messages.getInstance().getConfig().getString("Mobs."
@@ -661,6 +683,11 @@ public class Assets {
                 .replaceAll("%x%", String.valueOf(tameable.getLocation().getBlock().getX()))
                 .replaceAll("%y%", String.valueOf(tameable.getLocation().getBlock().getY()))
                 .replaceAll("%z%", String.valueOf(tameable.getLocation().getBlock().getZ())));
+        if(Constants.biomes.contains(tameable.getLocation().getBlock().getBiome().name())){
+            msg = msg.replaceAll("%biome%", tameable.getLocation().getBlock().getBiome().name());
+        } else {
+            msg = msg.replaceAll("%biome%", "Unknown");
+        }
         if (DeathMessages.plugin.placeholderAPIEnabled) {
             msg = PlaceholderAPI.setPlaceholders(killer.getPlayer(), msg);
         }
@@ -672,12 +699,16 @@ public class Assets {
             msg = colorize(msg
                     .replaceAll("%player%", pm.getName())
                     .replaceAll("%player_display%", pm.getPlayer().getDisplayName())
-                    .replaceAll("%biome%", pm.getLastLocation().getBlock().getBiome().name())
                     .replaceAll("%world%", pm.getLastLocation().getWorld().getName())
                     .replaceAll("%world_environment%", getEnvironment(pm.getLastLocation().getWorld().getEnvironment()))
                     .replaceAll("%x%", String.valueOf(pm.getLastLocation().getBlock().getX()))
                     .replaceAll("%y%", String.valueOf(pm.getLastLocation().getBlock().getY()))
                     .replaceAll("%z%", String.valueOf(pm.getLastLocation().getBlock().getZ())));
+            if(Constants.biomes.contains(pm.getLastLocation().getBlock().getBiome().name())){
+                msg = msg.replaceAll("%biome%", pm.getLastLocation().getBlock().getBiome().name());
+            } else {
+                msg = msg.replaceAll("%biome%", "Unknown");
+            }
             if (DeathMessages.plugin.placeholderAPIEnabled) {
                 msg = PlaceholderAPI.setPlaceholders(pm.getPlayer(), msg);
             }
@@ -702,12 +733,16 @@ public class Assets {
                     .replaceAll("%killer%", mobName)
                     .replaceAll("%killer_type%", Messages.getInstance().getConfig().getString("Mobs."
                             + mob.getType().toString().toLowerCase()))
-                    .replaceAll("%biome%", pm.getLastLocation().getBlock().getBiome().name())
                     .replaceAll("%world%", pm.getLastLocation().getWorld().getName())
                     .replaceAll("%world_environment%", getEnvironment(pm.getLastLocation().getWorld().getEnvironment()))
                     .replaceAll("%x%", String.valueOf(pm.getLastLocation().getBlock().getX()))
                     .replaceAll("%y%", String.valueOf(pm.getLastLocation().getBlock().getY()))
                     .replaceAll("%z%", String.valueOf(pm.getLastLocation().getBlock().getZ()));
+            if(Constants.biomes.contains(pm.getLastLocation().getBlock().getBiome().name())){
+                msg = msg.replaceAll("%biome%", pm.getLastLocation().getBlock().getBiome().name());
+            } else {
+                msg = msg.replaceAll("%biome%", "Unknown");
+            }
             if(mob instanceof Player){
                 Player p = (Player) mob;
                 msg = msg.replaceAll("%killer_display%", p.getDisplayName());
@@ -733,7 +768,7 @@ public class Assets {
         return sb.toString();
     }
 
-    public static String formating(BaseComponent tx){
+    public static String formatting(BaseComponent tx){
         String returning = "";
         if(tx.isBold()) returning = returning + "&l";
         if(tx.isItalic()) returning = returning + "&o";

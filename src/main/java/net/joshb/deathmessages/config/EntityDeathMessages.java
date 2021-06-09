@@ -43,7 +43,7 @@ public class EntityDeathMessages {
 
     public void reload(){
         try {
-            config.load(file);
+            config = CommentedConfiguration.loadConfiguration(file);
         } catch (Exception e){
             File f = new File(DeathMessages.plugin.getDataFolder(), fileName + ".broken." + new Date().getTime());
             DeathMessages.plugin.getLogger().log(Level.SEVERE, "Could not reload: " + fileName + ".yml");

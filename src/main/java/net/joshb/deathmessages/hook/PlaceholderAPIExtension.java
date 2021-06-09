@@ -14,10 +14,9 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
      * can simply use this method here to get an instance of our
      * plugin.
      *
-     * @param plugin
-     *        The instance of our plugin.
+     * @param plugin The instance of our plugin.
      */
-    public PlaceholderAPIExtension(DeathMessages plugin){
+    public PlaceholderAPIExtension(DeathMessages plugin) {
         this.plugin = plugin;
     }
 
@@ -29,7 +28,7 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
      * @return true to persist through reloads
      */
     @Override
-    public boolean persist(){
+    public boolean persist() {
         return true;
     }
 
@@ -40,7 +39,7 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
      * @return Always true since it's an internal class.
      */
     @Override
-    public boolean canRegister(){
+    public boolean canRegister() {
         return true;
     }
 
@@ -51,7 +50,7 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
      * @return The name of the author as a String.
      */
     @Override
-    public String getAuthor(){
+    public String getAuthor() {
         return plugin.getDescription().getAuthors().toString();
     }
 
@@ -65,20 +64,20 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
      * @return The identifier in {@code %<identifier>_<value>%} as String.
      */
     @Override
-    public String getIdentifier(){
+    public String getIdentifier() {
         return "deathmessages";
     }
 
     /**
      * This is the version of the expansion.
      * <br>You don't have to use numbers, since it is set as a String.
-     *
+     * <p>
      * For convienience do we return the version from the plugin.yml
      *
      * @return The version as a String.
      */
     @Override
-    public String getVersion(){
+    public String getVersion() {
         return plugin.getDescription().getVersion();
     }
 
@@ -88,26 +87,23 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
      * <br>We specify the value identifier in this method.
      * <br>Since version 2.9.1 can you use OfflinePlayers in your requests.
      *
-     * @param  player
-     *         A {@link org.bukkit.Player Player}.
-     * @param  identifier
-     *         A String containing the identifier/value.
-     *
+     * @param player     A {@link org.bukkit.Player Player}.
+     * @param identifier A String containing the identifier/value.
      * @return possibly-null String of the requested identifier.
      */
     @Override
-    public String onPlaceholderRequest(Player player, String identifier){
+    public String onPlaceholderRequest(Player player, String identifier) {
 
-        if(player == null){
+        if (player == null) {
             return "";
         }
 
         PlayerManager pm = PlayerManager.getPlayer(player);
 
-        if(identifier.equals("messages_enabled")){
+        if (identifier.equals("messages_enabled")) {
             return String.valueOf(pm.getMessagesEnabled());
         }
-        if(identifier.equals("is_blacklisted")){
+        if (identifier.equals("is_blacklisted")) {
             return String.valueOf(pm.isBlacklisted());
         }
 

@@ -4,6 +4,7 @@ D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\listene
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\hook\WorldGuardExtension.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\command\deathmessages\CommandVersion.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\api\events\DMBlockExplodeEvent.java
+D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\listener\PluginMessaging.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\listener\EntityDamageByBlock.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\assets\Constants.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\listener\OnChat.java
@@ -12,7 +13,6 @@ D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\enums\P
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\command\deathmessages\CommandBlacklist.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\hook\DiscordAssets.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\listener\OnMove.java
-D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\listener\SupportLogger.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\DeathMessages.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\config\Settings.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\command\deathmessages\CommandRestore.java

@@ -43,7 +43,7 @@ public class Settings {
 
     public void reload(){
         try {
-            config.load(file);
+            config = CommentedConfiguration.loadConfiguration(file);
         } catch (Exception e){
             e.printStackTrace();
             File f = new File(DeathMessages.plugin.getDataFolder(), fileName + ".broken." + new Date().getTime());

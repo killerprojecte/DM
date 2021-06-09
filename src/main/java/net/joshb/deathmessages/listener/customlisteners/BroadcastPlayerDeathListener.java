@@ -8,6 +8,7 @@ import net.joshb.deathmessages.assets.Assets;
 import net.joshb.deathmessages.config.Messages;
 import net.joshb.deathmessages.config.Settings;
 import net.joshb.deathmessages.enums.MessageType;
+import net.joshb.deathmessages.listener.PluginMessaging;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -15,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import java.util.List;
 import java.util.regex.Matcher;
 
 public class BroadcastPlayerDeathListener implements Listener {
@@ -53,21 +55,21 @@ public class BroadcastPlayerDeathListener implements Listener {
                     if(e.getMessageType().equals(MessageType.PLAYER)){
                         if (privatePlayer && (e.getPlayer().getUniqueId().equals(pms.getUUID())
                                 || e.getLivingEntity().getUniqueId().equals(pms.getUUID()))) {
-                            normal(e, pms, pls);
+                            normal(e, pms, pls, e.getBroadcastedWorlds());
                         } else if(!privatePlayer){
-                            normal(e, pms, pls);
+                            normal(e, pms, pls, e.getBroadcastedWorlds());
                         }
                     } else if (e.getMessageType().equals(MessageType.MOB)){
                         if (privateMobs && e.getPlayer().getUniqueId().equals(pms.getUUID())) {
-                            normal(e, pms, pls);
+                            normal(e, pms, pls, e.getBroadcastedWorlds());
                         } else if(!privateMobs){
-                            normal(e, pms, pls);
+                            normal(e, pms, pls, e.getBroadcastedWorlds());
                         }
                     } else if (e.getMessageType().equals(MessageType.NATURAL)){
                         if (privateNatural && e.getPlayer().getUniqueId().equals(pms.getUUID())) {
-                            normal(e, pms, pls);
+                            normal(e, pms, pls, e.getBroadcastedWorlds());
                         } else if(!privateNatural){
-                            normal(e, pms, pls);
+                            normal(e, pms, pls, e.getBroadcastedWorlds());
                         }
                     }
                 }
@@ -75,23 +77,42 @@ public class BroadcastPlayerDeathListener implements Listener {
         }
     }
 
-    private void normal(BroadcastDeathMessageEvent e, PlayerManager pms, Player pls){
-        if (pms.getMessagesEnabled()) {
-            pls.spigot().sendMessage(e.getTextComponent());
-        }
+    private void normal(BroadcastDeathMessageEvent e, PlayerManager pms, Player pls, List<World> worlds){
         if (DeathMessages.worldGuardExtension != null) {
             if (DeathMessages.worldGuardExtension.getRegionState(pls, e.getMessageType()).equals(StateFlag.State.DENY)
                 || DeathMessages.worldGuardExtension.getRegionState(e.getPlayer(), e.getMessageType()).equals(StateFlag.State.DENY)) {
                 return;
             }
         }
-        if (DeathMessages.discordBotAPIExtension != null && !discordSent) {
-            DeathMessages.discordBotAPIExtension.sendDiscordMessage(PlayerManager.getPlayer(e.getPlayer()), e.getMessageType(), ChatColor.stripColor(e.getTextComponent().toLegacyText()));
-            discordSent = true;
-        }
-        if (DeathMessages.discordSRVExtension != null && !discordSent) {
-            DeathMessages.discordSRVExtension.sendDiscordMessage(PlayerManager.getPlayer(e.getPlayer()), e.getMessageType(), ChatColor.stripColor(e.getTextComponent().toLegacyText()));
-            discordSent = true;
+        try {
+            if (pms.getMessagesEnabled()) {
+                pls.spigot().sendMessage(e.getTextComponent());
+            }
+            PluginMessaging.sendPluginMSG(pms.getPlayer(), e.getTextComponent().toString());
+            if(Settings.getInstance().getConfig().getBoolean("Hooks.Discord.World-Whitelist.Enabled")) {
+                List<String> discordWorldWhitelist = Settings.getInstance().getConfig().getStringList("Hooks.Discord.World-Whitelist.Worlds");
+                boolean broadcastToDiscord = false;
+                for(World world : worlds){
+                    if(discordWorldWhitelist.contains(world.getName())){
+                        broadcastToDiscord = true;
+                    }
+                }
+                if(!broadcastToDiscord){
+                    //Wont reach the discord broadcast
+                    return;
+                }
+                //Will reach the discord broadcast
+            }
+            if (DeathMessages.discordBotAPIExtension != null && !discordSent) {
+                DeathMessages.discordBotAPIExtension.sendDiscordMessage(PlayerManager.getPlayer(e.getPlayer()), e.getMessageType(), ChatColor.stripColor(e.getTextComponent().toLegacyText()));
+                discordSent = true;
+            }
+            if (DeathMessages.discordSRVExtension != null && !discordSent) {
+                DeathMessages.discordSRVExtension.sendDiscordMessage(PlayerManager.getPlayer(e.getPlayer()), e.getMessageType(), ChatColor.stripColor(e.getTextComponent().toLegacyText()));
+                discordSent = true;
+            }
+        } catch (NullPointerException e1){
+            e1.printStackTrace();
         }
     }
 }

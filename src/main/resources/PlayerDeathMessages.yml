@@ -49,6 +49,31 @@
 #       If the player has permission and in a region
 #       - "REGION[spawn]PERMISSION[deathmessages.premium]Idiot premium %player% died in spawn lol"
 
+# Due for there being no cure for laziness, this option ignores everything in the Mobs section and makes all messages
+# appear the same.
+Basic-Mode:
+  Enabled: false
+  Solo:
+    Projectile-Arrow:
+      - "%player% was shot by a %killer% using %weapon%"
+    Explosion:
+      - "%player% was blown up by a %killer%"
+    Magic:
+      - "%player% was killed by a %killer% using magic"
+    Weapon:
+      - "%player% was slain by a %killer% using %weapon%"
+    Melee:
+      - "%player% was slain by a %killer%"
+  Gang:
+    Projectile-Arrow:
+      - "%player% was shot by a group of %killer%'s using %weapon%"
+    Magic:
+      - "%player% was killed by a group of %killer%'s using magic"
+    Weapon:
+      - "%player% was slain by a group of %killer%'s somehow using %weapon%"
+    Melee:
+      - "%player% was slain by a group of %killer%'s"
+
 Natural-Cause:
   Bed:
     - "%player% tried sleeping in the %world_environment% :kappa:"
@@ -61,7 +86,7 @@ Natural-Cause:
   Projectile-Unknown:
     - "%player% shot themselves"
   Projectile-Arrow:
-    - "%player% shot themselves"
+    - "%player% shot themselves with %weapon%"
   Projectile-Egg:
     - "%player% egged themselves"
   Projectile-EnderPearl:

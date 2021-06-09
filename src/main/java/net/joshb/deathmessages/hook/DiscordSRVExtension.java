@@ -28,9 +28,9 @@ public class DiscordSRVExtension {
     }
 
 
-    public void sendDiscordMessage(PlayerManager pm, MessageType messageType, String message){
+    public void sendDiscordMessage(PlayerManager pm, MessageType messageType, String message) {
         List<String> channels = DiscordAssets.getInstance().getIDs(messageType);
-        for(String groups : channels) {
+        for (String groups : channels) {
             if (!groups.contains(":")) {
                 continue;
             }
@@ -48,18 +48,18 @@ public class DiscordSRVExtension {
                 continue;
             }
             TextChannel textChannel = g.getTextChannelById(channelID);
-            if(getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")){
+            if (getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")) {
                 String prefix = Assets.colorize(getMessages().getString("Prefix"));
                 prefix = ChatColor.stripColor(prefix);
-                prefix = prefix.replaceAll("[\\[\\](){}]","");
+                prefix = prefix.replaceAll("[\\[\\](){}]", "");
                 message = message.replaceAll(prefix, "");
             }
-            if(getMessages().getString("Discord.DeathMessage.Text").equalsIgnoreCase("")){
+            if (getMessages().getString("Discord.DeathMessage.Text").equalsIgnoreCase("")) {
                 textChannel.sendMessage(deathMessageToDiscordMessage(pm, message)).queue();
             } else {
                 String[] spl = getMessages().getString("Discord.DeathMessage.Text").split("\\\\n");
                 StringBuilder sb = new StringBuilder();
-                for(String s : spl){
+                for (String s : spl) {
                     sb.append(s + "\n");
                 }
                 if (pm.getLastEntityDamager() instanceof FallingBlock) {
@@ -73,9 +73,9 @@ public class DiscordSRVExtension {
         }
     }
 
-    public void sendTameableDiscordMessage(PlayerManager pm, MessageType messageType, String message, Tameable tameable){
+    public void sendTameableDiscordMessage(PlayerManager pm, MessageType messageType, String message, Tameable tameable) {
         List<String> channels = DiscordAssets.getInstance().getIDs(messageType);
-        for(String groups : channels) {
+        for (String groups : channels) {
             if (!groups.contains(":")) {
                 continue;
             }
@@ -93,18 +93,18 @@ public class DiscordSRVExtension {
                 continue;
             }
             TextChannel textChannel = g.getTextChannelById(channelID);
-            if(getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")){
+            if (getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")) {
                 String prefix = Assets.colorize(getMessages().getString("Prefix"));
                 prefix = ChatColor.stripColor(prefix);
-                prefix = prefix.replaceAll("[\\[\\](){}]","");
+                prefix = prefix.replaceAll("[\\[\\](){}]", "");
                 message = message.replaceAll(prefix, "");
             }
-            if(getMessages().getString("Discord.DeathMessage.Text").equalsIgnoreCase("")){
+            if (getMessages().getString("Discord.DeathMessage.Text").equalsIgnoreCase("")) {
                 textChannel.sendMessage(deathMessageToDiscordMessage(pm, message, tameable)).queue();
             } else {
                 String[] spl = getMessages().getString("Discord.DeathMessage.Text").split("\\\\n");
                 StringBuilder sb = new StringBuilder();
-                for(String s : spl){
+                for (String s : spl) {
                     sb.append(s + "\n");
                 }
                 if (pm.getLastEntityDamager() instanceof FallingBlock) {
@@ -126,43 +126,43 @@ public class DiscordSRVExtension {
                 pm.getUUID().toString()).replaceAll("%username%", pm.getName());
         String iconURL = getMessages().getString("Discord.DeathMessage.Author.Icon-URL").replaceAll("%uuid%",
                 pm.getUUID().toString()).replaceAll("%username%", pm.getName());
-        if(!url.startsWith("http") && iconURL.startsWith("http")){
+        if (!url.startsWith("http") && iconURL.startsWith("http")) {
             eb.setAuthor(name, null, iconURL);
-        } else if(url.startsWith("http") && !iconURL.startsWith("http")){
+        } else if (url.startsWith("http") && !iconURL.startsWith("http")) {
             eb.setAuthor(name, url);
-        } else if(!url.startsWith("http") && !iconURL.startsWith("http")){
+        } else if (!url.startsWith("http") && !iconURL.startsWith("http")) {
             eb.setAuthor(name);
-        } else if(name.equalsIgnoreCase("")){
+        } else if (name.equalsIgnoreCase("")) {
 
         } else {
             eb.setAuthor(name, url, iconURL);
         }
 
-        if(getMessages().getString("Discord.DeathMessage.Image").startsWith("http")){
+        if (getMessages().getString("Discord.DeathMessage.Image").startsWith("http")) {
             eb.setThumbnail(getMessages().getString("Discord.DeathMessage.Image").replaceAll("%uuid%",
                     pm.getUUID().toString()).replaceAll("%username%", pm.getName()));
         }
         String title = Assets.playerDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Title"), pm,
                 (LivingEntity) pm.getLastEntityDamager()).replaceAll("%message%", message);
-        if(!title.equalsIgnoreCase("")){
+        if (!title.equalsIgnoreCase("")) {
             eb.setTitle(title);
         }
         String description = Assets.playerDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Description"), pm,
                 (LivingEntity) pm.getLastEntityDamager()).replaceAll("%message%", message);
-        if(!description.equalsIgnoreCase("")){
+        if (!description.equalsIgnoreCase("")) {
             eb.setDescription(description);
         }
         String footerText = Assets.playerDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Footer.Text"), pm,
                 (LivingEntity) pm.getLastEntityDamager()).replaceAll("%message%", message);
         String footerIcon = Assets.playerDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Footer.Icon-URL"), pm,
                 (LivingEntity) pm.getLastEntityDamager()).replaceAll("%message%", message).replaceAll("%uuid%", pm.getUUID().toString());
-        if(!footerText.equalsIgnoreCase("") && footerIcon.startsWith("http")){
+        if (!footerText.equalsIgnoreCase("") && footerIcon.startsWith("http")) {
             eb.setFooter(footerText, footerIcon);
-        } else if(!footerText.equalsIgnoreCase("") && !footerIcon.startsWith("http")){
+        } else if (!footerText.equalsIgnoreCase("") && !footerIcon.startsWith("http")) {
             eb.setFooter(footerText);
         }
         boolean timeStamp = getMessages().getBoolean("Discord.DeathMessage.Timestamp");
-        if(timeStamp){
+        if (timeStamp) {
             eb.setTimestamp(Instant.now());
         }
         for (String s : getMessages().getStringList("Discord.DeathMessage.Content")) {
@@ -190,43 +190,43 @@ public class DiscordSRVExtension {
                 pm.getUUID().toString()).replaceAll("%username%", pm.getName());
         String iconURL = getMessages().getString("Discord.DeathMessage.Author.Icon-URL").replaceAll("%uuid%",
                 pm.getUUID().toString()).replaceAll("%username%", pm.getName());
-        if(!url.startsWith("http") && iconURL.startsWith("http")){
+        if (!url.startsWith("http") && iconURL.startsWith("http")) {
             eb.setAuthor(name, null, iconURL);
-        } else if(url.startsWith("http") && !iconURL.startsWith("http")){
+        } else if (url.startsWith("http") && !iconURL.startsWith("http")) {
             eb.setAuthor(name, url);
-        } else if(!url.startsWith("http") && !iconURL.startsWith("http")){
+        } else if (!url.startsWith("http") && !iconURL.startsWith("http")) {
             eb.setAuthor(name);
-        } else if(name.equalsIgnoreCase("")){
+        } else if (name.equalsIgnoreCase("")) {
 
         } else {
             eb.setAuthor(name, url, iconURL);
         }
 
-        if(getMessages().getString("Discord.DeathMessage.Image").startsWith("http")){
+        if (getMessages().getString("Discord.DeathMessage.Image").startsWith("http")) {
             eb.setThumbnail(getMessages().getString("Discord.DeathMessage.Image").replaceAll("%uuid%",
                     pm.getUUID().toString()).replaceAll("%username%", pm.getName()));
         }
-        String title = Assets.playerDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Title"), pm,
-                (LivingEntity) pm.getLastEntityDamager()).replaceAll("%message%", message);
-        if(!title.equalsIgnoreCase("")){
+        String title = Assets.entityDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Title"), pm,
+                tameable).replaceAll("%message%", message);
+        if (!title.equalsIgnoreCase("")) {
             eb.setTitle(title);
         }
-        String description = Assets.playerDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Description"), pm,
-                (LivingEntity) pm.getLastEntityDamager()).replaceAll("%message%", message);
-        if(!description.equalsIgnoreCase("")){
+        String description = Assets.entityDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Description"), pm,
+                tameable).replaceAll("%message%", message);
+        if (!description.equalsIgnoreCase("")) {
             eb.setDescription(description);
         }
-        String footerText = Assets.playerDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Footer.Text"), pm,
-                (LivingEntity) pm.getLastEntityDamager()).replaceAll("%message%", message);
-        String footerIcon = Assets.playerDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Footer.Icon-URL"), pm,
-                (LivingEntity) pm.getLastEntityDamager()).replaceAll("%message%", message).replaceAll("%uuid%", pm.getUUID().toString());
-        if(!footerText.equalsIgnoreCase("") && footerIcon.startsWith("http")){
+        String footerText = Assets.entityDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Footer.Text"), pm,
+                tameable).replaceAll("%message%", message);
+        String footerIcon = Assets.entityDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Footer.Icon-URL"), pm,
+                tameable).replaceAll("%message%", message).replaceAll("%uuid%", pm.getUUID().toString());
+        if (!footerText.equalsIgnoreCase("") && footerIcon.startsWith("http")) {
             eb.setFooter(footerText, footerIcon);
-        } else if(!footerText.equalsIgnoreCase("") && !footerIcon.startsWith("http")){
+        } else if (!footerText.equalsIgnoreCase("") && !footerIcon.startsWith("http")) {
             eb.setFooter(footerText);
         }
         boolean timeStamp = getMessages().getBoolean("Discord.DeathMessage.Timestamp");
-        if(timeStamp){
+        if (timeStamp) {
             eb.setTimestamp(Instant.now());
         }
         for (String s : getMessages().getStringList("Discord.DeathMessage.Content")) {

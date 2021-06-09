@@ -7,6 +7,7 @@ import net.joshb.deathmessages.api.events.BroadcastTamableDeathMessageEvent;
 import net.joshb.deathmessages.assets.Assets;
 import net.joshb.deathmessages.config.Messages;
 import net.joshb.deathmessages.config.Settings;
+import net.joshb.deathmessages.listener.PluginMessaging;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -14,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import java.util.List;
 import java.util.regex.Matcher;
 
 public class BroadcastTameableDeathListener implements Listener {
@@ -49,14 +51,6 @@ public class BroadcastTameableDeathListener implements Listener {
                             pls.spigot().sendMessage(e.getTextComponent());
                         }
                     } else {
-                        if(DeathMessages.discordBotAPIExtension != null && !discordSent){
-                            DeathMessages.discordBotAPIExtension.sendTameableDiscordMessage(PlayerManager.getPlayer(e.getPlayer()), e.getMessageType(), ChatColor.stripColor(e.getTextComponent().toLegacyText()), e.getTameable());
-                            discordSent = true;
-                        }
-                        if(DeathMessages.discordSRVExtension != null && !discordSent){
-                            DeathMessages.discordSRVExtension.sendTameableDiscordMessage(PlayerManager.getPlayer(e.getPlayer()), e.getMessageType(), ChatColor.stripColor(e.getTextComponent().toLegacyText()), e.getTameable());
-                            discordSent = true;
-                        }
                         if (pms.getMessagesEnabled()) {
                             if(DeathMessages.worldGuardExtension != null){
                                 if(DeathMessages.worldGuardExtension.getRegionState(pls, e.getMessageType()).equals(StateFlag.State.DENY)){
@@ -64,6 +58,29 @@ public class BroadcastTameableDeathListener implements Listener {
                                 }
                             }
                             pls.spigot().sendMessage(e.getTextComponent());
+                            PluginMessaging.sendPluginMSG(pms.getPlayer(), e.getTextComponent().toString());
+                        }
+                        if(Settings.getInstance().getConfig().getBoolean("Hooks.Discord.World-Whitelist.Enabled")) {
+                            List<String> discordWorldWhitelist = Settings.getInstance().getConfig().getStringList("Hooks.Discord.World-Whitelist.Worlds");
+                            boolean broadcastToDiscord = false;
+                            for(World world : e.getBroadcastedWorlds()){
+                                if(discordWorldWhitelist.contains(world.getName())){
+                                    broadcastToDiscord = true;
+                                }
+                            }
+                            if(!broadcastToDiscord){
+                                //Wont reach the discord broadcast
+                                return;
+                            }
+                            //Will reach the discord broadcast
+                        }
+                        if(DeathMessages.discordBotAPIExtension != null && !discordSent){
+                            DeathMessages.discordBotAPIExtension.sendTameableDiscordMessage(PlayerManager.getPlayer(e.getPlayer()), e.getMessageType(), ChatColor.stripColor(e.getTextComponent().toLegacyText()), e.getTameable());
+                            discordSent = true;
+                        }
+                        if(DeathMessages.discordSRVExtension != null && !discordSent){
+                            DeathMessages.discordSRVExtension.sendTameableDiscordMessage(PlayerManager.getPlayer(e.getPlayer()), e.getMessageType(), ChatColor.stripColor(e.getTextComponent().toLegacyText()), e.getTameable());
+                            discordSent = true;
                         }
                     }
                 }

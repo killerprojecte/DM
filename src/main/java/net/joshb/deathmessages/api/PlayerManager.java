@@ -3,6 +3,7 @@ package net.joshb.deathmessages.api;
 import net.joshb.deathmessages.DeathMessages;
 import net.joshb.deathmessages.config.Settings;
 import net.joshb.deathmessages.config.UserData;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -20,10 +21,8 @@ import java.util.UUID;
 
 public class PlayerManager {
 
-    private final Player p;
     private final UUID uuid;
     private final String name;
-    private final String displayName;
     private boolean messagesEnabled;
     private boolean isBlacklisted;
     private DamageCause damageCause;
@@ -39,16 +38,13 @@ public class PlayerManager {
 
     private BukkitTask lastEntityTask;
 
-    private static List<PlayerManager> players = new ArrayList<>();
+    private static final List<PlayerManager> players = new ArrayList<>();
 
     public boolean saveUserData = Settings.getInstance().getConfig().getBoolean("Saved-User-Data");
 
     public PlayerManager(Player p){
-        this.p = p;
         this.uuid = p.getUniqueId();
         this.name = p.getName();
-        this.displayName = p.getDisplayName();
-
 
         if(saveUserData && !UserData.getInstance().getConfig().contains(p.getUniqueId().toString())){
             UserData.getInstance().getConfig().set(p.getUniqueId().toString() + ".username", p.getName());
@@ -66,7 +62,7 @@ public class PlayerManager {
         players.add(this);
     }
 
-    public Player getPlayer(){ return Objects.requireNonNull(p); }
+    public Player getPlayer(){ return Bukkit.getServer().getPlayer(uuid); }
 
     public UUID getUUID(){
         return Objects.requireNonNull(uuid);
@@ -81,7 +77,7 @@ public class PlayerManager {
     public void setMessagesEnabled(boolean b) {
         this.messagesEnabled = b;
         if (saveUserData) {
-            UserData.getInstance().getConfig().set(p.getUniqueId().toString() + ".messages-enabled", b);
+            UserData.getInstance().getConfig().set(uuid.toString() + ".messages-enabled", b);
             UserData.getInstance().save();
         }
     }
@@ -91,7 +87,7 @@ public class PlayerManager {
     public void setBlacklisted(boolean b){
         this.isBlacklisted = b;
         if (saveUserData) {
-            UserData.getInstance().getConfig().set(p.getUniqueId().toString() + ".is-blacklisted", b);
+            UserData.getInstance().getConfig().set(uuid.toString() + ".is-blacklisted", b);
             UserData.getInstance().save();
         }
     }
@@ -203,5 +199,8 @@ public class PlayerManager {
         return null;
     }
 
+    public void removePlayer(){
+        players.remove(this);
+    }
 }
 

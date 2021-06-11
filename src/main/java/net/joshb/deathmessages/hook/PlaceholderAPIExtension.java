@@ -9,6 +9,7 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
 
     private DeathMessages plugin;
 
+
     /**
      * Since we register the expansion inside our own plugin, we
      * can simply use this method here to get an instance of our
@@ -105,6 +106,18 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
         }
         if (identifier.equals("is_blacklisted")) {
             return String.valueOf(pm.isBlacklisted());
+        }
+        if(identifier.equals("victim_name")){
+            return pm.getPlayer().getName();
+        }
+        if(identifier.equals("victim_display_name")){
+            return pm.getPlayer().getDisplayName();
+        }
+        if(identifier.equals("killer_name")){
+            return pm.getLastEntityDamager().getName();
+        }
+        if(identifier.equals("killer_display_name")){
+            return pm.getLastEntityDamager().getCustomName();
         }
 
         return null;

@@ -12,7 +12,7 @@ public class EntityDamage implements Listener {
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent e) {
-        if(e.isCancelled()) return;
+        if (e.isCancelled()) return;
         if (e.getEntity() instanceof Player && Bukkit.getOnlinePlayers().contains(e.getEntity())) {
             Player p = (Player) e.getEntity();
             PlayerManager pm = PlayerManager.getPlayer(p);
@@ -22,4 +22,3 @@ public class EntityDamage implements Listener {
     }
 
 }
-

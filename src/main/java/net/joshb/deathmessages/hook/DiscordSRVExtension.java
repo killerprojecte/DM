@@ -51,8 +51,7 @@ public class DiscordSRVExtension {
             if (getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")) {
                 String prefix = Assets.colorize(getMessages().getString("Prefix"));
                 prefix = ChatColor.stripColor(prefix);
-                prefix = prefix.replaceAll("[\\[\\](){}]", "");
-                message = message.replaceAll(prefix, "");
+                message = message.substring(prefix.length());
             }
             if (getMessages().getString("Discord.DeathMessage.Text").equalsIgnoreCase("")) {
                 textChannel.sendMessage(deathMessageToDiscordMessage(pm, message)).queue();
@@ -96,8 +95,7 @@ public class DiscordSRVExtension {
             if (getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")) {
                 String prefix = Assets.colorize(getMessages().getString("Prefix"));
                 prefix = ChatColor.stripColor(prefix);
-                prefix = prefix.replaceAll("[\\[\\](){}]", "");
-                message = message.replaceAll(prefix, "");
+                message = message.substring(prefix.length());
             }
             if (getMessages().getString("Discord.DeathMessage.Text").equalsIgnoreCase("")) {
                 textChannel.sendMessage(deathMessageToDiscordMessage(pm, message, tameable)).queue();

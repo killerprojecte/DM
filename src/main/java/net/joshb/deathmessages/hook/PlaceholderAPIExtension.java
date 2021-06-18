@@ -88,7 +88,6 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
      * <br>We specify the value identifier in this method.
      * <br>Since version 2.9.1 can you use OfflinePlayers in your requests.
      *
-     * @param player     A {@link org.bukkit.Player Player}.
      * @param identifier A String containing the identifier/value.
      * @return possibly-null String of the requested identifier.
      */
@@ -114,9 +113,15 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
             return pm.getPlayer().getDisplayName();
         }
         if(identifier.equals("killer_name")){
+            if(pm.getLastEntityDamager() == null){
+                return "null";
+            }
             return pm.getLastEntityDamager().getName();
         }
         if(identifier.equals("killer_display_name")){
+            if(pm.getLastEntityDamager() == null){
+                return "null";
+            }
             return pm.getLastEntityDamager().getCustomName();
         }
 

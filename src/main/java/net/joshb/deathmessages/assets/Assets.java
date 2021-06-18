@@ -959,6 +959,8 @@ public class Assets {
                 return "Cramming";
             case DRYOUT:
                 return "Dryout";
+            case FREEZE:
+                return "Freeze";
             default:
                 return "Unknown";
         }

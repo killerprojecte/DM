@@ -33,7 +33,7 @@
 #
 # For players that have a specific permission set, EX: deathmessages.premium, the death message
 # will be sent that is formatted as followed:
-# PERMISSIONS[YOUR.PERM.HERE]%player% dead lol
+# PERMISSION[YOUR.PERM.HERE]%player% dead lol
 #
 # Players that are in a region (With WorldGuard hook enabled) and is defined below, will be sending a custom
 # region messages.
@@ -48,6 +48,15 @@
 #       - "REGION[spawn]Idiot %player% died in spawn lol"
 #       If the player has permission and in a region
 #       - "REGION[spawn]PERMISSION[deathmessages.premium]Idiot premium %player% died in spawn lol"
+#
+# To completely remove the message for a certain death. Configure as followed:
+# Natrual-Death:
+#   Bed: []
+# or
+# Mobs:
+#   Creeper:
+#     Solo:
+#       Explosion: []
 
 # Due for there being no cure for laziness, this option ignores everything in the Mobs section and makes all messages
 # appear the same.
@@ -152,6 +161,8 @@ Natural-Cause:
     - "%player% was killed in a heavily populated space"
   Dryout:
     - "%player% belonged in the water. Not land"
+  Freeze:
+    - "%player% did not put their snow suit on before they went to play."
   Unknown:
     - "%player% died"
 
@@ -1278,3 +1289,10 @@ Mobs:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
       Melee:
         - "%player% was slain by a bunch of %killer%'s"
+  goat:
+    Solo:
+      Melee:
+        - "%player% was knocked by a %killer%"
+    Gang:
+      Melee:
+        - "%player% was knocked by a bunch of %killer%'s"

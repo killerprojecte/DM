@@ -5,6 +5,7 @@ import net.joshb.deathmessages.assets.Assets;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -14,7 +15,7 @@ public class OnMove implements Listener {
     Material lastBlock;
     boolean message;
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onMove(PlayerMoveEvent e){
         Player p = e.getPlayer();
         if(Assets.isClimable(e.getTo().getBlock())){

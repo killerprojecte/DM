@@ -2,8 +2,9 @@ package net.joshb.deathmessages.listener.customlisteners;
 
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import net.joshb.deathmessages.DeathMessages;
+import net.joshb.deathmessages.api.EntityManager;
 import net.joshb.deathmessages.api.PlayerManager;
-import net.joshb.deathmessages.api.events.BroadcastTamableDeathMessageEvent;
+import net.joshb.deathmessages.api.events.BroadcastEntityDeathMessageEvent;
 import net.joshb.deathmessages.assets.Assets;
 import net.joshb.deathmessages.config.Messages;
 import net.joshb.deathmessages.config.Settings;
@@ -12,24 +13,29 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Tameable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import java.util.List;
 import java.util.regex.Matcher;
 
-public class BroadcastTameableDeathListener implements Listener {
+public class BroadcastEntityDeathListener implements Listener {
 
     @EventHandler
-    public void broadcastListener(BroadcastTamableDeathMessageEvent e) {
+    public void broadcastListener(BroadcastEntityDeathMessageEvent e) {
+        PlayerManager pm = e.getPlayer();
+        boolean hasOwner = false;
+        if(e.getEntity() instanceof Tameable){
+            Tameable tameable = (Tameable) e.getEntity();
+            if(tameable.getOwner() != null) hasOwner = true;
+        }
         if (!e.isCancelled()) {
             if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
-                String message = Assets.entityDeathPlaceholders(Messages.getInstance().getConfig().getString("Console.Message"), PlayerManager.getPlayer(e.getPlayer()), e.getTameable());
+                String message = Assets.entityDeathPlaceholders(Messages.getInstance().getConfig().getString("Console.Message"), pm.getPlayer(), e.getEntity(), hasOwner);
                 message = message.replaceAll("%message%", Matcher.quoteReplacement(e.getTextComponent().toLegacyText()));
                 Bukkit.getConsoleSender().sendMessage(message);
             }
-
-            PlayerManager pm = PlayerManager.getPlayer(e.getPlayer());
             if(pm.isInCooldown()){
                 return;
             } else {
@@ -38,7 +44,7 @@ public class BroadcastTameableDeathListener implements Listener {
 
             boolean discordSent = false;
 
-            boolean privateTameable = Settings.getInstance().getConfig().getBoolean("Private-Messages.Tameable");
+            boolean privateTameable = Settings.getInstance().getConfig().getBoolean("Private-Messages.Entity");
 
             for(World w : e.getBroadcastedWorlds()){
                 for(Player pls : w.getPlayers()){
@@ -46,7 +52,7 @@ public class BroadcastTameableDeathListener implements Listener {
                         continue;
                     }
                     PlayerManager pms = PlayerManager.getPlayer(pls);
-                    if(privateTameable && pms.getUUID().equals(e.getPlayer().getUniqueId())){
+                    if(privateTameable && pms.getUUID().equals(pm.getPlayer().getUniqueId())){
                         if (pms.getMessagesEnabled()) {
                             pls.spigot().sendMessage(e.getTextComponent());
                         }
@@ -75,16 +81,17 @@ public class BroadcastTameableDeathListener implements Listener {
                             //Will reach the discord broadcast
                         }
                         if(DeathMessages.discordBotAPIExtension != null && !discordSent){
-                            DeathMessages.discordBotAPIExtension.sendTameableDiscordMessage(PlayerManager.getPlayer(e.getPlayer()), e.getMessageType(), ChatColor.stripColor(e.getTextComponent().toLegacyText()), e.getTameable());
+                            DeathMessages.discordBotAPIExtension.sendEntityDiscordMessage(ChatColor.stripColor(e.getTextComponent().toLegacyText()), pm, e.getEntity(), hasOwner, e.getMessageType());
                             discordSent = true;
                         }
                         if(DeathMessages.discordSRVExtension != null && !discordSent){
-                            DeathMessages.discordSRVExtension.sendTameableDiscordMessage(PlayerManager.getPlayer(e.getPlayer()), e.getMessageType(), ChatColor.stripColor(e.getTextComponent().toLegacyText()), e.getTameable());
+                            DeathMessages.discordSRVExtension.sendEntityDiscordMessage(ChatColor.stripColor(e.getTextComponent().toLegacyText()), pm, e.getEntity(), hasOwner, e.getMessageType());
                             discordSent = true;
                         }
                     }
                 }
             }
         }
+        EntityManager.getEntity(e.getEntity().getUniqueId()).destroy();
     }
 }

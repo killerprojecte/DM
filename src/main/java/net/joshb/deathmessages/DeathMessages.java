@@ -1,19 +1,17 @@
 package net.joshb.deathmessages;
 
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import net.joshb.deathmessages.api.PlayerManager;
 import net.joshb.deathmessages.command.deathmessages.CommandManager;
 import net.joshb.deathmessages.command.deathmessages.TabCompleter;
 import net.joshb.deathmessages.command.deathmessages.alias.CommandDeathMessagesToggle;
 import net.joshb.deathmessages.config.ConfigManager;
 import net.joshb.deathmessages.config.Settings;
-import net.joshb.deathmessages.hook.DiscordBotAPIExtension;
-import net.joshb.deathmessages.hook.DiscordSRVExtension;
-import net.joshb.deathmessages.hook.PlaceholderAPIExtension;
-import net.joshb.deathmessages.hook.WorldGuardExtension;
+import net.joshb.deathmessages.hook.*;
 import net.joshb.deathmessages.listener.*;
 import net.joshb.deathmessages.listener.customlisteners.BlockExplosion;
+import net.joshb.deathmessages.listener.customlisteners.BroadcastEntityDeathListener;
 import net.joshb.deathmessages.listener.customlisteners.BroadcastPlayerDeathListener;
-import net.joshb.deathmessages.listener.customlisteners.BroadcastTameableDeathListener;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.World;
@@ -38,7 +36,7 @@ public class DeathMessages extends JavaPlugin {
 
 
     public static WorldGuardExtension worldGuardExtension;
-    public static int worldGuardVersion;
+    public static boolean worldGuardEnabled;
 
     public static DiscordBotAPIExtension discordBotAPIExtension;
     public static DiscordSRVExtension discordSRVExtension;
@@ -48,16 +46,17 @@ public class DeathMessages extends JavaPlugin {
 
     public void onEnable() {
         plugin = this;
-        initializeConfigs();
         //Logger log = (Logger) LogManager.getRootLogger();
         //log.addAppender(new SupportLogger());
         initializeListeners();
         initializeCommands();
         initializeHooks();
         initializeOnlinePlayers();
+        checkGameRules();
     }
 
     public void onLoad() {
+        initializeConfigs();
         initializeHooksOnLoad();
     }
 
@@ -74,10 +73,6 @@ public class DeathMessages extends JavaPlugin {
     public static int majorVersion() {
         return Integer.parseInt(serverVersion().replace("1_", "")
                 .replaceAll("_R\\d", "").replaceAll("v", ""));
-    }
-
-    public static int worldGuardVersion() {
-        return worldGuardVersion;
     }
 
     private void initializeConfigs() {
@@ -104,7 +99,7 @@ public class DeathMessages extends JavaPlugin {
     private void initializeListeners() {
         //Custom Events
         Bukkit.getPluginManager().registerEvents(new BroadcastPlayerDeathListener(), this);
-        Bukkit.getPluginManager().registerEvents(new BroadcastTameableDeathListener(), this);
+        Bukkit.getPluginManager().registerEvents(new BroadcastEntityDeathListener(), this);
         //Bukkits events
         Bukkit.getPluginManager().registerEvents(new BlockExplosion(), this);
         Bukkit.getPluginManager().registerEvents(new EntityDamage(), this);
@@ -134,16 +129,8 @@ public class DeathMessages extends JavaPlugin {
             getLogger().log(Level.INFO, "PlaceholderAPI found. Enabling Hook.");
         }
 
-        if (!Bukkit.getPluginManager().isPluginEnabled("WorldGuard") &&
-                Settings.getInstance().getConfig().getBoolean("Hooks.WorldGuard.Enabled")) {
-            getLogger().log(Level.SEVERE, "You enabled the WorldGuard hook in your settings.yml with WorldGuard " +
-                    "not installed! Please disable!");
-            worldGuardExtension = null;
-        } else {
-            if (worldGuardExtension != null) {
-                getLogger().log(Level.INFO, "WorldGuard found. Enabling Hook.");
-                worldGuardExtension.enable();
-            }
+        if (worldGuardEnabled){
+            getLogger().log(Level.INFO, "WorldGuard Extension Enabled!");
         }
 
         if (Bukkit.getPluginManager().getPlugin("DiscordBotAPI") != null
@@ -174,36 +161,36 @@ public class DeathMessages extends JavaPlugin {
         }
 
         if (Settings.getInstance().getConfig().getBoolean("Hooks.Bungee.Enabled")) {
-          //  Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-           // Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new PluginMessaging());
-           // getLogger().log(Level.INFO, "Bungee hook enabled!");
-         //  bungeeInit = true;
+            //  Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+            // Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new PluginMessaging());
+            // getLogger().log(Level.INFO, "Bungee hook enabled!");
+            //  bungeeInit = true;
         }
     }
 
     private void initializeHooksOnLoad() {
-        if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null) {
-            Integer.parseInt(Bukkit.getPluginManager().getPlugin("WorldGuard")
-                    .getDescription().getVersion().split("\\.")[0]);
-            if (worldGuardVersion < 7) {
-                getLogger().log(Level.SEVERE, "WorldGuard v" + worldGuardVersion + " is not supported yet. " +
-                        "Please use WorldGuard v7 or higher!");
-            }
+        if (Bukkit.getPluginManager().isPluginEnabled("WorldGuard") &&
+                Settings.getInstance().getConfig().getBoolean("Hooks.WorldGuard.Enabled")) {
             try {
-                (worldGuardExtension = new WorldGuardExtension()).register();
-                worldGuardVersion = Integer.parseInt(Bukkit.getPluginManager().getPlugin("WorldGuard")
-                        .getDescription().getVersion().split("\\.")[0]);
-                if (worldGuardVersion < 7) {
-                    getLogger().log(Level.SEVERE, "WorldGuard v" + worldGuardVersion + " is not supported yet. " +
-                            "Please use WorldGuard v7 or higher!");
-                    worldGuardExtension = null;
-                } else {
-                    getLogger().log(Level.INFO, "WorldGuard v" + worldGuardVersion + " found. Enabling Hook.");
-                }
-            } catch (Exception e) {
-                worldGuardExtension = null;
+                final WorldGuardPlugin worldGuardPlugin = WorldGuardPlugin.inst();
+                if (worldGuardPlugin == null || !worldGuardPlugin.isEnabled()) throw new Exception();
+                final String version = worldGuardPlugin.getDescription().getVersion();
+                if (version.startsWith("7")) {
+                    worldGuardExtension = new WorldGuard7Extension();
+                    worldGuardExtension.registerFlags();
+                } else if (version.startsWith("6")) {
+                    worldGuardExtension = new WorldGuard6Extension();
+                    worldGuardExtension.registerFlags();
+                } else throw new Exception();
+                worldGuardEnabled = true;
+            } catch (final Throwable e) {
                 getLogger().log(Level.SEVERE, "Error loading WorldGuardHook. Error: " + e.getMessage());
+                worldGuardEnabled = false;
             }
+        } else if (!Bukkit.getPluginManager().isPluginEnabled("WorldGuard") &&
+                Settings.getInstance().getConfig().getBoolean("Hooks.WorldGuard.Enabled")) {
+            getLogger().log(Level.SEVERE, "You enabled the WorldGuard hook in your settings.yml with WorldGuard " +
+                    "not installed! Please disable!");
         }
     }
 

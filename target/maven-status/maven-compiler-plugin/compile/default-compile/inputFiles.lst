@@ -1,5 +1,4 @@
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\listener\OnJoin.java
-D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\hook\WorldGuardExtension.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\api\events\DMBlockExplodeEvent.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\listener\OnChat.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\command\deathmessages\CommandBlacklist.java
@@ -14,7 +13,8 @@ D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\api\Pla
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\assets\XMaterial.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\hook\DiscordSRVExtension.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\listener\customlisteners\BlockExplosion.java
-D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\listener\customlisteners\BroadcastTameableDeathListener.java
+D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\api\events\BroadcastEntityDeathMessageEvent.java
+D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\hook\WorldGuardNewExtension.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\config\ConfigManager.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\listener\customlisteners\BroadcastPlayerDeathListener.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\config\Gangs.java
@@ -33,11 +33,12 @@ D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\assets\
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\enums\Permission.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\DeathMessages.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\listener\InteractEvent.java
-D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\api\events\BroadcastTamableDeathMessageEvent.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\listener\PlayerDeath.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\command\deathmessages\TabCompleter.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\assets\CommentedConfiguration.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\hook\DiscordBotAPIExtension.java
+D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\api\EntityManager.java
+D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\listener\customlisteners\BroadcastEntityDeathListener.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\config\EntityDeathMessages.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\command\deathmessages\CommandReload.java
 D:\Intellij\Projects\DeathMessages\src\main\java\net\joshb\deathmessages\command\deathmessages\CommandBackup.java

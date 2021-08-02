@@ -63,7 +63,7 @@ public class EntityDeathMessages {
         }
         config = CommentedConfiguration.loadConfiguration(file);
         try{
-            config.syncWithConfig(file, DeathMessages.plugin.getResource(fileName + ".yml"), "Mobs");
+            config.syncWithConfig(file, DeathMessages.plugin.getResource(fileName + ".yml"), "Entities");
         } catch (Exception e){
 
         }

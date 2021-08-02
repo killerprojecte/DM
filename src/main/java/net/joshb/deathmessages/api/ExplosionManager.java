@@ -3,7 +3,6 @@ package net.joshb.deathmessages.api;
 import net.joshb.deathmessages.DeathMessages;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -24,10 +23,9 @@ public class ExplosionManager {
         this.material = material;
         this.location = location;
         this.effected = effected;
-
         explosions.add(this);
-        //Destroys class. Wont need the info anymore
 
+        //Destroys class. Wont need the info anymore
         new BukkitRunnable(){
             @Override
             public void run() {
@@ -52,21 +50,8 @@ public class ExplosionManager {
         return this.location;
     }
 
-    public void addEffected(Player p) {
-        this.effected.add(p.getUniqueId());
-    }
-
     public List<UUID> getEffected() {
         return this.effected;
-    }
-
-    public static ExplosionManager getExplosion(UUID pyro) {
-        for (ExplosionManager ex : explosions) {
-            if (ex.getPyro().equals(pyro)) {
-                return ex;
-            }
-        }
-        return null;
     }
 
     public static ExplosionManager getExplosion(Location location) {
@@ -78,9 +63,9 @@ public class ExplosionManager {
         return null;
     }
 
-    public static ExplosionManager getManagerIfEffected(Player p) {
+    public static ExplosionManager getManagerIfEffected(UUID uuid) {
         for (ExplosionManager ex : explosions) {
-            if (ex.getEffected().contains(p.getUniqueId())) {
+            if (ex.getEffected().contains(uuid)) {
                 return ex;
             }
         }

@@ -25,8 +25,8 @@ public class DiscordAssets {
                 return getSettings().getStringList("Hooks.Discord.Channels.Mob.Channels");
             case NATURAL:
                 return getSettings().getStringList("Hooks.Discord.Channels.Natural.Channels");
-            case TAMEABLE:
-                return getSettings().getStringList("Hooks.Discord.Channels.Tameable.Channels");
+            case ENTITY:
+                return getSettings().getStringList("Hooks.Discord.Channels.Entity.Channels");
             default:
                 return null;
         }

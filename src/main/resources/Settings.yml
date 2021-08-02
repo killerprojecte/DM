@@ -43,7 +43,7 @@ Hooks:
       Natural:
         Enabled: true
         Channels: []
-      Tameable:
+      Entity:
         Enabled: true
         Channels: []
     # If you wish to only have certain worlds with death message broadcast to discord, define them here
@@ -114,7 +114,10 @@ Disable-Named-Mobs: false
 Expire-Last-Damage:
   # How long until the last mob that damaged a player expires? (Becomes a natural death cause)
   # Default: 7
-  Expire-Mob: 7
+  Expire-Player: 7
+  # How long until the last player that damaged an entity expires (Cancels the deathmessage listener)
+  # Default: 7
+  Expire-Entity: 7
 
 # If enabled, death messages will only be sent to players in the same world the player died in.
 Per-World-Messages: false

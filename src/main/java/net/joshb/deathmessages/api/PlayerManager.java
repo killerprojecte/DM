@@ -113,7 +113,7 @@ public class PlayerManager {
             public void run() {
                 setLastEntityDamager(null);
             }
-        }.runTaskLater(DeathMessages.plugin, Settings.getInstance().getConfig().getInt("Expire-Last-Damage.Expire-Mob") * 20);
+        }.runTaskLater(DeathMessages.plugin, Settings.getInstance().getConfig().getInt("Expire-Last-Damage.Expire-Player") * 20);
     }
 
     public Entity getLastEntityDamager() {

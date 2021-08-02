@@ -5,16 +5,16 @@ import github.scarsz.discordsrv.dependencies.jda.api.entities.Guild;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.MessageEmbed;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.TextChannel;
 import github.scarsz.discordsrv.util.DiscordUtil;
+import me.joshb.discordbotapi.server.DiscordBotAPI;
 import net.joshb.deathmessages.DeathMessages;
 import net.joshb.deathmessages.api.PlayerManager;
 import net.joshb.deathmessages.assets.Assets;
 import net.joshb.deathmessages.config.Messages;
+import net.joshb.deathmessages.config.Settings;
 import net.joshb.deathmessages.enums.MessageType;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.FallingBlock;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Tameable;
+import org.bukkit.entity.*;
 
 import java.awt.*;
 import java.time.Instant;
@@ -48,7 +48,8 @@ public class DiscordSRVExtension {
                 continue;
             }
             TextChannel textChannel = g.getTextChannelById(channelID);
-            if (getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")) {
+            if (getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")
+                    && Settings.getInstance().getConfig().getBoolean("Add-Prefix-To-All-Messages")) {
                 String prefix = Assets.colorize(getMessages().getString("Prefix"));
                 prefix = ChatColor.stripColor(prefix);
                 message = message.substring(prefix.length());
@@ -72,7 +73,8 @@ public class DiscordSRVExtension {
         }
     }
 
-    public void sendTameableDiscordMessage(PlayerManager pm, MessageType messageType, String message, Tameable tameable) {
+    public void sendEntityDiscordMessage(String rawMessage, PlayerManager pm, Entity entity, boolean hasOwner, MessageType messageType) {
+        String message = rawMessage;
         List<String> channels = DiscordAssets.getInstance().getIDs(messageType);
         for (String groups : channels) {
             if (!groups.contains(":")) {
@@ -81,7 +83,7 @@ public class DiscordSRVExtension {
             String[] groupSplit = groups.split(":");
             String guildID = groupSplit[0];
             String channelID = groupSplit[1];
-            if (DiscordUtil.getJda().getGuildById(guildID) == null) {
+            if (DiscordBotAPI.getJDA().getGuildById(guildID) == null) {
                 DeathMessages.plugin.getLogger().log(Level.SEVERE, "Could not find the discord guild with ID: " + guildID);
                 continue;
             }
@@ -98,7 +100,7 @@ public class DiscordSRVExtension {
                 message = message.substring(prefix.length());
             }
             if (getMessages().getString("Discord.DeathMessage.Text").equalsIgnoreCase("")) {
-                textChannel.sendMessage(deathMessageToDiscordMessage(pm, message, tameable)).queue();
+                textChannel.sendMessage(deathMessageToDiscordMessage(message, pm.getPlayer(), entity, hasOwner)).queue();
             } else {
                 String[] spl = getMessages().getString("Discord.DeathMessage.Text").split("\\\\n");
                 StringBuilder sb = new StringBuilder();
@@ -180,14 +182,14 @@ public class DiscordSRVExtension {
         return eb.build();
     }
 
-    public MessageEmbed deathMessageToDiscordMessage(PlayerManager pm, String message, Tameable tameable) {
+    public MessageEmbed deathMessageToDiscordMessage(String message, Player p, Entity entity, boolean hasOwner) {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(getDeathMessageColor());
         String name = getMessages().getString("Discord.DeathMessage.Author.Name").replaceAll("%message%", message);
         String url = getMessages().getString("Discord.DeathMessage.Author.URL").replaceAll("%uuid%",
-                pm.getUUID().toString()).replaceAll("%username%", pm.getName());
+                p.getUniqueId().toString()).replaceAll("%username%", p.getName());
         String iconURL = getMessages().getString("Discord.DeathMessage.Author.Icon-URL").replaceAll("%uuid%",
-                pm.getUUID().toString()).replaceAll("%username%", pm.getName());
+                p.getUniqueId().toString()).replaceAll("%username%", p.getName());
         if (!url.startsWith("http") && iconURL.startsWith("http")) {
             eb.setAuthor(name, null, iconURL);
         } else if (url.startsWith("http") && !iconURL.startsWith("http")) {
@@ -199,25 +201,24 @@ public class DiscordSRVExtension {
         } else {
             eb.setAuthor(name, url, iconURL);
         }
-
         if (getMessages().getString("Discord.DeathMessage.Image").startsWith("http")) {
             eb.setThumbnail(getMessages().getString("Discord.DeathMessage.Image").replaceAll("%uuid%",
-                    pm.getUUID().toString()).replaceAll("%username%", pm.getName()));
+                    p.getUniqueId().toString()).replaceAll("%username%", p.getName()));
         }
-        String title = Assets.entityDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Title"), pm,
-                tameable).replaceAll("%message%", message);
+        String title = Assets.entityDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Title"), p,
+                entity, hasOwner).replaceAll("%message%", message);
         if (!title.equalsIgnoreCase("")) {
             eb.setTitle(title);
         }
-        String description = Assets.entityDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Description"), pm,
-                tameable).replaceAll("%message%", message);
+        String description = Assets.entityDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Description"), p,
+                entity, hasOwner).replaceAll("%message%", message);
         if (!description.equalsIgnoreCase("")) {
             eb.setDescription(description);
         }
-        String footerText = Assets.entityDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Footer.Text"), pm,
-                tameable).replaceAll("%message%", message);
-        String footerIcon = Assets.entityDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Footer.Icon-URL"), pm,
-                tameable).replaceAll("%message%", message).replaceAll("%uuid%", pm.getUUID().toString());
+        String footerText = Assets.entityDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Footer.Text"), p,
+                entity, hasOwner).replaceAll("%message%", message);
+        String footerIcon = Assets.entityDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Footer.Icon-URL"), p,
+                entity, hasOwner).replaceAll("%message%", message).replaceAll("%uuid%", p.getUniqueId().toString());
         if (!footerText.equalsIgnoreCase("") && footerIcon.startsWith("http")) {
             eb.setFooter(footerText, footerIcon);
         } else if (!footerText.equalsIgnoreCase("") && !footerIcon.startsWith("http")) {
@@ -234,10 +235,10 @@ public class DiscordSRVExtension {
                 eb.addBlankField(b);
             } else {
                 boolean b = Boolean.parseBoolean(conSpl[2]);
-                String header = Assets.entityDeathPlaceholders(conSpl[0], pm,
-                        tameable).replaceAll("%message%", message);
-                String subHeader = Assets.entityDeathPlaceholders(conSpl[1], pm,
-                        tameable).replaceAll("%message%", message);
+                String header = Assets.entityDeathPlaceholders(conSpl[0], p,
+                        entity, hasOwner).replaceAll("%message%", message);
+                String subHeader = Assets.entityDeathPlaceholders(conSpl[1], p,
+                        entity, hasOwner).replaceAll("%message%", message);
                 eb.addField(header, subHeader, b);
             }
         }

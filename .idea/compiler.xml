@@ -6,7 +6,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="DeathMessages" />
+        <module name="WorldGuard6" />
+        <module name="WorldGuard7" />
+        <module name="DeathMessagesPlugin" />
       </profile>
     </annotationProcessing>
   </component>

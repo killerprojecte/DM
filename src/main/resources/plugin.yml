@@ -1,5 +1,5 @@
 name: DeathMessages
-version: ${project.version}
+version: 1.4.0
 main: net.joshb.deathmessages.DeathMessages
 api-version: 1.13
 softdepend:

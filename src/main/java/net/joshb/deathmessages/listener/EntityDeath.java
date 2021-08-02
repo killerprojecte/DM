@@ -1,10 +1,11 @@
 package net.joshb.deathmessages.listener;
 
 import net.joshb.deathmessages.DeathMessages;
+import net.joshb.deathmessages.api.EntityManager;
 import net.joshb.deathmessages.api.ExplosionManager;
 import net.joshb.deathmessages.api.PlayerManager;
 import net.joshb.deathmessages.api.events.BroadcastDeathMessageEvent;
-import net.joshb.deathmessages.api.events.BroadcastTamableDeathMessageEvent;
+import net.joshb.deathmessages.api.events.BroadcastEntityDeathMessageEvent;
 import net.joshb.deathmessages.assets.Assets;
 import net.joshb.deathmessages.config.Gangs;
 import net.joshb.deathmessages.config.Settings;
@@ -60,7 +61,7 @@ public class EntityDeath implements Listener {
                     BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(p, null, MessageType.NATURAL, tx, getWorlds(p), false);
                     Bukkit.getPluginManager().callEvent(event);
                 } else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
-                    ExplosionManager explosionManager = ExplosionManager.getManagerIfEffected(p);
+                    ExplosionManager explosionManager = ExplosionManager.getManagerIfEffected(p.getUniqueId());
                     if(explosionManager == null) return;
                     TextComponent tx = null;
                     if(explosionManager.getMaterial().name().contains("BED")){
@@ -102,9 +103,9 @@ public class EntityDeath implements Listener {
                         gangKill = true;
                     }
                 }
-                TextComponent tx = Assets.deathMessage(pm, gangKill);
+                TextComponent tx = Assets.playerDeathMessage(pm, gangKill);
                 if (tx == null) return;
-                if(ent instanceof Player){
+                if (ent instanceof Player) {
                     BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(p,
                             (LivingEntity) pm.getLastEntityDamager(), MessageType.PLAYER, tx, getWorlds(p), gangKill);
                     Bukkit.getPluginManager().callEvent(event);
@@ -114,19 +115,17 @@ public class EntityDeath implements Listener {
                         (LivingEntity) pm.getLastEntityDamager(), MessageType.MOB, tx, getWorlds(p), gangKill);
                 Bukkit.getPluginManager().callEvent(event);
             }
-        } else if (e.getEntity() instanceof Tameable) {
-            if (e.getEntity().getKiller() != null && e.getEntity().getKiller() instanceof Player) {
-                Player killer = e.getEntity().getKiller();
-                PlayerManager pm = PlayerManager.getPlayer(killer);
-                Tameable tameable = (Tameable) e.getEntity();
-                if (tameable.getOwner() == null || tameable.getOwner().equals(e.getEntity().getKiller())) return;
+        } else {
+            //Player killing mob
+            if(EntityManager.getEntity(e.getEntity().getUniqueId()) == null) return;
+            EntityManager em = EntityManager.getEntity(e.getEntity().getUniqueId());
 
-                TextComponent tx = Assets.getTamable(pm, tameable);
-                if (tx == null) return;
-                BroadcastTamableDeathMessageEvent event = new BroadcastTamableDeathMessageEvent(killer,
-                        tameable.getOwner().getName(), tameable, MessageType.TAMEABLE, tx, getWorlds(tameable));
-                Bukkit.getPluginManager().callEvent(event);
-            }
+            PlayerManager damager = em.getLastPlayerDamager();
+
+            TextComponent tx = Assets.entityDeathMessage(em);
+            if (tx == null) return;
+            BroadcastEntityDeathMessageEvent event = new BroadcastEntityDeathMessageEvent(damager, e.getEntity(), MessageType.ENTITY, tx, getWorlds(e.getEntity()));
+            Bukkit.getPluginManager().callEvent(event);
         }
     }
 

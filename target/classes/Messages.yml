@@ -74,7 +74,7 @@ Discord:
     # Example: Text: "%message%\nX:%x%\nY:%y%\nZ:%z%"
     Text: ""
 #Translations
-# Mobs: these translations will effect the %killer% placeholder
+# Mobs: these translations will effect the %killer_type% placeholder
 Mobs:
   elderguardian: "Elder Guardian"
   witherskeleton: "Wither Skeleton"
@@ -147,12 +147,18 @@ Mobs:
   strider: "Strider"
   zoglin: "Zoglin"
   piglinbrute: "Piglin Brute"
+  goat: "Goat"
+  glow_squid: "Glow Squid"
+  axolotl: "Axolotl"
 Blocks:
   ladder: "Ladder"
   anvil: "Anvil"
   vine: "Vine"
   twisted_vines_plant: "Twisted Vine"
   weeping_vines_plant: "Weeping Vine"
+  cave_vines_plant: "Cave Vines"
+  scaffolding: "Scaffolding"
+  chain: "Chain"
 Environment:
   normal: "over-world"
   nether: "nether"

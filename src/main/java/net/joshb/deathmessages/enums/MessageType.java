@@ -5,5 +5,5 @@ public enum MessageType {
     PLAYER(),
     MOB(),
     NATURAL(),
-    TAMEABLE()
+    ENTITY();
 }

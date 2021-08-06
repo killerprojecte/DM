@@ -9,6 +9,7 @@ import net.joshb.deathmessages.config.Messages;
 import net.joshb.deathmessages.config.Settings;
 import net.joshb.deathmessages.enums.MessageType;
 import net.joshb.deathmessages.listener.PluginMessaging;
+import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -25,6 +26,7 @@ public class BroadcastPlayerDeathListener implements Listener {
 
     @EventHandler
     public void broadcastListener(BroadcastDeathMessageEvent e) {
+
         if (!e.isCancelled()) {
             if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
                 String message = Assets.playerDeathPlaceholders(Messages.getInstance().getConfig().getString("Console.Message"), PlayerManager.getPlayer(e.getPlayer()), e.getLivingEntity());
@@ -74,13 +76,14 @@ public class BroadcastPlayerDeathListener implements Listener {
                     }
                 }
             }
+            PluginMessaging.sendPluginMSG(e.getPlayer(), ComponentSerializer.toString(e.getTextComponent()));
         }
     }
 
     private void normal(BroadcastDeathMessageEvent e, PlayerManager pms, Player pls, List<World> worlds){
         if (DeathMessages.worldGuardExtension != null) {
-            if (DeathMessages.worldGuardExtension.getRegionState(pls, e.getMessageType()).equals(StateFlag.State.DENY)
-                || DeathMessages.worldGuardExtension.getRegionState(e.getPlayer(), e.getMessageType()).equals(StateFlag.State.DENY)) {
+            if (DeathMessages.worldGuardExtension.getRegionState(pls, e.getMessageType().getValue()).equals(StateFlag.State.DENY)
+                || DeathMessages.worldGuardExtension.getRegionState(e.getPlayer(), e.getMessageType().getValue()).equals(StateFlag.State.DENY)) {
                 return;
             }
         }
@@ -88,7 +91,6 @@ public class BroadcastPlayerDeathListener implements Listener {
             if (pms.getMessagesEnabled()) {
                 pls.spigot().sendMessage(e.getTextComponent());
             }
-            PluginMessaging.sendPluginMSG(pms.getPlayer(), e.getTextComponent().toString());
             if(Settings.getInstance().getConfig().getBoolean("Hooks.Discord.World-Whitelist.Enabled")) {
                 List<String> discordWorldWhitelist = Settings.getInstance().getConfig().getStringList("Hooks.Discord.World-Whitelist.Worlds");
                 boolean broadcastToDiscord = false;

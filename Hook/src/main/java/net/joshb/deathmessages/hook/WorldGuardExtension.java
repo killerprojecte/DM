@@ -4,7 +4,6 @@ import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.flags.registry.FlagConflictException;
 import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
-import net.joshb.deathmessages.enums.MessageType;
 import org.bukkit.entity.Player;
 
 public interface WorldGuardExtension {
@@ -39,7 +38,7 @@ public interface WorldGuardExtension {
         }
     }
 
-    StateFlag.State getRegionState(final Player p, MessageType messageType);
+    StateFlag.State getRegionState(final Player p, String type);
 
     boolean isInRegion(Player p, String regionID);
 

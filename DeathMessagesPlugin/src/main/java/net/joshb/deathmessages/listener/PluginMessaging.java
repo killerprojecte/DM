@@ -3,14 +3,19 @@ package net.joshb.deathmessages.listener;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import net.joshb.deathmessages.DeathMessages;
+import net.joshb.deathmessages.api.PlayerManager;
+import net.joshb.deathmessages.assets.Assets;
+import net.joshb.deathmessages.config.Messages;
 import net.joshb.deathmessages.config.Settings;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -18,40 +23,27 @@ public class PluginMessaging implements PluginMessageListener {
 
     public void onPluginMessageReceived(String channel, @NotNull Player player, byte[] messageBytes) {
         if (!channel.equals("BungeeCord")) return;
+
+        DataInputStream in = new DataInputStream(new ByteArrayInputStream(messageBytes));
         try {
-            DataInputStream in = new DataInputStream(new ByteArrayInputStream(messageBytes));
-            String subChannel;
-            subChannel = in.readUTF();
+            String subChannel = in.readUTF();
+
             if (subChannel.equals("GetServer")) {
-                String serverName;
-                serverName = in.readUTF();
+                String serverName = in.readUTF();
                 DeathMessages.plugin.getLogger().log(Level.INFO, "Server-Name successfully initialized from Bungee! (" + serverName + ")");
                 DeathMessages.bungeeServerName = serverName;
                 DeathMessages.bungeeServerNameRequest = false;
-            }
-            if (subChannel.equals("DeathMessages")) {
-                String serverName;
-                serverName = in.readUTF();
-
-                Bukkit.broadcastMessage("server name = " + serverName);
-
-                Bukkit.broadcastMessage("Extra? = "+ in.readShort());
-
-                short len = in.readShort();
-                byte[] msgbytes = new byte[len];
-                in.readFully(msgbytes);
-
-                DataInputStream msgin = new DataInputStream(new ByteArrayInputStream(msgbytes));
-                try {
-                    String message = msgin.readUTF();
-                    for (Player pls : Bukkit.getServer().getOnlinePlayers()) {
-                        //PlayerManager pms = PlayerManager.getPlayer(pls);
-                        //if (pms.getMessagesEnabled()) {
-                        pls.spigot().sendMessage(TextComponent.fromLegacyText(message.replaceAll("%server_name%", serverName)));
-                        //}
+            } else if (subChannel.equals("DeathMessages")) {
+                String[] data = in.readUTF().split("######");
+                String serverName = data[0];
+                String rawMsg = data[1];
+                TextComponent prefix = new TextComponent(Assets.colorize(Messages.getInstance().getConfig().getString("Bungee.Message").replaceAll("%server_name%", serverName)));
+                TextComponent message = new TextComponent(ComponentSerializer.parse(rawMsg));
+                for (Player pls : Bukkit.getOnlinePlayers()) {
+                    PlayerManager pms = PlayerManager.getPlayer(pls);
+                    if(pms.getMessagesEnabled()){
+                        pls.spigot().sendMessage(prefix, message);
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
             }
         } catch (Exception e) {
@@ -68,10 +60,6 @@ public class PluginMessaging implements PluginMessageListener {
     }
 
     public static void sendPluginMSG(Player p, String msg) {
-
-    }
-
-    public static void sendPluginOLDMSG(Player p, String msg) {
         if (!Settings.getInstance().getConfig().getBoolean("Hooks.Bungee.Enabled")) return;
         if (Settings.getInstance().getConfig().getBoolean("Hooks.Bungee.Server-Groups.Enabled")) {
             List<String> serverList = Settings.getInstance().getConfig().getStringList("Hooks.Bungee.Server-Groups.Servers");
@@ -80,40 +68,15 @@ public class PluginMessaging implements PluginMessageListener {
                 out.writeUTF("Forward");
                 out.writeUTF(server);
                 out.writeUTF("DeathMessages");
-                out.writeUTF(DeathMessages.bungeeServerName);
-
-                ByteArrayOutputStream msgbytes = new ByteArrayOutputStream();
-                DataOutputStream msgout = new DataOutputStream(msgbytes);
-                try {
-                    msgout.writeUTF(msg);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                out.writeShort(msgbytes.toByteArray().length);
-                out.write(msgbytes.toByteArray());
-
+                out.writeUTF(DeathMessages.bungeeServerName + "######" + msg);
                 p.sendPluginMessage(DeathMessages.plugin, "BungeeCord", out.toByteArray());
             }
         } else {
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
             out.writeUTF("Forward");
-            out.writeUTF("ALL");
+            out.writeUTF("ONLINE");
             out.writeUTF("DeathMessages");
-            out.writeUTF(DeathMessages.bungeeServerName);
-
-            ByteArrayOutputStream msgbytes = new ByteArrayOutputStream();
-            DataOutputStream msgout = new DataOutputStream(msgbytes);
-            try {
-                msgout.writeUTF(msg);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Bukkit.broadcastMessage("length: " + msgbytes.toByteArray().length);
-
-            out.writeShort(msgbytes.toByteArray().length);
-            out.write(msgbytes.toByteArray());
-
+            out.writeUTF(DeathMessages.bungeeServerName + "######" + msg);
             p.sendPluginMessage(DeathMessages.plugin, "BungeeCord", out.toByteArray());
         }
     }

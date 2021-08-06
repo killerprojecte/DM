@@ -9,6 +9,7 @@ import net.joshb.deathmessages.assets.Assets;
 import net.joshb.deathmessages.config.Messages;
 import net.joshb.deathmessages.config.Settings;
 import net.joshb.deathmessages.listener.PluginMessaging;
+import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -59,7 +60,7 @@ public class BroadcastEntityDeathListener implements Listener {
                     } else {
                         if (pms.getMessagesEnabled()) {
                             if(DeathMessages.worldGuardExtension != null){
-                                if(DeathMessages.worldGuardExtension.getRegionState(pls, e.getMessageType()).equals(StateFlag.State.DENY)){
+                                if(DeathMessages.worldGuardExtension.getRegionState(pls, e.getMessageType().getValue()).equals(StateFlag.State.DENY)){
                                     return;
                                 }
                             }
@@ -91,6 +92,7 @@ public class BroadcastEntityDeathListener implements Listener {
                     }
                 }
             }
+            PluginMessaging.sendPluginMSG(e.getPlayer().getPlayer(), ComponentSerializer.toString(e.getTextComponent()));
         }
         EntityManager.getEntity(e.getEntity().getUniqueId()).destroy();
     }

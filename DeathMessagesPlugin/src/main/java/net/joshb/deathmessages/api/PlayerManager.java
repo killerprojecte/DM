@@ -144,17 +144,13 @@ public class PlayerManager {
         this.climbing = climbing;
     }
 
-    public void setLastLocation(Location location){
-        this.location = location;
-    }
-
     public void setExplosionCauser(Location location){
         this.explosionCauser = location;
     }
 
     public Location getExplosionCauser(){ return explosionCauser; }
 
-    public Location getLastLocation() { return location; }
+    public Location getLastLocation() { return getPlayer().getLocation(); }
 
     public boolean isInCooldown(){
         return cooldown > 0;
@@ -178,7 +174,7 @@ public class PlayerManager {
     }
 
     public Inventory getCachedInventory(){
-        return getCachedInventory();
+        return cachedInventory;
     }
 
     public static PlayerManager getPlayer(Player p){

@@ -3,6 +3,9 @@ Console:
   #Send death messages to console
   Enabled: true
   Message: "%message% (Extra: World:%world%, X:%x%, Y:%y%)"
+Bungee:
+  #Configure how bungee messages look from other servers
+  Message: '&a%server_name%&7> '
 Commands:
   DeathMessages:
     Player-Only-Command: "&cOnly players can run this command."

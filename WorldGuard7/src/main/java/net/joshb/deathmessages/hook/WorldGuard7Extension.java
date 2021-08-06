@@ -9,28 +9,29 @@ import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
-import net.joshb.deathmessages.enums.MessageType;
 import org.bukkit.entity.Player;
 
-public final class WorldGuard7Extension implements WorldGuardExtension{
+public final class WorldGuard7Extension implements WorldGuardExtension {
 
-    public StateFlag.State getRegionState(final Player p, MessageType messageType) {
+    @Override
+    public StateFlag.State getRegionState(final Player p, String type) {
         final Location loc = new Location(BukkitAdapter.adapt(p.getLocation().getWorld()), p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ());
         final RegionContainer rc = WorldGuard.getInstance().getPlatform().getRegionContainer();
         final ApplicableRegionSet set = rc.createQuery().getApplicableRegions(loc);
         final LocalPlayer lp = WorldGuardPlugin.inst().wrapPlayer(p);
-        if (messageType.equals(MessageType.PLAYER)) {
+        if (type.equals("player")) {
             return set.queryState(lp, BROADCAST_PLAYER);
-        } else if (messageType.equals(MessageType.MOB)) {
+        } else if (type.equals("mob")) {
             return set.queryState(lp, BROADCAST_MOBS);
-        } else if (messageType.equals(MessageType.NATURAL)) {
+        } else if (type.equals("natural")) {
             return set.queryState(lp, BROADCAST_NATURAL);
-        } else if (messageType.equals(MessageType.ENTITY)) {
+        } else if (type.equals("entity")) {
             return set.queryState(lp, BROADCAST_ENTITY);
         }
         return StateFlag.State.ALLOW;
     }
 
+    @Override
     public boolean isInRegion(Player p, String regionID) {
         final Location loc = new Location(BukkitAdapter.adapt(p.getLocation().getWorld()), p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ());
         final RegionContainer rc = WorldGuard.getInstance().getPlatform().getRegionContainer();

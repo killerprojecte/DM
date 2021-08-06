@@ -30,7 +30,6 @@ public class EntityDeath implements Listener {
         if (e.getEntity() instanceof Player && Bukkit.getOnlinePlayers().contains(e.getEntity())) {
             Player p = (Player) e.getEntity();
             PlayerManager pm = PlayerManager.getPlayer(p);
-            pm.setLastLocation(p.getLocation());
             if(e.getEntity().getLastDamageCause() == null){
                 pm.setLastDamageCause(EntityDamageEvent.DamageCause.CUSTOM);
             } else {
@@ -119,6 +118,8 @@ public class EntityDeath implements Listener {
             //Player killing mob
             if(EntityManager.getEntity(e.getEntity().getUniqueId()) == null) return;
             EntityManager em = EntityManager.getEntity(e.getEntity().getUniqueId());
+
+            if (em == null || em.getLastPlayerDamager() == null) return;
 
             PlayerManager damager = em.getLastPlayerDamager();
 

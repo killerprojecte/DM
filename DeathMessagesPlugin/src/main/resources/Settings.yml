@@ -10,6 +10,11 @@ Add-Prefix-To-All-Messages: true
 
 #Settings for specific hooks the plugins interact with
 Hooks:
+  # If MythicMobs is found, enable the hook
+  # Enable/Disable MythicMobs hook
+  MythicMobs:
+    Enabled: true
+
   # If WorldGuard is found, enable the hook
   # This creates custom flags for regions. These flags are set to ALLOW by default
   # Flags:
@@ -54,10 +59,14 @@ Hooks:
         - test2
 
   # If you run a bungee server that you would like to send death messages to other servers, enable this
-  #
-  # NOT WORKING YET, NOT WORKING YET, NOT WORKING YET, NOT WORKING YET, NOT WORKING YET, NOT WORKING YET
   Bungee:
     Enabled: false
+    # The server name that other servers will see
+    Server-Name:
+      # Should the plugin set the server name from the bungee config?
+      Get-From-Bungee: false
+      # Ignored if Get-From-Bungee is enabled.
+      Display-Name: lobby
     Server-Groups:
       # If enabled, the messages will only send to specified servers you list in the Servers section.
       # If disabled, messages will send to all servers you have the plugin installed on.
@@ -160,9 +169,15 @@ Private-Messages:
 Cooldown: 0
 
 # Custom Items
+
 # Add item display names here. If an item has the display name of something you provide here. Will be counted as
-# a Weapon Kill, not a melee kill.
+# a Weapon Kill. Not a melee kill.
 # REGEX is required here.
 Custom-Item-Display-Names-Is-Weapon:
   - '&6SUPER\sCOOL\sGOLDEN\sAPPLE'
   - 'SICKNAME'
+
+# Any item materials you list here will return a weapon kill. Not a melee kill
+# Material names are listed here https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
+Custom-Item-Material-Is-Weapon:
+  - 'ACACIA_FENCE'

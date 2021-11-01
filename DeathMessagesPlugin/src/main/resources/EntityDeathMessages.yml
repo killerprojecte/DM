@@ -29,7 +29,15 @@
 # "%player% was killed by %killer%::&cLocations: X:%x%, Y:%y%, Z:%z%::COMMAND:tppos %x% %y% %z%"
 # "%player% was killed by %killer%::&cLocations: X:%x%, Y:%y%, Z:%z%"
 # "%player% was killed by %killer%::&cLocations: X:%x%, Y:%y%, Z:%z%::SUGGEST_COMMAND:msg %player% lol noob"
+#
+# !!!!!!!!!!!!!!!!!!!!LOOK HERE :EYES: :EYES:!!!!!!!!!!!!!!!!!!!!!!!!!
+# If you do not want to use this feature of the plugin. Setup this config like so:
+#
+# Entities: []
+#
+# That's it.
 
+#Vanilla Entities
 Entities:
   # Below is an example of how this section is setup. You can use any death-type like in PlayerDeathMessages.yml
   wolf:
@@ -52,3 +60,13 @@ Entities:
       - "%killer% 360'd Y Y'd the &6&lEnder Dragon &cusing %weapon%"
     Melee:
       - "The Ender Dragon was taken down by %killer%!"
+
+#Mythic-Mob Entities https://www.spigotmc.org/resources/%E2%9A%94-mythicmobs-free-version-%E2%96%BAthe-1-custom-mob-creator%E2%97%84.5702/
+Mythic-Mobs-Entities:
+  SkeletalMinion:
+    Melee:
+      - '%killer% killed skele boss %entity_display% with their bare hands'
+    Weapon:
+      - '%killer% destroyed the boss mob %entity_display% with %weapon%'
+    TNT:
+      - '%killer% blew up the boss mob %entity_display% with TNT'

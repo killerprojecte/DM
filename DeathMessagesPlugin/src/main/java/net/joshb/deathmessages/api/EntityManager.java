@@ -2,6 +2,7 @@ package net.joshb.deathmessages.api;
 
 import net.joshb.deathmessages.DeathMessages;
 import net.joshb.deathmessages.config.Settings;
+import net.joshb.deathmessages.enums.MobType;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Projectile;
@@ -19,6 +20,7 @@ public class EntityManager {
 
     private Entity entity;
     private UUID entityUUID;
+    private MobType mobType;
     private DamageCause damageCause;
     private PlayerManager lastPlayerDamager;
     private Entity lastExplosiveEntity;
@@ -29,9 +31,10 @@ public class EntityManager {
 
     private static final List<EntityManager> entities = new ArrayList<>();
 
-    public EntityManager(Entity entity, UUID entityUUID) {
+    public EntityManager(Entity entity, UUID entityUUID, MobType mobType) {
         this.entity = entity;
         this.entityUUID = entityUUID;
+        this.mobType = mobType;
         entities.add(this);
     }
 
@@ -64,7 +67,8 @@ public class EntityManager {
             public void run() {
                 destroy();
             }
-        }.runTaskLater(DeathMessages.plugin, Settings.getInstance().getConfig().getInt("Expire-Last-Damage.Expire-Entity") * 20);
+        }.runTaskLater(DeathMessages.plugin, Settings.getInstance().getConfig().getInt("Expire-Last-Damage.Expire-Entity") * 20L);
+        this.damageCause = DamageCause.CUSTOM;
     }
 
     public PlayerManager getLastPlayerDamager() {

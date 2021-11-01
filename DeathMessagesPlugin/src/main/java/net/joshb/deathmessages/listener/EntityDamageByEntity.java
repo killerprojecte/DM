@@ -4,6 +4,7 @@ import net.joshb.deathmessages.DeathMessages;
 import net.joshb.deathmessages.api.EntityManager;
 import net.joshb.deathmessages.api.PlayerManager;
 import net.joshb.deathmessages.config.EntityDeathMessages;
+import net.joshb.deathmessages.enums.MobType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -12,6 +13,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.HashMap;
+import java.util.Set;
 import java.util.UUID;
 
 public class EntityDamageByEntity implements Listener {
@@ -63,13 +65,27 @@ public class EntityDamageByEntity implements Listener {
                     pm.setLastEntityDamager(evokerFangs.getOwner());
                 }
             }
-        } else {
-            for (String listened : EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities")
-                    .getKeys(false)) {
-                if(listened.contains(e.getEntity().getType().getEntityClass().getSimpleName().toLowerCase())) {
+        } else if (!(e.getEntity() instanceof Player) && e.getDamager() instanceof Player){
+            if(EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities") == null) return;
+            Set<String> listenedMobs = EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities")
+                    .getKeys(false);
+            if(EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Mythic-Mobs-Entities") != null
+                    && DeathMessages.plugin.mythicmobsEnabled){
+                listenedMobs.addAll(EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Mythic-Mobs-Entities")
+                        .getKeys(false));
+            }
+            if(listenedMobs.isEmpty()) return;
+            for (String listened : listenedMobs) {
+                if(listened.contains(e.getEntity().getType().getEntityClass().getSimpleName().toLowerCase())
+                        || (DeathMessages.plugin.mythicmobsEnabled && DeathMessages.plugin.mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId()))) {
                     EntityManager em;
                     if (EntityManager.getEntity(e.getEntity().getUniqueId()) == null) {
-                        em = new EntityManager(e.getEntity(), e.getEntity().getUniqueId());
+                        MobType mobType = MobType.VANILLA;
+                        if(DeathMessages.plugin.mythicmobsEnabled
+                                && DeathMessages.plugin.mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())){
+                            mobType = MobType.MYTHIC_MOB;
+                        }
+                        em = new EntityManager(e.getEntity(), e.getEntity().getUniqueId(), mobType);
                     } else {
                         em = EntityManager.getEntity(e.getEntity().getUniqueId());
                     }

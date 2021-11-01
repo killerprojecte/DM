@@ -1,6 +1,7 @@
 package net.joshb.deathmessages;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import io.lumine.xikage.mythicmobs.MythicMobs;
 import net.joshb.deathmessages.api.PlayerManager;
 import net.joshb.deathmessages.command.deathmessages.CommandManager;
 import net.joshb.deathmessages.command.deathmessages.TabCompleter;
@@ -12,6 +13,8 @@ import net.joshb.deathmessages.listener.*;
 import net.joshb.deathmessages.listener.customlisteners.BlockExplosion;
 import net.joshb.deathmessages.listener.customlisteners.BroadcastEntityDeathListener;
 import net.joshb.deathmessages.listener.customlisteners.BroadcastPlayerDeathListener;
+import net.joshb.deathmessages.listener.mythicmobs.MobDeath;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.World;
@@ -29,6 +32,11 @@ public class DeathMessages extends JavaPlugin {
     public static DeathMessages plugin;
 
     public boolean placeholderAPIEnabled = false;
+    public boolean combatLogXAPIEnabled = false;
+
+    public MythicMobs mythicMobs = null;
+    public boolean mythicmobsEnabled = false;
+
 
     public static String bungeeServerName;
     public static boolean bungeeServerNameRequest = true;
@@ -53,6 +61,8 @@ public class DeathMessages extends JavaPlugin {
         initializeHooks();
         initializeOnlinePlayers();
         checkGameRules();
+        new Metrics(this, 12365);
+        getLogger().log(Level.INFO, "bStats Hook Enabled!");
     }
 
     public void onLoad() {
@@ -127,28 +137,28 @@ public class DeathMessages extends JavaPlugin {
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new PlaceholderAPIExtension(this).register();
             placeholderAPIEnabled = true;
-            getLogger().log(Level.INFO, "PlaceholderAPI found. Enabling Hook.");
+            getLogger().log(Level.INFO, "PlaceholderAPI Hook Enabled!");
         }
 
         if (worldGuardEnabled) {
-            getLogger().log(Level.INFO, "WorldGuard Extension Enabled!");
+            getLogger().log(Level.INFO, "WorldGuard Hook Enabled!");
         }
 
         if (Bukkit.getPluginManager().getPlugin("DiscordBotAPI") != null
                 && Settings.getInstance().getConfig().getBoolean("Hooks.Discord.Enabled")) {
             discordBotAPIExtension = new DiscordBotAPIExtension();
-            getLogger().log(Level.INFO, "DiscordBotAPI found. Enabling Hook.");
+            getLogger().log(Level.INFO, "DiscordBotAPI Hook Enabled!");
         }
 
         if (Bukkit.getPluginManager().getPlugin("DiscordSRV") != null
                 && Settings.getInstance().getConfig().getBoolean("Hooks.Discord.Enabled")) {
             discordSRVExtension = new DiscordSRVExtension();
-            getLogger().log(Level.INFO, "DiscordSRV found. Enabling Hook.");
+            getLogger().log(Level.INFO, "DiscordSRV Hook Enabled!");
         }
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlugMan") && worldGuardExtension != null) {
             Plugin plugMan = Bukkit.getPluginManager().getPlugin("PlugMan");
-            getLogger().log(Level.INFO, "PlugMan found. Adding this plugin to its ignored plugins list.");
+            getLogger().log(Level.INFO, "PlugMan found. Adding this plugin to its ignored plugins list due to WorldGuard hook being enabled!");
             try {
                 List<String> ignoredPlugins = (List<String>) plugMan.getClass().getMethod("getIgnoredPlugins")
                         .invoke(plugMan);
@@ -161,11 +171,31 @@ public class DeathMessages extends JavaPlugin {
             }
         }
 
+//
+//        if (Bukkit.getPluginManager().getPlugin("CombatLogX") != null) {
+//            combatLogXAPIEnabled = true;
+//            Bukkit.getPluginManager().registerEvents(new PlayerUntag(), this);
+//            getLogger().log(Level.INFO, "CombatLogX Hook Enabled!");
+//        }
+
+        if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null
+                && Settings.getInstance().getConfig().getBoolean("Hooks.MythicMobs.Enabled")) {
+            mythicMobs = MythicMobs.inst();
+            mythicmobsEnabled = true;
+            getLogger().log(Level.INFO, "MythicMobs Hook Enabled!");
+            Bukkit.getPluginManager().registerEvents(new MobDeath(), this);
+        }
+
         if (Settings.getInstance().getConfig().getBoolean("Hooks.Bungee.Enabled")) {
             Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
             Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new PluginMessaging());
-            getLogger().log(Level.INFO, "Bungee hook enabled!");
-            bungeeInit = true;
+            getLogger().log(Level.INFO, "Bungee Hook enabled!");
+            if (Settings.getInstance().getConfig().getBoolean("Hooks.Bungee.Server-Name.Get-From-Bungee")) {
+                bungeeInit = true;
+            } else {
+                bungeeInit = false;
+                bungeeServerName = Settings.getInstance().getConfig().getString("Hooks.Bungee.Server-Name.Display-Name");
+            }
         }
     }
 

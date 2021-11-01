@@ -10,6 +10,7 @@ import net.joshb.deathmessages.assets.Assets;
 import net.joshb.deathmessages.config.Gangs;
 import net.joshb.deathmessages.config.Settings;
 import net.joshb.deathmessages.enums.MessageType;
+import net.joshb.deathmessages.enums.MobType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -30,6 +31,10 @@ public class EntityDeath implements Listener {
         if (e.getEntity() instanceof Player && Bukkit.getOnlinePlayers().contains(e.getEntity())) {
             Player p = (Player) e.getEntity();
             PlayerManager pm = PlayerManager.getPlayer(p);
+            if(pm == null){
+                pm = new PlayerManager(p);
+            }
+
             if(e.getEntity().getLastDamageCause() == null){
                 pm.setLastDamageCause(EntityDamageEvent.DamageCause.CUSTOM);
             } else {
@@ -116,6 +121,12 @@ public class EntityDeath implements Listener {
             }
         } else {
             //Player killing mob
+            MobType mobType = MobType.VANILLA;
+            if(DeathMessages.plugin.mythicmobsEnabled) {
+                if(DeathMessages.plugin.mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())){
+                    mobType = MobType.MYTHIC_MOB;
+                }
+            }
             if(EntityManager.getEntity(e.getEntity().getUniqueId()) == null) return;
             EntityManager em = EntityManager.getEntity(e.getEntity().getUniqueId());
 
@@ -123,7 +134,7 @@ public class EntityDeath implements Listener {
 
             PlayerManager damager = em.getLastPlayerDamager();
 
-            TextComponent tx = Assets.entityDeathMessage(em);
+            TextComponent tx = Assets.entityDeathMessage(em, mobType);
             if (tx == null) return;
             BroadcastEntityDeathMessageEvent event = new BroadcastEntityDeathMessageEvent(damager, e.getEntity(), MessageType.ENTITY, tx, getWorlds(e.getEntity()));
             Bukkit.getPluginManager().callEvent(event);

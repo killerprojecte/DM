@@ -19,6 +19,7 @@ public class CommandManager implements CommandExecutor {
     public void initializeSubCommands(){
         commands.add(new CommandBackup());
         commands.add(new CommandBlacklist());
+        commands.add(new CommandDiscordLog());
         commands.add(new CommandEdit());
         commands.add(new CommandReload());
         commands.add(new CommandRestore());
@@ -46,7 +47,10 @@ public class CommandManager implements CommandExecutor {
                 cmd.onCommand(sender, args);
                 return false;
             }
-
+            for(String s : Assets.formatMessage(
+                    Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Help"))){
+                sender.sendMessage(s);
+            }
         }
         return false;
     }

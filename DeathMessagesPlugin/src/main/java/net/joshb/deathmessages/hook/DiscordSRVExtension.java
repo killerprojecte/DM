@@ -155,7 +155,7 @@ public class DiscordSRVExtension {
         String footerText = Assets.playerDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Footer.Text"), pm,
                 (LivingEntity) pm.getLastEntityDamager()).replaceAll("%message%", message);
         String footerIcon = Assets.playerDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Footer.Icon-URL"), pm,
-                (LivingEntity) pm.getLastEntityDamager()).replaceAll("%message%", message).replaceAll("%uuid%", pm.getUUID().toString());
+                (LivingEntity) pm.getLastEntityDamager()).replaceAll("%message%", message).replaceAll("%uuid%", pm.getUUID().toString()).replaceAll("%username%", pm.getName());
         if (!footerText.equalsIgnoreCase("") && footerIcon.startsWith("http")) {
             eb.setFooter(footerText, footerIcon);
         } else if (!footerText.equalsIgnoreCase("") && !footerIcon.startsWith("http")) {
@@ -218,7 +218,7 @@ public class DiscordSRVExtension {
         String footerText = Assets.entityDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Footer.Text"), p,
                 entity, hasOwner).replaceAll("%message%", message);
         String footerIcon = Assets.entityDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Footer.Icon-URL"), p,
-                entity, hasOwner).replaceAll("%message%", message).replaceAll("%uuid%", p.getUniqueId().toString());
+                entity, hasOwner).replaceAll("%message%", message).replaceAll("%uuid%", p.getUniqueId().toString()).replaceAll("%username%", p.getName());
         if (!footerText.equalsIgnoreCase("") && footerIcon.startsWith("http")) {
             eb.setFooter(footerText, footerIcon);
         } else if (!footerText.equalsIgnoreCase("") && !footerIcon.startsWith("http")) {

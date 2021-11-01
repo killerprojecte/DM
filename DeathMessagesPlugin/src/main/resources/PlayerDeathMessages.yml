@@ -31,9 +31,13 @@
 #
 # Permissions Based Messages
 #
-# For players that have a specific permission set, EX: deathmessages.premium, the death message
+# For victims that have a specific permission set, EX: deathmessages.premium, the death message
 # will be sent that is formatted as followed:
 # PERMISSION[YOUR.PERM.HERE]%player% dead lol
+#
+# For killers that have a specific permission set, EX: deathmessages.premium, the death message
+# will be sent that is formatted as followed:
+# PERMISSION_KILLER[YOUR.PERM.HERE]%killer% REKT %player%
 #
 # Players that are in a region (With WorldGuard hook enabled) and is defined below, will be sending a custom
 # region messages.
@@ -60,6 +64,7 @@
 
 # Due for there being no cure for laziness, this option ignores everything in the Mobs section and makes all messages
 # appear the same.
+
 Basic-Mode:
   Enabled: false
   Solo:
@@ -165,7 +170,6 @@ Natural-Cause:
     - "%player% did not put their snow suit on before they went to play."
   Unknown:
     - "%player% died"
-
 Mobs:
   elderguardian:
     Solo:
@@ -1282,6 +1286,9 @@ Mobs:
         - "%player% withered away from %killer%'s magic"
       Thorns:
         - "%player% tried playing with %killer%'s armor with thorns"
+      # Hook related deaths
+      CombatLogX-Kill:
+        - '%player% logged out during combat fighting %killer%, they died still -.-'
     Gang:
       Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
@@ -1296,3 +1303,10 @@ Mobs:
     Gang:
       Melee:
         - "%player% was knocked by a bunch of %killer%'s"
+
+Custom-Mobs:
+  Mythic-Mobs:
+    SkeletalMinion:
+      Solo:
+        Projectile-Arrow:
+          - "%player% was shot by %killer%"

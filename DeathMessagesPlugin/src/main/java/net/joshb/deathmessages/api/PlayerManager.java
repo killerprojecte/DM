@@ -43,6 +43,8 @@ public class PlayerManager {
     public boolean saveUserData = Settings.getInstance().getConfig().getBoolean("Saved-User-Data");
 
     public PlayerManager(Player p){
+
+
         this.uuid = p.getUniqueId();
         this.name = p.getName();
 
@@ -59,6 +61,7 @@ public class PlayerManager {
             messagesEnabled = true;
             isBlacklisted = false;
         }
+        this.damageCause = DamageCause.CUSTOM;
         players.add(this);
     }
 
@@ -113,7 +116,7 @@ public class PlayerManager {
             public void run() {
                 setLastEntityDamager(null);
             }
-        }.runTaskLater(DeathMessages.plugin, Settings.getInstance().getConfig().getInt("Expire-Last-Damage.Expire-Player") * 20);
+        }.runTaskLater(DeathMessages.plugin, Settings.getInstance().getConfig().getInt("Expire-Last-Damage.Expire-Player") * 20L);
     }
 
     public Entity getLastEntityDamager() {

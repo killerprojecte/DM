@@ -22,11 +22,11 @@ public class TabCompleter implements org.bukkit.command.TabCompleter {
             // /dm edit <args>
             List<String> arguments = new ArrayList<>();
             arguments.add("player");
-            //args0.add("entity");
+            arguments.add("entity");
             return arguments;
         } else if(args.length == 3){
             // /dm edit <player> <mobName>
-            if(args[1].equalsIgnoreCase("player")){
+            if(args[1].equalsIgnoreCase("player") ||  args[1].equalsIgnoreCase("entity")){
                 // Not checking config cause we can add sections if we want
                 //List<String> mobNames = new ArrayList<>(PlayerDeathMessages.getInstance().getConfig()
                   //      .getConfigurationSection("Mobs").getKeys(false));
@@ -45,11 +45,19 @@ public class TabCompleter implements org.bukkit.command.TabCompleter {
                 arguments.add("solo");
                 arguments.add("gang");
                 return arguments;
+            } else if(args[1].equalsIgnoreCase("entity")){
+                return Assets.damageTypes;
             }
         } else if(args.length == 5){
             // /dm edit <player> <mobName> <solo, gang> <damage-type>
             if(args[1].equalsIgnoreCase("player")){
                 return Assets.damageTypes;
+            } else if(args[1].equalsIgnoreCase("entity")){
+                List<String> arguments = new ArrayList<>();
+                arguments.add("add");
+                arguments.add("remove");
+                arguments.add("list");
+                return arguments;
             }
         } else if(args.length == 6){
             // /dm edit <player> <mobName> <solo, gang> <damage-type> <add, remove, list>

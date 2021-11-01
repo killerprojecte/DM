@@ -54,6 +54,9 @@ public class BroadcastPlayerDeathListener implements Listener {
                 }
                 for (Player pls : w.getPlayers()) {
                     PlayerManager pms = PlayerManager.getPlayer(pls);
+                    if(pms == null){
+                        pms = new PlayerManager(pls);
+                    }
                     if(e.getMessageType().equals(MessageType.PLAYER)){
                         if (privatePlayer && (e.getPlayer().getUniqueId().equals(pms.getUUID())
                                 || e.getLivingEntity().getUniqueId().equals(pms.getUUID()))) {

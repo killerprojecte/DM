@@ -5,6 +5,7 @@ import net.joshb.deathmessages.api.EntityManager;
 import net.joshb.deathmessages.api.ExplosionManager;
 import net.joshb.deathmessages.api.PlayerManager;
 import net.joshb.deathmessages.api.events.DMBlockExplodeEvent;
+import net.joshb.deathmessages.enums.MobType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -46,7 +47,7 @@ public class InteractEvent implements Listener {
                     if (ent.getLocation().distanceSquared(b.getLocation()) < 100) {
                         EntityManager em;
                         if (EntityManager.getEntity(ent.getUniqueId()) == null) {
-                            em = new EntityManager(ent, ent.getUniqueId());
+                            em = new EntityManager(ent, ent.getUniqueId(), MobType.VANILLA);
                         } else {
                             em = EntityManager.getEntity(ent.getUniqueId());
                         }
@@ -77,7 +78,7 @@ public class InteractEvent implements Listener {
                         if (ent.getLocation().distanceSquared(b.getLocation()) < 100) {
                             EntityManager em;
                             if (EntityManager.getEntity(ent.getUniqueId()) == null) {
-                                em = new EntityManager(ent, ent.getUniqueId());
+                                em = new EntityManager(ent, ent.getUniqueId(), MobType.VANILLA);
                             } else {
                                 em = EntityManager.getEntity(ent.getUniqueId());
                             }

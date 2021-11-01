@@ -8,6 +8,7 @@ softdepend:
   - WorldGuard
   - DiscordBotAPI
   - DiscordSRV
+  - CombatLogX
 author: Joshb_
 commands:
   deathmessages:

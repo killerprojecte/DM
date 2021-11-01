@@ -10,6 +10,9 @@ import net.joshb.deathmessages.config.EntityDeathMessages;
 import net.joshb.deathmessages.config.Messages;
 import net.joshb.deathmessages.config.PlayerDeathMessages;
 import net.joshb.deathmessages.config.Settings;
+import net.joshb.deathmessages.enums.DeathAffiliation;
+import net.joshb.deathmessages.enums.MobType;
+import net.joshb.deathmessages.enums.PDMode;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -76,7 +79,8 @@ public class Assets {
             "Hot-Floor",
             "Cramming",
             "Dryout",
-            "Unknown");
+            "Unknown",
+            "CombatLogX-Quit");
 
     public static boolean isNumeric(String s) {
         for (char c : s.toCharArray()) {
@@ -119,7 +123,7 @@ public class Assets {
                 || b.getType().name().contains("TRAPDOOR");
     }
 
-    public static boolean displayNameIsWeapon(ItemStack itemStack) {
+    public static boolean itemNameIsWeapon(ItemStack itemStack) {
         if (itemStack == null || !itemStack.hasItemMeta() || !itemStack.getItemMeta().hasDisplayName()) {
             return false;
         }
@@ -135,40 +139,60 @@ public class Assets {
         return false;
     }
 
+    public static boolean itemMaterialIsWeapon(ItemStack itemStack) {
+        if (itemStack == null) {
+            return false;
+        }
+        for (String s : Settings.getInstance().getConfig().getStringList("Custom-Item-Material-Is-Weapon")) {
+            Material mat = Material.getMaterial(s);
+            if (mat == null) {
+                return false;
+            }
+            if (itemStack.getType().equals(mat)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean isWeapon(ItemStack itemStack) {
-        return itemStack.getType().toString().contains("SHOVEL")
-                || itemStack.getType().toString().contains("PICKAXE")
-                || itemStack.getType().toString().contains("AXE")
-                || itemStack.getType().toString().contains("HOE")
-                || itemStack.getType().toString().contains("SWORD")
-                || itemStack.getType().toString().contains("BOW")
-                || displayNameIsWeapon(itemStack);
+        return !itemStack.getType().toString().contains("SHOVEL")
+                && !itemStack.getType().toString().contains("PICKAXE")
+                && !itemStack.getType().toString().contains("AXE")
+                && !itemStack.getType().toString().contains("HOE")
+                && !itemStack.getType().toString().contains("SWORD")
+                && !itemStack.getType().toString().contains("BOW")
+                && !itemNameIsWeapon(itemStack)
+                && !itemMaterialIsWeapon(itemStack);
+    }
+
+    public static boolean hasWeapon(LivingEntity mob, EntityDamageEvent.DamageCause damageCause) {
+        if (DeathMessages.majorVersion() < 9) {
+            if (mob.getEquipment() == null || mob.getEquipment().getItemInHand() == null) {
+                return false;
+            } else if (isWeapon(mob.getEquipment().getItemInHand())) {
+                return false;
+            } else if (damageCause.equals(EntityDamageEvent.DamageCause.THORNS)) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            if (mob.getEquipment() == null || mob.getEquipment().getItemInMainHand() == null) {
+                return false;
+            } else if (isWeapon(mob.getEquipment().getItemInMainHand())) {
+                return false;
+            } else if (damageCause.equals(EntityDamageEvent.DamageCause.THORNS)) {
+                return false;
+            } else {
+                return true;
+            }
+        }
     }
 
     public static TextComponent playerDeathMessage(PlayerManager pm, boolean gang) {
         LivingEntity mob = (LivingEntity) pm.getLastEntityDamager();
-        boolean hasWeapon;
-        if (DeathMessages.majorVersion() < 9) {
-            if (mob.getEquipment() == null || mob.getEquipment().getItemInHand() == null) {
-                hasWeapon = false;
-            } else if (!isWeapon(mob.getEquipment().getItemInHand())) {
-                hasWeapon = false;
-            } else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.THORNS)) {
-                hasWeapon = false;
-            } else {
-                hasWeapon = true;
-            }
-        } else {
-            if (mob.getEquipment() == null || mob.getEquipment().getItemInMainHand() == null) {
-                hasWeapon = false;
-            } else if (!isWeapon(mob.getEquipment().getItemInMainHand())) {
-                hasWeapon = false;
-            } else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.THORNS)) {
-                hasWeapon = false;
-            } else {
-                hasWeapon = true;
-            }
-        }
+        boolean hasWeapon = hasWeapon(mob, pm.getLastDamage());
 
         if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
             if (pm.getLastExplosiveEntity() instanceof EnderCrystal) {
@@ -217,41 +241,20 @@ public class Assets {
         }
     }
 
-    public static TextComponent entityDeathMessage(EntityManager em) {
+    public static TextComponent entityDeathMessage(EntityManager em, MobType mobType) {
         PlayerManager pm = em.getLastPlayerDamager();
         Player p = pm.getPlayer();
-        boolean hasWeapon;
-        if (DeathMessages.majorVersion() < 9) {
-            if (p.getEquipment() == null || p.getEquipment().getItemInHand() == null) {
-                hasWeapon = false;
-            } else if (!isWeapon(p.getEquipment().getItemInHand())) {
-                hasWeapon = false;
-            } else if (em.getLastDamage().equals(EntityDamageEvent.DamageCause.THORNS)) {
-                hasWeapon = false;
-            } else {
-                hasWeapon = true;
-            }
-        } else {
-            if (p.getEquipment() == null || p.getEquipment().getItemInMainHand() == null) {
-                hasWeapon = false;
-            } else if (!isWeapon(p.getEquipment().getItemInMainHand())) {
-                hasWeapon = false;
-            } else if (em.getLastDamage().equals(EntityDamageEvent.DamageCause.THORNS)) {
-                hasWeapon = false;
-            } else {
-                hasWeapon = true;
-            }
-        }
+        boolean hasWeapon = hasWeapon(p, pm.getLastDamage());
 
         if (em.getLastDamage().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
             if (em.getLastExplosiveEntity() instanceof EnderCrystal) {
-                return getEntityDeath(p, em.getEntity(), "End-Crystal");
+                return getEntityDeath(p, em.getEntity(), "End-Crystal", mobType);
             } else if (em.getLastExplosiveEntity() instanceof TNTPrimed) {
-                return getEntityDeath(p, em.getEntity(), "TNT");
+                return getEntityDeath(p, em.getEntity(), "TNT", mobType);
             } else if (em.getLastExplosiveEntity() instanceof Firework) {
-                return getEntityDeath(p, em.getEntity(), "Firework");
+                return getEntityDeath(p, em.getEntity(), "Firework", mobType);
             } else {
-                return getEntityDeath(p, em.getEntity(), getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION));
+                return getEntityDeath(p, em.getEntity(), getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION), mobType);
             }
         }
         if (em.getLastDamage().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
@@ -259,30 +262,30 @@ public class Assets {
             ExplosionManager explosionManager = ExplosionManager.getManagerIfEffected(em.getEntityUUID());
             if (explosionManager.getMaterial().name().contains("BED")) {
                 PlayerManager pyro = PlayerManager.getPlayer(explosionManager.getPyro());
-                return getEntityDeath(pyro.getPlayer(), em.getEntity(), "Bed");
+                return getEntityDeath(pyro.getPlayer(), em.getEntity(), "Bed", mobType);
             }
             //Respawn Anchor kill
             if (DeathMessages.majorVersion() >= 16 && explosionManager.getMaterial().equals(Material.RESPAWN_ANCHOR)) {
                 PlayerManager pyro = PlayerManager.getPlayer(explosionManager.getPyro());
-                return getEntityDeath(pyro.getPlayer(), em.getEntity(), "Respawn-Anchor");
+                return getEntityDeath(pyro.getPlayer(), em.getEntity(), "Respawn-Anchor", mobType);
             }
         }
         if (hasWeapon) {
             if (em.getLastDamage().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
-                return getEntityDeathWeapon(p, em.getEntity());
+                return getEntityDeathWeapon(p, em.getEntity(), mobType);
             } else if (em.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)
                     && em.getLastProjectileEntity() instanceof Arrow) {
-                return getEntityDeathProjectile(p, em, getSimpleProjectile(em.getLastProjectileEntity()));
+                return getEntityDeathProjectile(p, em, getSimpleProjectile(em.getLastProjectileEntity()), mobType);
             } else {
-                return getEntityDeath(p, em.getEntity(), getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_ATTACK));
+                return getEntityDeathWeapon(p, em.getEntity(), mobType);
             }
         } else {
             for (EntityDamageEvent.DamageCause dc : EntityDamageEvent.DamageCause.values()) {
                 if (em.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
-                    return getEntityDeathProjectile(p, em, getSimpleProjectile(em.getLastProjectileEntity()));
+                    return getEntityDeathProjectile(p, em, getSimpleProjectile(em.getLastProjectileEntity()), mobType);
                 }
                 if (em.getLastDamage().equals(dc)) {
-                    return getEntityDeath(p, em.getEntity(), getSimpleCause(dc));
+                    return getEntityDeath(p, em.getEntity(), getSimpleCause(dc), mobType);
                 }
             }
             return null;
@@ -292,14 +295,13 @@ public class Assets {
 
     public static TextComponent getNaturalDeath(PlayerManager pm, String damageCause) {
         Random random = new Random();
-        List<String> msgs = sortList(getPlayerDeathMessages().getStringList("Natural-Cause." + damageCause), pm.getPlayer());
+        List<String> msgs = sortList(getPlayerDeathMessages().getStringList("Natural-Cause." + damageCause), pm.getPlayer(), pm.getPlayer());
         if (msgs.isEmpty()) return null;
         String msg = msgs.get(random.nextInt(msgs.size()));
         TextComponent tc = new TextComponent("");
         if (addPrefix) {
             TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(Messages.getInstance().getConfig().getString("Prefix"))));
             tc.addExtra(tx);
-            tc.addExtra(" ");
         }
         String[] sec = msg.split("::");
         String firstSection;
@@ -363,11 +365,11 @@ public class Assets {
                 } else {
                     i = pm.getPlayer().getEquipment().getItemInMainHand();
                 }
-                if(!i.getType().equals(Material.BOW)){
+                if (!i.getType().equals(Material.BOW)) {
                     return getNaturalDeath(pm, "Projectile-Unknown");
                 }
                 if (DeathMessages.majorVersion() < 14) {
-                    if(!i.getType().equals(Material.CROSSBOW)){
+                    if (!i.getType().equals(Material.CROSSBOW)) {
                         return getNaturalDeath(pm, "Projectile-Unknown");
                     }
                 }
@@ -431,30 +433,28 @@ public class Assets {
 
     public static TextComponent getWeapon(boolean gang, PlayerManager pm, LivingEntity mob) {
         Random random = new Random();
+
+        final boolean basicMode = PlayerDeathMessages.getInstance().getConfig().getBoolean("Basic-Mode.Enabled");
+        final String cMode = basicMode ? PDMode.BASIC_MODE.getValue() : PDMode.MOBS.getValue()
+                + "." + mob.getType().getEntityClass().getSimpleName().toLowerCase();
+        final String affiliation = gang ? DeathAffiliation.GANG.getValue() : DeathAffiliation.SOLO.getValue();
+        //List<String> msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + ".Weapon"), pm.getPlayer());
+
         List<String> msgs;
-        boolean basicMode = PlayerDeathMessages.getInstance().getConfig().getBoolean("Basic-Mode.Enabled");
-        if (gang) {
-            if(basicMode){
-                msgs = sortList(getPlayerDeathMessages().getStringList("Basic-Mode.Gang.Weapon"), pm.getPlayer());
-            } else {
-                msgs = sortList(getPlayerDeathMessages().getStringList("Mobs." +
-                        mob.getType().getEntityClass().getSimpleName().toLowerCase() + ".Gang.Weapon"), pm.getPlayer());
-            }
+        if (DeathMessages.plugin.mythicmobsEnabled
+                && DeathMessages.plugin.mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
+            String internalMobType = DeathMessages.plugin.mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
+            msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + ".Weapon"), pm.getPlayer(), mob);
         } else {
-            if(basicMode){
-                msgs = sortList(getPlayerDeathMessages().getStringList("Basic-Mode.Solo.Weapon"), pm.getPlayer());
-            } else {
-                msgs = sortList(getPlayerDeathMessages().getStringList("Mobs." +
-                        mob.getType().getEntityClass().getSimpleName().toLowerCase() + ".Solo.Weapon"), pm.getPlayer());
-            }
+            msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + ".Weapon"), pm.getPlayer(), mob);
         }
+
         if (msgs.isEmpty()) return null;
         String msg = msgs.get(random.nextInt(msgs.size()));
         TextComponent tc = new TextComponent("");
         if (addPrefix) {
             TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(Messages.getInstance().getConfig().getString("Prefix"))));
             tc.addExtra(tx);
-            tc.addExtra(" ");
         }
         String[] sec = msg.split("::");
         String firstSection;
@@ -536,15 +536,28 @@ public class Assets {
         return tc;
     }
 
-    public static TextComponent getEntityDeathWeapon(Player p, Entity e) {
+    public static TextComponent getEntityDeathWeapon(Player p, Entity e, MobType mobType) {
         Random random = new Random();
         String entityName = e.getType().getEntityClass().getSimpleName().toLowerCase();
-        List<String> msgs = sortList(getEntityDeathMessages().getStringList("Entities." + entityName + ".Weapon"), p);
+        List<String> msgs;
+        if (mobType.equals(MobType.MYTHIC_MOB)) {
+            String internalMobType = null;
+            if (DeathMessages.plugin.mythicmobsEnabled
+                    && DeathMessages.plugin.mythicMobs.getAPIHelper().isMythicMob(e.getUniqueId())) {
+                internalMobType = DeathMessages.plugin.mythicMobs.getAPIHelper().getMythicMobInstance(e).getMobType();
+            } else {
+                //reserved
+            }
+            msgs = sortList(getEntityDeathMessages().getStringList("Mythic-Mobs-Entities." + internalMobType + ".Weapon"), p, e);
+        } else {
+            msgs = sortList(getEntityDeathMessages().getStringList("Entities." + entityName + ".Weapon"), p, e);
+        }
+
         if (msgs.isEmpty()) return null;
         boolean hasOwner = false;
-        if(e instanceof Tameable){
+        if (e instanceof Tameable) {
             Tameable tameable = (Tameable) e;
-            if(tameable.getOwner() != null) hasOwner = true;
+            if (tameable.getOwner() != null) hasOwner = true;
         }
 
         String msg = msgs.get(random.nextInt(msgs.size()));
@@ -552,7 +565,6 @@ public class Assets {
         if (addPrefix) {
             TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(Messages.getInstance().getConfig().getString("Prefix"))));
             tc.addExtra(tx);
-            tc.addExtra(" ");
         }
         String[] sec = msg.split("::");
         String firstSection;
@@ -584,11 +596,11 @@ public class Assets {
                         if (!Settings.getInstance().getConfig().getBoolean("Disable-Weapon-Kill-With-No-Custom-Name.Ignore-Enchantments")) {
                             if (i.getEnchantments().size() == 0) {
                                 return getEntityDeath(p, e, Settings.getInstance().getConfig()
-                                        .getString("Disable-Weapon-Kill-With-No-Custom-Name.Source.Weapon.Default-To"));
+                                        .getString("Disable-Weapon-Kill-With-No-Custom-Name.Source.Weapon.Default-To"), mobType);
                             }
                         } else {
                             return getEntityDeath(p, e, Settings.getInstance().getConfig()
-                                    .getString("Disable-Weapon-Kill-With-No-Custom-Name.Source.Weapon.Default-To"));
+                                    .getString("Disable-Weapon-Kill-With-No-Custom-Name.Source.Weapon.Default-To"), mobType);
                         }
                     }
                     displayName = Assets.convertString(i.getType().name());
@@ -636,30 +648,29 @@ public class Assets {
 
     public static TextComponent get(boolean gang, PlayerManager pm, LivingEntity mob, String damageCause) {
         Random random = new Random();
+
+        final boolean basicMode = PlayerDeathMessages.getInstance().getConfig().getBoolean("Basic-Mode.Enabled");
+        final String cMode = basicMode ? PDMode.BASIC_MODE.getValue() : PDMode.MOBS.getValue()
+                + "." + mob.getType().getEntityClass().getSimpleName().toLowerCase();
+        final String affiliation = gang ? DeathAffiliation.GANG.getValue() : DeathAffiliation.SOLO.getValue();
+
+        // List<String> msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + "." + damageCause), pm.getPlayer());
+
+
         List<String> msgs;
-        boolean basicMode = PlayerDeathMessages.getInstance().getConfig().getBoolean("Basic-Mode.Enabled");
-        if (gang) {
-            if(basicMode){
-                msgs = sortList(getPlayerDeathMessages().getStringList("Basic-Mode.Gang." + damageCause), pm.getPlayer());
-            } else {
-                msgs = sortList(getPlayerDeathMessages().getStringList("Mobs." +
-                        mob.getType().getEntityClass().getSimpleName().toLowerCase() + ".Gang." + damageCause), pm.getPlayer());
-            }
+        if (DeathMessages.plugin.mythicmobsEnabled
+                && DeathMessages.plugin.mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
+            String internalMobType = DeathMessages.plugin.mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
+            msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + "." + damageCause), pm.getPlayer(), mob);
         } else {
-            if(basicMode){
-                msgs = sortList(getPlayerDeathMessages().getStringList("Basic-Mode.Solo." + damageCause), pm.getPlayer());
-            } else {
-                msgs = sortList(getPlayerDeathMessages().getStringList("Mobs." +
-                        mob.getType().getEntityClass().getSimpleName().toLowerCase() + ".Solo." + damageCause), pm.getPlayer());
-            }
+            msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + "." + damageCause), pm.getPlayer(), mob);
         }
+
         if (msgs.isEmpty()) {
-            if (Settings.getInstance().getConfig().getBoolean("Default-Natural-Death-Not-Defined")) {
+            if (Settings.getInstance().getConfig().getBoolean("Default-Natural-Death-Not-Defined"))
                 return getNaturalDeath(pm, damageCause);
-            }
-            if (Settings.getInstance().getConfig().getBoolean("Default-Melee-Last-Damage-Not-Defined")) {
+            if (Settings.getInstance().getConfig().getBoolean("Default-Melee-Last-Damage-Not-Defined"))
                 return get(gang, pm, mob, getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_ATTACK));
-            }
             return null;
         }
 
@@ -668,7 +679,6 @@ public class Assets {
         if (addPrefix) {
             TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(Messages.getInstance().getConfig().getString("Prefix"))));
             tc.addExtra(tx);
-            tc.addExtra(" ");
         }
         String[] sec = msg.split("::");
         String firstSection;
@@ -710,27 +720,22 @@ public class Assets {
 
     public static TextComponent getProjectile(boolean gang, PlayerManager pm, LivingEntity mob, String projectileDamage) {
         Random random = new Random();
+        final boolean basicMode = PlayerDeathMessages.getInstance().getConfig().getBoolean("Basic-Mode.Enabled");
+        final String cMode = basicMode ? PDMode.BASIC_MODE.getValue() : PDMode.MOBS.getValue()
+                + "." + mob.getType().getEntityClass().getSimpleName().toLowerCase();
+        final String affiliation = gang ? DeathAffiliation.GANG.getValue() : DeathAffiliation.SOLO.getValue();
+
+      //  List<String> msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + "." + projectileDamage), pm.getPlayer());
+
         List<String> msgs;
-        boolean basicMode = PlayerDeathMessages.getInstance().getConfig().getBoolean("Basic-Mode.Enabled");
-        if (gang) {
-            if(basicMode){
-                msgs = sortList(getPlayerDeathMessages().getStringList("Basic-Mode.Gang." + projectileDamage), pm.getPlayer());
-            } else {
-                msgs = sortList(getPlayerDeathMessages().getStringList("Mobs." +
-                        mob.getType().getEntityClass().getSimpleName().toLowerCase() + ".Gang." + projectileDamage), pm.getPlayer());
-            }
+        if (DeathMessages.plugin.mythicmobsEnabled
+                && DeathMessages.plugin.mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
+            String internalMobType = DeathMessages.plugin.mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
+            msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + "." + projectileDamage), pm.getPlayer(), mob);
         } else {
-            if(basicMode){
-                msgs = sortList(getPlayerDeathMessages().getStringList("Basic-Mode.Solo." + projectileDamage), pm.getPlayer());
-            } else {
-                msgs = sortList(getPlayerDeathMessages().getStringList("Mobs." +
-                        mob.getType().getEntityClass().getSimpleName().toLowerCase() + ".Solo." + projectileDamage), pm.getPlayer());
-            }
+            msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + "." + projectileDamage), pm.getPlayer(), mob);
         }
         if (msgs.isEmpty()) {
-            if (Settings.getInstance().getConfig().getBoolean("Default-Melee-Last-Damage-Not-Defined")) {
-                return get(gang, pm, mob, getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_ATTACK));
-            }
             return null;
         }
         String msg = msgs.get(random.nextInt(msgs.size()));
@@ -738,7 +743,6 @@ public class Assets {
         if (addPrefix) {
             TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(Messages.getInstance().getConfig().getString("Prefix"))));
             tc.addExtra(tx);
-            tc.addExtra(" ");
         }
         String[] sec = msg.split("::");
         String firstSection;
@@ -816,28 +820,37 @@ public class Assets {
         return tc;
     }
 
-    public static TextComponent getEntityDeathProjectile(Player p, EntityManager em, String projectileDamage) {
+    public static TextComponent getEntityDeathProjectile(Player p, EntityManager em, String projectileDamage, MobType mobType) {
         Random random = new Random();
         String entityName = em.getEntity().getType().getEntityClass().getSimpleName().toLowerCase();
-        List<String> msgs = sortList(getEntityDeathMessages().getStringList("Entities." + entityName + "." + projectileDamage), p);
+        List<String> msgs;
+        if (mobType.equals(MobType.MYTHIC_MOB)) {
+            String internalMobType = null;
+            if (DeathMessages.plugin.mythicmobsEnabled
+                    && DeathMessages.plugin.mythicMobs.getAPIHelper().isMythicMob(em.getEntityUUID())) {
+                internalMobType = DeathMessages.plugin.mythicMobs.getAPIHelper().getMythicMobInstance(em.getEntity()).getMobType();
+            } else {
+            }
+            msgs = sortList(getEntityDeathMessages().getStringList("Mythic-Mobs-Entities." + internalMobType + "." + projectileDamage), p, em.getEntity());
+        } else {
+            msgs = sortList(getEntityDeathMessages().getStringList("Entities." + entityName + "." + projectileDamage), p, em.getEntity());
+        }
         if (msgs.isEmpty()) {
             if (Settings.getInstance().getConfig().getBoolean("Default-Melee-Last-Damage-Not-Defined")) {
-                return getEntityDeath(p, em.getEntity(), getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_ATTACK));
+                return getEntityDeath(p, em.getEntity(), getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_ATTACK), mobType);
             }
             return null;
         }
-        if (msgs.isEmpty()) return null;
         boolean hasOwner = false;
-        if(em.getEntity() instanceof Tameable){
+        if (em.getEntity() instanceof Tameable) {
             Tameable tameable = (Tameable) em.getEntity();
-            if(tameable.getOwner() != null) hasOwner = true;
+            if (tameable.getOwner() != null) hasOwner = true;
         }
         String msg = msgs.get(random.nextInt(msgs.size()));
         TextComponent tc = new TextComponent("");
         if (addPrefix) {
             TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(Messages.getInstance().getConfig().getString("Prefix"))));
             tc.addExtra(tx);
-            tc.addExtra(" ");
         }
         String[] sec = msg.split("::");
         String firstSection;
@@ -869,7 +882,7 @@ public class Assets {
                         if (!Settings.getInstance().getConfig()
                                 .getString("Disable-Weapon-Kill-With-No-Custom-Name.Source.Projectile.Default-To").equals(projectileDamage)) {
                             return getEntityDeathProjectile(p, em, Settings.getInstance().getConfig()
-                                    .getString("Disable-Weapon-Kill-With-No-Custom-Name.Source.Projectile.Default-To"));
+                                    .getString("Disable-Weapon-Kill-With-No-Custom-Name.Source.Projectile.Default-To"), mobType);
                         }
                     }
                     displayName = Assets.convertString(i.getType().name());
@@ -915,20 +928,31 @@ public class Assets {
         return tc;
     }
 
-    public static TextComponent getEntityDeath(Player player, Entity entity, String damageCause) {
+    public static TextComponent getEntityDeath(Player player, Entity entity, String damageCause, MobType mobType) {
         Random random = new Random();
         boolean hasOwner = false;
-        if(entity instanceof Tameable){
+        if (entity instanceof Tameable) {
             Tameable tameable = (Tameable) entity;
-            if(tameable.getOwner() != null) hasOwner = true;
+            if (tameable.getOwner() != null) hasOwner = true;
         }
         List<String> msgs;
-        if(hasOwner){
-           msgs = sortList(getEntityDeathMessages().getStringList("Entities." +
-                    entity.getType().getEntityClass().getSimpleName().toLowerCase() + ".Tamed"), player);
-        } else {
+        if (hasOwner) {
             msgs = sortList(getEntityDeathMessages().getStringList("Entities." +
-                    entity.getType().getEntityClass().getSimpleName().toLowerCase() + "." + damageCause), player);
+                    entity.getType().getEntityClass().getSimpleName().toLowerCase() + ".Tamed"), player, entity);
+        } else {
+            if (mobType.equals(MobType.MYTHIC_MOB)) {
+                String internalMobType = null;
+                if (DeathMessages.plugin.mythicmobsEnabled
+                        && DeathMessages.plugin.mythicMobs.getAPIHelper().isMythicMob(entity.getUniqueId())) {
+                    internalMobType = DeathMessages.plugin.mythicMobs.getAPIHelper().getMythicMobInstance(entity).getMobType();
+                } else {
+                    //reserved
+                }
+                msgs = sortList(getEntityDeathMessages().getStringList("Mythic-Mobs-Entities." + internalMobType + "." + damageCause), player, entity);
+            } else {
+                msgs = sortList(getEntityDeathMessages().getStringList("Entities." +
+                        entity.getType().getEntityClass().getSimpleName().toLowerCase() + "." + damageCause), player, entity);
+            }
         }
         if (msgs.isEmpty()) return null;
 
@@ -937,7 +961,6 @@ public class Assets {
         if (addPrefix) {
             TextComponent tx = new TextComponent(TextComponent.fromLegacyText(Assets.colorize(Messages.getInstance().getConfig().getString("Prefix"))));
             tc.addExtra(tx);
-            tc.addExtra(" ");
         }
         String[] sec = msg.split("::");
         String firstSection;
@@ -977,7 +1000,7 @@ public class Assets {
         return tc;
     }
 
-    public static List<String> sortList(List<String> list, Player player) {
+    public static List<String> sortList(List<String> list, Player player, Entity killer) {
         List<String> newList = list;
         List<String> returnList = new ArrayList<>();
         for (String s : list) {
@@ -988,6 +1011,15 @@ public class Assets {
                     String perm = m.group(1);
                     if (player.getPlayer().hasPermission(perm)) {
                         returnList.add(s.replace("PERMISSION[" + perm + "]", ""));
+                    }
+                }
+            }
+            if (s.contains("PERMISSION_KILLER[")) {
+                Matcher m = Pattern.compile("PERMISSION_KILLER\\[([^)]+)\\]").matcher(s);
+                while (m.find()) {
+                    String perm = m.group(1);
+                    if (killer.hasPermission(perm)) {
+                        returnList.add(s.replace("PERMISSION_KILLER[" + perm + "]", ""));
                     }
                 }
             }
@@ -1008,7 +1040,7 @@ public class Assets {
         if (!returnList.isEmpty()) {
             newList = returnList;
         } else {
-            newList.removeIf(s -> s.contains("PERMISSION[") || s.contains("REGION["));
+            newList.removeIf(s -> s.contains("PERMISSION[") || s.contains("REGION[") || s.contains("PERMISSION_KILLER["));
         }
         return newList;
     }
@@ -1034,7 +1066,8 @@ public class Assets {
         msg = colorize(msg
                 .replaceAll("%entity%", Messages.getInstance().getConfig().getString("Mobs."
                         + entity.getType().toString().toLowerCase()))
-                .replaceAll("%entity_display%", entity.getCustomName())
+                .replaceAll("%entity_display%", entity.getCustomName() == null ? Messages.getInstance().getConfig().getString("Mobs."
+                        + entity.getType().toString().toLowerCase()): entity.getCustomName())
                 .replaceAll("%killer%", player.getName())
                 .replaceAll("%killer_display%", player.getDisplayName())
                 .replaceAll("%world%", entity.getLocation().getWorld().getName())
@@ -1042,10 +1075,10 @@ public class Assets {
                 .replaceAll("%x%", String.valueOf(entity.getLocation().getBlock().getX()))
                 .replaceAll("%y%", String.valueOf(entity.getLocation().getBlock().getY()))
                 .replaceAll("%z%", String.valueOf(entity.getLocation().getBlock().getZ())));
-        if(owner) {
+        if (owner) {
             if (entity instanceof Tameable) {
                 Tameable tameable = (Tameable) entity;
-                if (tameable.getOwner() == null) {
+                if (tameable.getOwner() != null && tameable.getOwner().getName() != null) {
                     msg = msg.replaceAll("%owner%", tameable.getOwner().getName());
                 }
             }

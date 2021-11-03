@@ -20,6 +20,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -354,7 +355,7 @@ public class Assets {
                 } catch (NullPointerException e) {
                     DeathMessages.plugin.getLogger().log(Level.SEVERE, "Could not parse %climbable%. Please check your config for a wrong value." +
                             " Your materials could be spelt wrong or it does not exists in the config. If this problem persist, contact support" +
-                            " on the discord https://discord.gg/K9zVDwt");
+                            " on the discord https://discord.gg/K9zVDwt - Parsed block: "+ pm.getLastClimbing().toString());
                     pm.setLastClimbing(null);
                     return getNaturalDeath(pm, getSimpleCause(EntityDamageEvent.DamageCause.FALL));
                 }
@@ -440,10 +441,13 @@ public class Assets {
         final String affiliation = gang ? DeathAffiliation.GANG.getValue() : DeathAffiliation.SOLO.getValue();
         //List<String> msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + ".Weapon"), pm.getPlayer());
 
+        Bukkit.broadcastMessage("getWeapon");
+        Bukkit.broadcastMessage(DeathMessages.plugin.mythicmobsEnabled + " - " + DeathMessages.plugin.mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId()));
         List<String> msgs;
         if (DeathMessages.plugin.mythicmobsEnabled
-                && DeathMessages.plugin.mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
+                &&DeathMessages.plugin.mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
             String internalMobType = DeathMessages.plugin.mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
+            Bukkit.broadcastMessage("is myth - " + internalMobType);
             msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + ".Weapon"), pm.getPlayer(), mob);
         } else {
             msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + ".Weapon"), pm.getPlayer(), mob);
@@ -656,11 +660,12 @@ public class Assets {
 
         // List<String> msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + "." + damageCause), pm.getPlayer());
 
-
+        Bukkit.broadcastMessage("get");
         List<String> msgs;
         if (DeathMessages.plugin.mythicmobsEnabled
                 && DeathMessages.plugin.mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
             String internalMobType = DeathMessages.plugin.mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
+            Bukkit.broadcastMessage("is myth - " + internalMobType);
             msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + "." + damageCause), pm.getPlayer(), mob);
         } else {
             msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + "." + damageCause), pm.getPlayer(), mob);

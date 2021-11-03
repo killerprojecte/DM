@@ -6,7 +6,7 @@
 
     <groupId>net.joshb.deathmessages</groupId>
     <artifactId>DeathMessages</artifactId>
-    <version>1.4.10</version>
+    <version>1.4.11</version>
     <modules>
         <module>DeathMessagesPlugin</module>
         <module>WorldGuard6</module>

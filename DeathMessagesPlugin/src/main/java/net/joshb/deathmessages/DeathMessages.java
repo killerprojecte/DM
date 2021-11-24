@@ -209,7 +209,7 @@ public class DeathMessages extends JavaPlugin {
                     worldGuardExtension = new WorldGuard7Extension();
                     worldGuardExtension.registerFlags();
                 } else if (version.startsWith("6")) {
-                    worldGuardExtension = new WorldGuard6Extension();
+                    //worldGuardExtension = new WorldGuard6Extension();
                     worldGuardExtension.registerFlags();
                 } else throw new Exception();
                 worldGuardEnabled = true;

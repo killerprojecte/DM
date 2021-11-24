@@ -9,9 +9,9 @@
     <version>1.4.11</version>
     <modules>
         <module>DeathMessagesPlugin</module>
-        <module>WorldGuard6</module>
-        <module>WorldGuard7</module>
         <module>Hook</module>
+       <!-- <module>WorldGuard6</module> -->
+        <module>WorldGuard7</module>
     </modules>
     <packaging>pom</packaging>
     <name>DeathMessages</name>

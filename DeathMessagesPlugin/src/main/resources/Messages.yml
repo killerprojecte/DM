@@ -80,6 +80,7 @@ Discord:
       # The clickable link
       URL: ""
       # The picture that shows up in the author name
+      # Placeholders: %uuid%, %username%
       Icon-URL: "https://crafatar.com/avatars/%uuid%"
     Title: DeathMessage
     Description: '%message%'

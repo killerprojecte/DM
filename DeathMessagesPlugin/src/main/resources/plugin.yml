@@ -3,13 +3,13 @@ version: ${project.version}
 main: net.joshb.deathmessages.DeathMessages
 api-version: 1.13
 softdepend:
+  - MythicMobs
   - PlaceholderAPI
   - WorldEdit
   - WorldGuard
   - DiscordBotAPI
   - DiscordSRV
   - CombatLogX
-  - MythicMobs
 author: Joshb_
 commands:
   deathmessages:

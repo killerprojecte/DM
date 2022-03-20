@@ -1,6 +1,6 @@
 package net.joshb.deathmessages.listener.mythicmobs;
 
-import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobDeathEvent;
+import io.lumine.mythic.bukkit.events.MythicMobDeathEvent;
 import net.joshb.deathmessages.api.EntityManager;
 import net.joshb.deathmessages.api.PlayerManager;
 import net.joshb.deathmessages.api.events.BroadcastEntityDeathMessageEvent;

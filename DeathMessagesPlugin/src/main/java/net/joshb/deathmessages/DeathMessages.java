@@ -1,7 +1,8 @@
 package net.joshb.deathmessages;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import io.lumine.xikage.mythicmobs.MythicMobs;
+import io.lumine.mythic.api.MythicPlugin;
+import io.lumine.mythic.bukkit.MythicBukkit;
 import net.joshb.deathmessages.api.PlayerManager;
 import net.joshb.deathmessages.command.deathmessages.CommandManager;
 import net.joshb.deathmessages.command.deathmessages.TabCompleter;
@@ -34,7 +35,7 @@ public class DeathMessages extends JavaPlugin {
     public boolean placeholderAPIEnabled = false;
     public boolean combatLogXAPIEnabled = false;
 
-    public MythicMobs mythicMobs = null;
+    public MythicBukkit mythicMobs = null;
     public boolean mythicmobsEnabled = false;
 
 
@@ -180,7 +181,7 @@ public class DeathMessages extends JavaPlugin {
 
         if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null
                 && Settings.getInstance().getConfig().getBoolean("Hooks.MythicMobs.Enabled")) {
-            mythicMobs = MythicMobs.inst();
+            mythicMobs = MythicBukkit.inst();
             mythicmobsEnabled = true;
             getLogger().log(Level.INFO, "MythicMobs Hook Enabled!");
             Bukkit.getPluginManager().registerEvents(new MobDeath(), this);
